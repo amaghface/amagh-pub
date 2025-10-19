@@ -6,6 +6,7 @@
     <title>پنل مدیریت - نشر اعماق</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --primary: #182128;
@@ -27,6 +28,8 @@
             color: var(--light);
             min-height: 100vh;
             padding: 0;
+            position: fixed;
+            width: 250px;
         }
         
         .sidebar .nav-link {
@@ -43,7 +46,9 @@
         }
         
         .main-content {
+            margin-right: 250px;
             padding: 20px;
+            min-height: 100vh;
         }
         
         .admin-card {
@@ -52,47 +57,70 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             margin-bottom: 20px;
             border: none;
+            padding: 25px;
         }
         
         .module-icon {
-            font-size: 24px;
+            font-size: 20px;
             margin-left: 10px;
             color: var(--secondary);
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        .btn-primary:hover {
+            background-color: #69532e;
+            border-color: #69532e;
         }
     </style>
 </head>
 <body>
+    <!-- بررسی لاگین -->
+    <script>
+        if (!localStorage.getItem('adminAuthenticated')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
     <div class="container-fluid">
         <div class="row">
             <!-- سایدبار -->
             <div class="col-md-3 col-lg-2 sidebar">
                 <div class="text-center py-4">
-                    <h5>پنل مدیریت نشر اعماق</h5>
+                    <img src="http://www.blogfa.com/photo/nj/amaagh_owcva.jpg" alt="لوگو" height="40" style="background: white; padding: 5px; border-radius: 5px;">
+                    <h6 class="mt-2">پنل مدیریت نشر اعماق</h6>
                 </div>
                 <nav class="nav flex-column">
-                    <a class="nav-link active" href="#header-module">
+                    <a class="nav-link active" href="#" data-module="header">
                         <i class="fas fa-header module-icon"></i>
                         هدر و منو
                     </a>
-                    <a class="nav-link" href="#slider-module">
+                    <a class="nav-link" href="#" data-module="slider">
                         <i class="fas fa-images module-icon"></i>
                         اسلایدشو
                     </a>
-                    <a class="nav-link" href="#about-module">
+                    <a class="nav-link" href="#" data-module="about">
                         <i class="fas fa-info-circle module-icon"></i>
                         درباره ما
                     </a>
-                    <a class="nav-link" href="#blog-module">
+                    <a class="nav-link" href="#" data-module="blog">
                         <i class="fas fa-blog module-icon"></i>
                         مدیریت مطالب
                     </a>
-                    <a class="nav-link" href="#form-module">
+                    <a class="nav-link" href="#" data-module="form">
                         <i class="fas fa-envelope module-icon"></i>
                         درخواست‌ها
                     </a>
-                    <a class="nav-link" href="#footer-module">
+                    <a class="nav-link" href="#" data-module="footer">
                         <i class="fas fa-shoe-prints module-icon"></i>
                         فوتر
+                    </a>
+                    <a class="nav-link" href="#" data-module="security">
+                        <i class="fas fa-shield-alt module-icon"></i>
+                        تنظیمات امنیتی
                     </a>
                 </nav>
             </div>
@@ -101,78 +129,253 @@
             <div class="col-md-9 col-lg-10 main-content">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4>مدیریت وبسایت نشر اعماق</h4>
-                    <button class="btn btn-primary">ذخیره تمام تغییرات</button>
+                    <div>
+                        <button class="btn btn-primary me-2" onclick="saveAll()">
+                            <i class="fas fa-save"></i>
+                            ذخیره تمام تغییرات
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            خروج
+                        </button>
+                    </div>
                 </div>
 
                 <!-- ماژول هدر و منو -->
-                <div id="header-module" class="admin-card p-4">
+                <div id="header-module" class="admin-card">
                     <h5><i class="fas fa-header text-warning"></i> مدیریت هدر و منو</h5>
                     <hr>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label>آدرس لوگو</label>
-                                <input type="text" class="form-control" value="http://www.blogfa.com/photo/nj/amaagh_owcva.jpg">
+                                <input type="text" class="form-control" id="logoUrl" value="http://www.blogfa.com/photo/nj/amaagh_owcva.jpg">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label>Alt لوگو</label>
-                                <input type="text" class="form-control" value="لوگوی نشر اعماق">
+                                <input type="text" class="form-control" id="logoAlt" value="لوگوی نشر اعماق">
                             </div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label>مدیریت منوها</label>
-                        <div class="border p-3 rounded">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>خانه</span>
-                                <button class="btn btn-sm btn-outline-secondary">ویرایش</button>
+                        <div id="menuItems">
+                            <!-- منوها به صورت دایnamic ساخته می‌شوند -->
+                        </div>
+                        <button class="btn btn-sm btn-success mt-2" onclick="addMenuItem()">
+                            <i class="fas fa-plus"></i> افزودن منوی جدید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ماژول اسلایدشو -->
+                <div id="slider-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-images text-warning"></i> مدیریت اسلایدشو</h5>
+                    <hr>
+                    <div id="slidesContainer">
+                        <!-- اسلایدها به صورت داینامیک -->
+                    </div>
+                    <button class="btn btn-success" onclick="addSlide()">
+                        <i class="fas fa-plus"></i> افزودن اسلاید جدید
+                    </button>
+                </div>
+
+                <!-- ماژول درباره ما -->
+                <div id="about-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-info-circle text-warning"></i> مدیریت بخش درباره ما</h5>
+                    <hr>
+                    <div class="mb-3">
+                        <label>متن معرفی</label>
+                        <textarea class="form-control" id="aboutText" rows="4">نشر اعماق بیست و دوم مهرماه یک‌هزار و چهارصد و چهار زاده شد
+
+نشر اعماق امکان زیستن است در عین نبودن
+
+شماره پروانه نشر: 19975
+
+[...در حال به روزرسانی...]</textarea>
+                    </div>
+                </div>
+
+                <!-- ماژول مطالب -->
+                <div id="blog-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-blog text-warning"></i> مدیریت مطالب و بلاگ</h5>
+                    <hr>
+                    <button class="btn btn-success mb-3" onclick="addNewPost()">
+                        <i class="fas fa-plus"></i> نوشته جدید
+                    </button>
+                    <div id="postsContainer">
+                        <!-- پست‌ها به صورت داینامیک -->
+                    </div>
+                </div>
+
+                <!-- ماژول درخواست‌ها -->
+                <div id="form-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-envelope text-warning"></i> درخواست‌های بررسی اثر</h5>
+                    <hr>
+                    <div id="submissionsContainer">
+                        <!-- درخواست‌ها به صورت داینامیک -->
+                    </div>
+                </div>
+
+                <!-- ماژول فوتر -->
+                <div id="footer-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-shoe-prints text-warning"></i> مدیریت فوتر</h5>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>شبکه‌های اجتماعی</h6>
+                            <div class="mb-3">
+                                <label>تلگرام</label>
+                                <input type="text" class="form-control" id="telegramUrl" value="https://t.me/amaghpub">
                             </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>درباره ما</span>
-                                <button class="btn btn-sm btn-outline-secondary">ویرایش</button>
+                            <div class="mb-3">
+                                <label>اینستاگرام</label>
+                                <input type="text" class="form-control" id="instagramUrl" value="https://instagram.com/amaghpub">
                             </div>
-                            <div class="d-flex justify-content-between">
-                                <span>تماس با ما</span>
-                                <button class="btn btn-sm btn-outline-secondary">ویرایش</button>
+                            <div class="mb-3">
+                                <label>لینکدین</label>
+                                <input type="text" class="form-control" id="linkedinUrl" value="https://www.linkedin.com/company/amaghpub">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>اطلاعات تماس</h6>
+                            <div class="mb-3">
+                                <label>ایمیل</label>
+                                <input type="email" class="form-control" id="contactEmail" value="amagh.pub@gmail.com">
+                            </div>
+                            <div class="mb-3">
+                                <label>متن کپی رایت</label>
+                                <input type="text" class="form-control" id="copyrightText" value="© تمامی حقوق محفوظ است | نشر اعماق">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- ماژول اسلایدشو -->
-                <div id="slider-module" class="admin-card p-4" style="display: none;">
-                    <h5><i class="fas fa-images text-warning"></i> مدیریت اسلایدشو</h5>
+                <!-- ماژول تنظیمات امنیتی -->
+                <div id="security-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-shield-alt text-warning"></i> تنظیمات امنیتی و لاگین</h5>
                     <hr>
-                    <p>این ماژول به زودی تکمیل می‌شود...</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label>نام کاربری جدید</label>
+                                <input type="text" class="form-control" id="newUsername">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label>رمز عبور جدید</label>
+                                <input type="password" class="form-control" id="newPassword">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        پس از تغییر نام کاربری و رمز عبور، برای ورود مجدد از اطلاعات جدید استفاده کنید.
+                    </div>
+                    <button class="btn btn-warning" onclick="updateCredentials()">
+                        <i class="fas fa-key"></i> بروزرسانی اطلاعات ورود
+                    </button>
                 </div>
-
-                <!-- بقیه ماژول‌ها به همین شکل -->
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <script>
-        // تغییر بین ماژول‌ها
+        // مدیریت ماژول‌ها
         document.querySelectorAll('.sidebar .nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                // غیرفعال کردن همه لینک‌ها
                 document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
-                // فعال کردن لینک جاری
                 this.classList.add('active');
                 
-                // مخفی کردن همه ماژول‌ها
                 document.querySelectorAll('.admin-card').forEach(card => card.style.display = 'none');
-                // نمایش ماژول انتخاب شده
-                const targetId = this.getAttribute('href');
-                document.querySelector(targetId).style.display = 'block';
+                
+                const module = this.getAttribute('data-module');
+                document.getElementById(module + '-module').style.display = 'block';
             });
         });
+
+        // خروج از سیستم
+        function logout() {
+            if (confirm('آیا از خروج از پنل مدیریت اطمینان دارید؟')) {
+                localStorage.removeItem('adminAuthenticated');
+                localStorage.removeItem('loginTime');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // ذخیره تمام تغییرات
+        function saveAll() {
+            alert('تمامی تغییرات با موفقیت ذخیره شد.');
+            // اینجا کد ذخیره‌سازی در localStorage یا ارسال به سرور اضافه می‌شود
+        }
+
+        // بروزرسانی اطلاعات ورود
+        function updateCredentials() {
+            const newUsername = document.getElementById('newUsername').value;
+            const newPassword = document.getElementById('newPassword').value;
+            
+            if (newUsername && newPassword) {
+                localStorage.setItem('adminUsername', newUsername);
+                localStorage.setItem('adminPassword', newPassword);
+                alert('نام کاربری و رمز عبور با موفقیت بروزرسانی شد.');
+                document.getElementById('newUsername').value = '';
+                document.getElementById('newPassword').value = '';
+            } else {
+                alert('لطفاً هر دو فیلد را پر کنید.');
+            }
+        }
+
+        // بارگذاری اولیه داده‌ها
+        function loadInitialData() {
+            // بارگذاری منوها
+            const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
+                { text: 'خانه', url: '#' },
+                { text: 'درباره ما', url: '#' },
+                { text: 'تماس با ما', url: '#' },
+                { text: 'کتاب‌ها', url: '#' },
+                { text: 'بلاگ', url: '#' }
+            ];
+            renderMenuItems(menuItems);
+        }
+
+        // رندر منوها
+        function renderMenuItems(menuItems) {
+            const container = document.getElementById('menuItems');
+            container.innerHTML = '';
+            
+            menuItems.forEach((item, index) => {
+                container.innerHTML += `
+                    <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+                        <span>${item.text} - ${item.url}</span>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary me-1" onclick="editMenuItem(${index})">ویرایش</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteMenuItem(${index})">حذف</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // افزودن منوی جدید
+        function addMenuItem() {
+            const text = prompt('عنوان منو:');
+            const url = prompt('آدرس منو:');
+            if (text && url) {
+                const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+                menuItems.push({ text, url });
+                localStorage.setItem('menuItems', JSON.stringify(menuItems));
+                renderMenuItems(menuItems);
+            }
+        }
+
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', loadInitialData);
     </script>
 </body>
 </html>
