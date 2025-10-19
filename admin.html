@@ -78,9 +78,18 @@
     </style>
 </head>
 <body>
-    <!-- بررسی لاگین -->
+    <!-- بررسی امنیت - هر بار چک میشه -->
     <script>
-        if (!localStorage.getItem('adminAuthenticated')) {
+        if (!localStorage.getItem('adminAuthenticated') || !localStorage.getItem('loginTime')) {
+            window.location.href = 'login.html';
+        }
+        
+        // بررسی انقضای session (30 دقیقه)
+        const loginTime = parseInt(localStorage.getItem('loginTime'));
+        const now = Date.now();
+        if (now - loginTime > 30 * 60 * 1000) {
+            localStorage.removeItem('adminAuthenticated');
+            localStorage.removeItem('loginTime');
             window.location.href = 'login.html';
         }
     </script>
@@ -162,7 +171,7 @@
                     <div class="mb-3">
                         <label>مدیریت منوها</label>
                         <div id="menuItems">
-                            <!-- منوها به صورت دایnamic ساخته می‌شوند -->
+                            <!-- منوها به صورت داینامیک ساخته می‌شوند -->
                         </div>
                         <button class="btn btn-sm btn-success mt-2" onclick="addMenuItem()">
                             <i class="fas fa-plus"></i> افزودن منوی جدید
@@ -215,7 +224,7 @@
                     <h5><i class="fas fa-envelope text-warning"></i> درخواست‌های بررسی اثر</h5>
                     <hr>
                     <div id="submissionsContainer">
-                        <!-- درخواست‌ها به صورت داینامیک -->
+                        <p>درخواست‌های ارسالی از طریق فرم در اینجا نمایش داده می‌شود.</p>
                     </div>
                 </div>
 
@@ -335,7 +344,7 @@
         function loadInitialData() {
             // بارگذاری منوها
             const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
-                { text: 'خانه', url: '#' },
+                { text: 'خانه', url: 'index.html' },
                 { text: 'درباره ما', url: '#' },
                 { text: 'تماس با ما', url: '#' },
                 { text: 'کتاب‌ها', url: '#' },
@@ -369,6 +378,29 @@
             if (text && url) {
                 const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
                 menuItems.push({ text, url });
+                localStorage.setItem('menuItems', JSON.stringify(menuItems));
+                renderMenuItems(menuItems);
+            }
+        }
+
+        // ویرایش منو
+        function editMenuItem(index) {
+            const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+            const newText = prompt('عنوان جدید:', menuItems[index].text);
+            const newUrl = prompt('آدرس جدید:', menuItems[index].url);
+            
+            if (newText && newUrl) {
+                menuItems[index] = { text: newText, url: newUrl };
+                localStorage.setItem('menuItems', JSON.stringify(menuItems));
+                renderMenuItems(menuItems);
+            }
+        }
+
+        // حذف منو
+        function deleteMenuItem(index) {
+            if (confirm('آیا از حذف این منو اطمینان دارید؟')) {
+                const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+                menuItems.splice(index, 1);
                 localStorage.setItem('menuItems', JSON.stringify(menuItems));
                 renderMenuItems(menuItems);
             }
