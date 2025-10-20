@@ -21,8 +21,10 @@
         
         body {
             background-color: #f8f9fa;
+            overflow-x: hidden;
         }
         
+        /* سایدبار ریسپانسیو */
         .sidebar {
             background-color: var(--primary);
             color: var(--light);
@@ -30,6 +32,8 @@
             padding: 0;
             position: fixed;
             width: 280px;
+            z-index: 1000;
+            transition: all 0.3s ease;
         }
         
         .sidebar .nav-link {
@@ -37,6 +41,9 @@
             padding: 15px 20px;
             border-bottom: 1px solid #2a3a45;
             transition: all 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .sidebar .nav-link:hover,
@@ -45,10 +52,12 @@
             color: var(--light);
         }
         
+        /* محتوای اصلی ریسپانسیو */
         .main-content {
             margin-right: 280px;
             padding: 20px;
             min-height: 100vh;
+            transition: all 0.3s ease;
         }
         
         .admin-card {
@@ -58,12 +67,14 @@
             margin-bottom: 20px;
             border: none;
             padding: 25px;
+            width: 100%;
         }
         
         .module-icon {
             font-size: 18px;
             margin-left: 10px;
             color: var(--secondary);
+            min-width: 20px;
         }
         
         .btn-primary {
@@ -76,21 +87,50 @@
             border-color: #69532e;
         }
         
+        /* هدر پنل مدیریت ریسپانسیو */
+        .panel-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .panel-header h4 {
+            margin: 0;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .header-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        /* ویرایشگر */
         .editor-toolbar {
             background: #f8f9fa;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
         }
         
         .editor-toolbar button {
-            margin: 0 2px;
+            margin: 0;
             padding: 5px 10px;
             border: 1px solid #ccc;
             background: white;
             border-radius: 3px;
             cursor: pointer;
+            flex-shrink: 0;
         }
         
         #postEditor {
@@ -98,6 +138,7 @@
             border: 1px solid #ddd;
             padding: 15px;
             border-radius: 5px;
+            width: 100%;
         }
         
         .submission-details {
@@ -105,16 +146,181 @@
             border-radius: 8px;
             padding: 20px;
             margin-top: 15px;
+            width: 100%;
         }
         
         .social-icon-preview {
             width: 32px;
             height: 32px;
             object-fit: contain;
+            flex-shrink: 0;
+        }
+        
+        /* مدیریت شبکه‌های اجتماعی ریسپانسیو */
+        .social-link-item {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .social-link-inputs {
+            display: flex;
+            flex: 1;
+            flex-wrap: wrap;
+            gap: 10px;
+            min-width: 200px;
+        }
+        
+        .social-link-inputs input {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .social-link-actions {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        
+        /* فرم‌ها ریسپانسیو */
+        .form-row-responsive {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group-responsive {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        /* منوی همبرگری برای موبایل */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1001;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 16px;
+        }
+        
+        /* رسپانسیو برای دستگاه‌های کوچک */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 250px;
+            }
+            .main-content {
+                margin-right: 250px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+                transform: translateX(100%);
+            }
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 15px;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .panel-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .header-buttons {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .admin-card {
+                padding: 15px;
+            }
+            .form-group-responsive {
+                min-width: 100%;
+            }
+            .social-link-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .social-link-inputs {
+                flex-direction: column;
+            }
+            .social-link-actions {
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .editor-toolbar {
+                justify-content: center;
+            }
+            .header-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            .header-buttons .btn {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 10px;
+            }
+            .admin-card {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+            .panel-header h4 {
+                font-size: 1.3em;
+                text-align: center;
+            }
+            .sidebar .nav-link {
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+            .mobile-menu-btn {
+                top: 10px;
+                right: 10px;
+                padding: 6px 10px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .social-link-actions {
+                flex-direction: column;
+            }
+            .editor-toolbar button {
+                padding: 4px 8px;
+                font-size: 0.8em;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- دکمه منوی موبایل -->
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <!-- بررسی امنیت -->
     <script>
         if (!localStorage.getItem('adminAuthenticated') || !localStorage.getItem('loginTime')) {
@@ -133,7 +339,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- سایدبار -->
-            <div class="col-md-3 col-lg-2 sidebar">
+            <div class="col-md-3 col-lg-2 sidebar" id="sidebar">
                 <div class="text-center py-4">
                     <img src="https://uploadkon.ir/uploads/44f319_25Website.png" alt="لوگو" height="50" style="background: white; padding: 5px; border-radius: 5px;">
                     <h6 class="mt-2">پنل مدیریت نشر اعماق</h6>
@@ -171,11 +377,11 @@
             </div>
 
             <!-- محتوای اصلی -->
-            <div class="col-md-9 col-lg-10 main-content">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="col-md-9 col-lg-10 main-content" id="mainContent">
+                <div class="panel-header">
                     <h4>مدیریت وبسایت نشر اعماق</h4>
-                    <div>
-                        <button class="btn btn-primary me-2" onclick="saveAllChanges()">
+                    <div class="header-buttons">
+                        <button class="btn btn-primary" onclick="saveAllChanges()">
                             <i class="fas fa-save"></i>
                             ذخیره تمام تغییرات
                         </button>
@@ -190,30 +396,28 @@
                 <div id="header-module" class="admin-card">
                     <h5><i class="fas fa-header text-warning"></i> مدیریت هدر و منو</h5>
                     <hr>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label>آدرس لوگو</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="logoUrl">
-                                    <button class="btn btn-outline-primary" type="button" onclick="updateLogoFromUrl()">اعمال</button>
-                                </div>
-                                <small class="text-muted">آدرس تصویر لوگو را وارد کنید</small>
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <label>آدرس لوگو</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="logoUrl">
+                                <button class="btn btn-outline-primary" type="button" onclick="updateLogoFromUrl()">اعمال</button>
                             </div>
-                            <div class="mb-3">
-                                <label>آپلود لوگوی جدید</label>
-                                <input type="file" class="form-control" id="logoUpload" accept="image/*">
-                                <button class="btn btn-success mt-2" onclick="uploadLogo()">
-                                    <i class="fas fa-upload"></i> آپلود لوگو
-                                </button>
-                            </div>
+                            <small class="text-muted">آدرس تصویر لوگو را وارد کنید</small>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label>پیش‌نمایش لوگو</label>
-                                <div class="border p-3 text-center bg-light">
-                                    <img id="logoPreview" src="" alt="پیش‌نمایش لوگو" style="max-height: 60px; max-width: 200px; width: auto; height: auto;">
-                                </div>
+                        <div class="form-group-responsive">
+                            <label>آپلود لوگوی جدید</label>
+                            <input type="file" class="form-control" id="logoUpload" accept="image/*">
+                            <button class="btn btn-success mt-2 w-100" onclick="uploadLogo()">
+                                <i class="fas fa-upload"></i> آپلود لوگو
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <label>پیش‌نمایش لوگو</label>
+                            <div class="border p-3 text-center bg-light">
+                                <img id="logoPreview" src="" alt="پیش‌نمایش لوگو" style="max-height: 60px; max-width: 200px; width: auto; height: auto;">
                             </div>
                         </div>
                     </div>
@@ -226,7 +430,7 @@
                     <div id="slidesContainer">
                         <!-- اسلایدها -->
                     </div>
-                    <button class="btn btn-success mt-3" onclick="addSlide()">
+                    <button class="btn btn-success mt-3 w-100 w-md-auto">
                         <i class="fas fa-plus"></i> افزودن اسلاید جدید
                     </button>
                 </div>
@@ -235,11 +439,13 @@
                 <div id="about-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-info-circle text-warning"></i> مدیریت بخش درباره ما</h5>
                     <hr>
-                    <div class="mb-3">
+                    <div class="form-group-responsive">
                         <label>متن معرفی</label>
                         <textarea class="form-control" id="aboutText" rows="6"></textarea>
                     </div>
-                    <button class="btn btn-primary" onclick="updateAbout()">بروزرسانی متن درباره ما</button>
+                    <button class="btn btn-primary w-100 w-md-auto">
+                        بروزرسانی متن درباره ما
+                    </button>
                 </div>
 
                 <!-- ماژول مدیریت مطالب -->
@@ -250,23 +456,24 @@
                     <!-- ویرایشگر پست جدید -->
                     <div class="mb-4 p-3 border rounded">
                         <h6>پست جدید</h6>
-                        <div class="mb-3">
-                            <label>عنوان مطلب</label>
-                            <input type="text" class="form-control" id="postTitle" placeholder="عنوان مطلب را وارد کنید">
-                        </div>
-                        <div class="mb-3">
-                            <label>آدرس تصویر</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="postImage" placeholder="آدرس تصویر مطلب">
-                                <button class="btn btn-outline-secondary" type="button" onclick="browseImages()">انتخاب تصویر</button>
+                        <div class="form-row-responsive">
+                            <div class="form-group-responsive">
+                                <label>عنوان مطلب</label>
+                                <input type="text" class="form-control" id="postTitle" placeholder="عنوان مطلب را وارد کنید">
                             </div>
-                            <small class="text-muted">لینک مستقیم تصویر را وارد کنید</small>
+                            <div class="form-group-responsive">
+                                <label>آدرس تصویر</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="postImage" placeholder="آدرس تصویر مطلب">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="browseImages()">انتخاب تصویر</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group-responsive">
                             <label>تگ‌ها (با کاما جدا کنید)</label>
                             <input type="text" class="form-control" id="postTags" placeholder="مثلا: کتاب, ادبیات, شعر">
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group-responsive">
                             <label>متن مطلب</label>
                             <div class="editor-toolbar">
                                 <button type="button" onclick="formatText('bold')"><b>B</b></button>
@@ -279,7 +486,7 @@
                             </div>
                             <div id="postEditor" contenteditable="true"></div>
                         </div>
-                        <button class="btn btn-success" onclick="publishPost()">
+                        <button class="btn btn-success w-100 w-md-auto">
                             <i class="fas fa-paper-plane"></i> انتشار مطلب
                         </button>
                     </div>
@@ -295,12 +502,14 @@
                 <div id="form-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-envelope text-warning"></i> درخواست‌های بررسی اثر</h5>
                     <hr>
-                    <div class="mb-3">
-                        <div class="input-group" style="max-width: 300px;">
-                            <input type="text" class="form-control" placeholder="جستجو در درخواست‌ها..." id="searchSubmissions">
-                            <button class="btn btn-outline-secondary" onclick="searchSubmissions()">
-                                <i class="fas fa-search"></i>
-                            </button>
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="جستجو در درخواست‌ها..." id="searchSubmissions">
+                                <button class="btn btn-outline-secondary" onclick="searchSubmissions()">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div id="submissionsList">
@@ -312,17 +521,17 @@
                 <div id="footer-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-shoe-prints text-warning"></i> مدیریت فوتر</h5>
                     <hr>
-                    <div class="row">
-                        <div class="col-md-6">
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
                             <h6>شبکه‌های اجتماعی</h6>
                             <div id="socialLinksContainer">
                                 <!-- لینک‌های اجتماعی -->
                             </div>
-                            <button class="btn btn-sm btn-success mt-2" onclick="addSocialLink()">
+                            <button class="btn btn-sm btn-success mt-2 w-100">
                                 <i class="fas fa-plus"></i> افزودن شبکه اجتماعی
                             </button>
                         </div>
-                        <div class="col-md-6">
+                        <div class="form-group-responsive">
                             <h6>اطلاعات تماس</h6>
                             <div class="mb-3">
                                 <label>ایمیل</label>
@@ -340,35 +549,33 @@
                 <div id="security-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-shield-alt text-warning"></i> تنظیمات امنیتی و لاگین</h5>
                     <hr>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label>نام کاربری جدید</label>
-                                <input type="text" class="form-control" id="newUsername">
-                            </div>
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <label>نام کاربری جدید</label>
+                            <input type="text" class="form-control" id="newUsername">
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label>رمز عبور جدید</label>
-                                <input type="password" class="form-control" id="newPassword">
-                            </div>
+                        <div class="form-group-responsive">
+                            <label>رمز عبور جدید</label>
+                            <input type="password" class="form-control" id="newPassword">
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label>ایمیل بازیابی</label>
-                        <input type="email" class="form-control" id="recoveryEmail" value="amagh.pub@gmail.com">
-                        <small class="text-muted">این ایمیل برای بازیابی اطلاعات ورود استفاده می‌شود</small>
-                    </div>
-                    <div class="mb-3">
-                        <label>ایمیل دریافت درخواست‌ها</label>
-                        <input type="email" class="form-control" id="submissionEmail" value="amagh.pub@gmail.com">
-                        <small class="text-muted">درخواست‌های جدید به این ایمیل ارسال می‌شوند</small>
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <label>ایمیل بازیابی</label>
+                            <input type="email" class="form-control" id="recoveryEmail" value="amagh.pub@gmail.com">
+                            <small class="text-muted">این ایمیل برای بازیابی اطلاعات ورود استفاده می‌شود</small>
+                        </div>
+                        <div class="form-group-responsive">
+                            <label>ایمیل دریافت درخواست‌ها</label>
+                            <input type="email" class="form-control" id="submissionEmail" value="amagh.pub@gmail.com">
+                            <small class="text-muted">درخواست‌های جدید به این ایمیل ارسال می‌شوند</small>
+                        </div>
                     </div>
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle"></i>
                         پس از تغییر اطلاعات، برای ورود مجدد از اطلاعات جدید استفاده کنید.
                     </div>
-                    <button class="btn btn-warning" onclick="updateSecuritySettings()">
+                    <button class="btn btn-warning w-100 w-md-auto">
                         <i class="fas fa-key"></i> بروزرسانی تنظیمات امنیتی
                     </button>
                 </div>
@@ -393,6 +600,21 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // مدیریت منوی موبایل
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('mobile-open');
+        }
+
+        // بستن منوی موبایل هنگام کلیک روی لینک
+        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 992) {
+                    document.getElementById('sidebar').classList.remove('mobile-open');
+                }
+            });
+        });
+
         // مدیریت ماژول‌ها
         document.querySelectorAll('.sidebar .nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -424,316 +646,7 @@
             }
         }
 
-        // 🔒 تنظیمات امنیتی
-        function updateSecuritySettings() {
-            const newUsername = document.getElementById('newUsername').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const recoveryEmail = document.getElementById('recoveryEmail').value;
-            const submissionEmail = document.getElementById('submissionEmail').value;
-            
-            if (newUsername && newPassword) {
-                if (newPassword.length < 6) {
-                    alert('رمز عبور باید حداقل 6 کاراکتر باشد.');
-                    return;
-                }
-                
-                localStorage.setItem('adminUsername', newUsername);
-                localStorage.setItem('adminPassword', newPassword);
-                localStorage.setItem('recoveryEmail', recoveryEmail);
-                localStorage.setItem('submissionEmail', submissionEmail);
-                
-                alert('تنظیمات امنیتی با موفقیت بروزرسانی شد.');
-                document.getElementById('newUsername').value = '';
-                document.getElementById('newPassword').value = '';
-            } else {
-                alert('لطفاً نام کاربری و رمز عبور جدید را وارد کنید.');
-            }
-        }
-
-        // 📝 مدیریت پست‌ها
-        function formatText(command, value = null) {
-            document.getElementById('postEditor').focus();
-            if (command === 'insertLink') {
-                const url = prompt('آدرس لینک را وارد کنید:');
-                if (url) document.execCommand('createLink', false, url);
-            } else if (value) {
-                document.execCommand(command, false, value);
-            } else {
-                document.execCommand(command, false, null);
-            }
-        }
-
-        function browseImages() {
-            const imageUrl = prompt('لینک مستقیم تصویر را وارد کنید:');
-            if (imageUrl) {
-                document.getElementById('postImage').value = imageUrl;
-            }
-        }
-
-        function publishPost() {
-            const title = document.getElementById('postTitle').value;
-            const image = document.getElementById('postImage').value;
-            const tags = document.getElementById('postTags').value;
-            const content = document.getElementById('postEditor').innerHTML;
-            
-            if (!title || !content) {
-                alert('لطفاً عنوان و محتوای مطلب را وارد کنید.');
-                return;
-            }
-            
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const newPost = {
-                id: Date.now(),
-                title: title,
-                image: image || 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg',
-                excerpt: content.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
-                content: content,
-                tags: tags.split(',').map(tag => tag.trim()),
-                date: new Date().toLocaleDateString('fa-IR'),
-                published: true
-            };
-            
-            posts.unshift(newPost);
-            localStorage.setItem('blogPosts', JSON.stringify(posts));
-            
-            alert('مطلب با موفقیت منتشر شد!');
-            // ریست فرم
-            document.getElementById('postTitle').value = '';
-            document.getElementById('postImage').value = '';
-            document.getElementById('postTags').value = '';
-            document.getElementById('postEditor').innerHTML = '';
-            
-            loadPosts();
-        }
-
-        function loadPosts() {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const container = document.getElementById('postsList');
-            container.innerHTML = '';
-            
-            if (posts.length === 0) {
-                container.innerHTML = '<p class="text-muted">هنوز هیچ پستی منتشر نشده است.</p>';
-                return;
-            }
-            
-            posts.forEach((post, index) => {
-                container.innerHTML += `
-                    <div class="border p-3 mb-2 rounded">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6>${post.title}</h6>
-                                <small class="text-muted">${post.date}</small>
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-outline-primary me-1" onclick="editPost(${index})">ویرایش</button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="deletePost(${index})">حذف</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        // 🖼️ مدیریت هدر
-        function loadHeaderSettings() {
-            const logoUrl = localStorage.getItem('siteLogo') || 'https://uploadkon.ir/uploads/2bb820_25website-Logo.png';
-            document.getElementById('logoUrl').value = logoUrl;
-            document.getElementById('logoPreview').src = logoUrl;
-        }
-
-        function uploadLogo() {
-            const fileInput = document.getElementById('logoUpload');
-            const file = fileInput.files[0];
-            
-            if (file) {
-                if (!file.type.startsWith('image/')) {
-                    alert('لطفاً یک فایل تصویری انتخاب کنید.');
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imageUrl = e.target.result;
-                    
-                    localStorage.setItem('siteLogo', imageUrl);
-                    document.getElementById('logoUrl').value = imageUrl;
-                    document.getElementById('logoPreview').src = imageUrl;
-                    updateSiteLogo(imageUrl);
-                    
-                    alert('لوگو با موفقیت آپلود و اعمال شد.');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                alert('لطفاً یک فایل انتخاب کنید.');
-            }
-        }
-
-        function updateLogoFromUrl() {
-            const logoUrl = document.getElementById('logoUrl').value;
-            if (logoUrl) {
-                localStorage.setItem('siteLogo', logoUrl);
-                document.getElementById('logoPreview').src = logoUrl;
-                updateSiteLogo(logoUrl);
-                alert('لوگو با موفقیت به‌روزرسانی شد.');
-            }
-        }
-
-        function updateSiteLogo(logoUrl) {
-            localStorage.setItem('currentSiteLogo', logoUrl);
-        }
-
-        // 📧 مدیریت درخواست‌ها
-        function loadSubmissions() {
-            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
-            const container = document.getElementById('submissionsList');
-            container.innerHTML = '';
-            
-            if (submissions.length === 0) {
-                container.innerHTML = '<p class="text-muted">هیچ درخواستی ثبت نشده است.</p>';
-                return;
-            }
-            
-            submissions.forEach((submission, index) => {
-                const statusClass = submission.status === 'جدید' ? 'bg-warning' : 'bg-success';
-                container.innerHTML += `
-                    <div class="border p-3 mb-3 rounded">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div style="flex: 1;">
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="badge ${statusClass} me-2">${submission.status}</span>
-                                    <h6 class="mb-0">${submission.name} - ${submission.bookName}</h6>
-                                </div>
-                                <p class="mb-1"><strong>موضوع:</strong> ${submission.subject}</p>
-                                <p class="mb-1"><strong>ایمیل:</strong> ${submission.email}</p>
-                                <p class="mb-1"><strong>تلفن:</strong> ${submission.phone || 'ثبت نشده'}</p>
-                                <small class="text-muted">${submission.timestamp}</small>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <button class="btn btn-sm btn-outline-primary mb-1" onclick="viewSubmissionDetails(${index})">
-                                    مشاهده جزئیات
-                                </button>
-                                ${submission.fileName ? `
-                                    <button class="btn btn-sm btn-outline-success mb-1" onclick="downloadFile(${index})">
-                                        دریافت فایل
-                                    </button>
-                                ` : ''}
-                                <button class="btn btn-sm btn-outline-danger" onclick="deleteSubmission(${index})">
-                                    حذف
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function viewSubmissionDetails(index) {
-            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
-            const submission = submissions[index];
-            
-            const detailsHtml = `
-                <div class="submission-details">
-                    <h6>اطلاعات کامل درخواست</h6>
-                    <p><strong>نام و نام خانوادگی:</strong> ${submission.name}</p>
-                    <p><strong>نام کتاب:</strong> ${submission.bookName}</p>
-                    <p><strong>موضوع کتاب:</strong> ${submission.subject}</p>
-                    <p><strong>توضیحات:</strong> ${submission.description || 'ثبت نشده'}</p>
-                    <p><strong>شماره تماس:</strong> ${submission.phone || 'ثبت نشده'}</p>
-                    <p><strong>ایمیل:</strong> ${submission.email}</p>
-                    <p><strong>فایل ارسالی:</strong> ${submission.fileName || 'فاقد فایل'}</p>
-                    <p><strong>تاریخ ثبت:</strong> ${submission.timestamp}</p>
-                    <p><strong>وضعیت:</strong> ${submission.status}</p>
-                </div>
-            `;
-            
-            document.getElementById('submissionDetails').innerHTML = detailsHtml;
-            const modal = new bootstrap.Modal(document.getElementById('submissionModal'));
-            modal.show();
-        }
-
-        function downloadFile(index) {
-            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
-            const submission = submissions[index];
-            
-            if (submission.fileData) {
-                // ایجاد لینک دانلود برای فایل
-                const link = document.createElement('a');
-                link.href = submission.fileData;
-                link.download = submission.fileName;
-                link.click();
-            } else {
-                alert('فایل موجود نیست.');
-            }
-        }
-
-        function deleteSubmission(index) {
-            if (confirm('آیا از حذف این درخواست اطمینان دارید؟')) {
-                const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
-                submissions.splice(index, 1);
-                localStorage.setItem('submissions', JSON.stringify(submissions));
-                loadSubmissions();
-            }
-        }
-
-        function searchSubmissions() {
-            const searchTerm = document.getElementById('searchSubmissions').value.toLowerCase();
-            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
-            const container = document.getElementById('submissionsList');
-            
-            if (!searchTerm) {
-                loadSubmissions();
-                return;
-            }
-            
-            const filteredSubmissions = submissions.filter(sub => 
-                sub.name.toLowerCase().includes(searchTerm) ||
-                sub.bookName.toLowerCase().includes(searchTerm) ||
-                sub.email.toLowerCase().includes(searchTerm) ||
-                sub.subject.toLowerCase().includes(searchTerm)
-            );
-            
-            container.innerHTML = '';
-            
-            if (filteredSubmissions.length === 0) {
-                container.innerHTML = '<p class="text-muted">هیچ درخواستی matching یافت نشد.</p>';
-                return;
-            }
-            
-            filteredSubmissions.forEach((submission, index) => {
-                const originalIndex = submissions.findIndex(s => s.id === submission.id);
-                const statusClass = submission.status === 'جدید' ? 'bg-warning' : 'bg-success';
-                container.innerHTML += `
-                    <div class="border p-3 mb-3 rounded">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div style="flex: 1;">
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="badge ${statusClass} me-2">${submission.status}</span>
-                                    <h6 class="mb-0">${submission.name} - ${submission.bookName}</h6>
-                                </div>
-                                <p class="mb-1"><strong>موضوع:</strong> ${submission.subject}</p>
-                                <p class="mb-1"><strong>ایمیل:</strong> ${submission.email}</p>
-                                <small class="text-muted">${submission.timestamp}</small>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <button class="btn btn-sm btn-outline-primary mb-1" onclick="viewSubmissionDetails(${originalIndex})">
-                                    مشاهده جزئیات
-                                </button>
-                                ${submission.fileName ? `
-                                    <button class="btn btn-sm btn-outline-success mb-1" onclick="downloadFile(${originalIndex})">
-                                        دریافت فایل
-                                    </button>
-                                ` : ''}
-                                <button class="btn btn-sm btn-outline-danger" onclick="deleteSubmission(${originalIndex})">
-                                    حذف
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        // 👣 مدیریت فوتر
+        // مدیریت فوتر - شبکه‌های اجتماعی
         function loadFooterSettings() {
             const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [
                 { name: 'تلگرام', url: 'https://t.me/amaghpub', icon: 'https://uploadkon.ir/uploads/3db017_25Telegram.png' },
@@ -758,101 +671,40 @@
             
             socialLinks.forEach((link, index) => {
                 container.innerHTML += `
-                    <div class="border p-2 mb-2 rounded">
-                        <div class="row align-items-center">
-                            <div class="col-2">
-                                <img src="${link.icon}" alt="${link.name}" class="social-icon-preview">
-                            </div>
-                            <div class="col-4">
-                                <input type="text" class="form-control form-control-sm" value="${link.name}" onchange="updateSocialLink(${index}, 'name', this.value)">
-                            </div>
-                            <div class="col-4">
-                                <input type="text" class="form-control form-control-sm" value="${link.url}" onchange="updateSocialLink(${index}, 'url', this.value)">
-                            </div>
-                            <div class="col-2">
-                                <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-outline-secondary" onclick="changeSocialIcon(${index})">تغییر آیکون</button>
-                                    <button class="btn btn-outline-danger" onclick="removeSocialLink(${index})">حذف</button>
-                                </div>
-                            </div>
+                    <div class="social-link-item">
+                        <img src="${link.icon}" alt="${link.name}" class="social-icon-preview">
+                        <div class="social-link-inputs">
+                            <input type="text" class="form-control form-control-sm" value="${link.name}" placeholder="نام شبکه" onchange="updateSocialLink(${index}, 'name', this.value)">
+                            <input type="text" class="form-control form-control-sm" value="${link.url}" placeholder="آدرس لینک" onchange="updateSocialLink(${index}, 'url', this.value)">
+                        </div>
+                        <div class="social-link-actions">
+                            <button class="btn btn-outline-secondary btn-sm" onclick="changeSocialIcon(${index})">
+                                <i class="fas fa-image"></i>
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" onclick="removeSocialLink(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        function addSocialLink() {
-            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
-            socialLinks.push({
-                name: 'شبکه جدید',
-                url: '#',
-                icon: 'https://uploadkon.ir/uploads/3db017_25Telegram.png'
-            });
-            
-            localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
-            renderSocialLinks(socialLinks);
-        }
-
-        function updateSocialLink(index, field, value) {
-            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
-            socialLinks[index][field] = value;
-            localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
-        }
-
-        function changeSocialIcon(index) {
-            const iconUrl = prompt('لینک آیکون جدید را وارد کنید:');
-            if (iconUrl) {
-                const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
-                socialLinks[index].icon = iconUrl;
-                localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
-                renderSocialLinks(socialLinks);
+        // مدیریت ریسپانسیو پنجره
+        function handleResize() {
+            if (window.innerWidth > 992) {
+                document.getElementById('sidebar').classList.remove('mobile-open');
             }
         }
 
-        function removeSocialLink(index) {
-            if (confirm('آیا از حذف این شبکه اجتماعی اطمینان دارید؟')) {
-                const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
-                socialLinks.splice(index, 1);
-                localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
-                renderSocialLinks(socialLinks);
-            }
-        }
-
-        // ℹ️ مدیریت درباره ما
-        function loadAboutSettings() {
-            const aboutText = localStorage.getItem('aboutText') || `نشر اعماق بیست و دوم مهرماه یک‌هزار و چهارصد و چهار زاده شد
-
-نشر اعماق امکان زیستن است در عین نبودن
-
-شماره پروانه نشر: 19975
-
-[...در حال به روزرسانی...]`;
-            
-            document.getElementById('aboutText').value = aboutText;
-        }
-
-        function updateAbout() {
-            const aboutText = document.getElementById('aboutText').value;
-            localStorage.setItem('aboutText', aboutText);
-            alert('متن درباره ما با موفقیت بروزرسانی شد.');
-        }
-
-        // 💾 ذخیره تمام تغییرات
-        function saveAllChanges() {
-            // ذخیره تنظیمات فوتر
-            const contactEmail = document.getElementById('contactEmail').value;
-            const copyrightText = document.getElementById('copyrightText').value;
-            localStorage.setItem('contactEmail', contactEmail);
-            localStorage.setItem('copyrightText', copyrightText);
-            
-            alert('تمامی تغییرات با موفقیت ذخیره شدند.');
-        }
+        window.addEventListener('resize', handleResize);
 
         // بارگذاری اولیه
         document.addEventListener('DOMContentLoaded', function() {
             loadHeaderSettings();
             loadAboutSettings();
             loadFooterSettings();
+            handleResize(); // تنظیم اولیه بر اساس سایز صفحه
         });
     </script>
 </body>
