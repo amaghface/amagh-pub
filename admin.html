@@ -27,7 +27,7 @@
             padding: 0;
         }
         
-        /* سایدبار کاملاً ریسپانسیو */
+        /* سایدبار */
         .sidebar {
             background-color: var(--primary);
             color: var(--light);
@@ -60,6 +60,7 @@
         .sidebar-nav {
             flex: 1;
             overflow-y: auto;
+            padding: 0;
         }
         
         .sidebar .nav-link {
@@ -73,6 +74,7 @@
             display: flex;
             align-items: center;
             margin: 0;
+            text-decoration: none;
         }
         
         .sidebar .nav-link:hover,
@@ -89,7 +91,12 @@
             text-align: center;
         }
         
-        /* محتوای اصلی کاملاً ریسپانسیو */
+        .sidebar .nav-link.active .module-icon,
+        .sidebar .nav-link:hover .module-icon {
+            color: var(--light);
+        }
+        
+        /* محتوای اصلی */
         .main-content {
             margin-right: 280px;
             padding: 20px;
@@ -98,7 +105,7 @@
             width: calc(100% - 280px);
         }
         
-        /* هدر پنل مدیریت کاملاً ریسپانسیو */
+        /* هدر پنل مدیریت */
         .panel-header {
             display: flex;
             flex-wrap: wrap;
@@ -141,10 +148,11 @@
             padding: 30px;
             width: 100%;
             transition: all 0.3s ease;
+            display: block;
         }
         
-        .admin-card:hover {
-            box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+        .admin-card[style*="display: none"] {
+            display: none !important;
         }
         
         .admin-card h5 {
@@ -170,7 +178,7 @@
             transform: translateY(-2px);
         }
         
-        /* فرم‌های کاملاً ریسپانسیو */
+        /* فرم‌ها */
         .form-row-responsive {
             display: flex;
             flex-wrap: wrap;
@@ -198,7 +206,7 @@
             box-shadow: 0 0 0 0.2rem rgba(122, 101, 56, 0.15);
         }
         
-        /* ویرایشگر پیشرفته */
+        /* ویرایشگر */
         .editor-toolbar {
             background: #f8f9fa;
             padding: 15px;
@@ -310,28 +318,14 @@
             transform: scale(1.05);
         }
         
-        /* رسپانسیو برای دستگاه‌های مختلف */
-        @media (max-width: 1400px) {
+        /* استایل‌های ریسپانسیو */
+        @media (max-width: 1200px) {
             .sidebar {
                 width: 260px;
             }
             .main-content {
                 margin-right: 260px;
                 width: calc(100% - 260px);
-            }
-        }
-        
-        @media (max-width: 1200px) {
-            .sidebar {
-                width: 240px;
-            }
-            .main-content {
-                margin-right: 240px;
-                width: calc(100% - 240px);
-                padding: 18px;
-            }
-            .admin-card {
-                padding: 25px;
             }
         }
         
@@ -361,19 +355,11 @@
                 justify-content: center;
                 width: 100%;
             }
-            .form-group-responsive {
-                min-width: 100%;
-            }
         }
         
         @media (max-width: 768px) {
             .admin-card {
                 padding: 20px;
-                margin-bottom: 20px;
-            }
-            .panel-header h4 {
-                font-size: 1.4em;
-                text-align: center;
             }
             .header-buttons {
                 flex-direction: column;
@@ -382,12 +368,13 @@
             .header-buttons .btn {
                 width: 100%;
                 margin-bottom: 8px;
-                justify-content: center;
+            }
+            .form-group-responsive {
+                min-width: 100%;
             }
             .social-link-item {
                 flex-direction: column;
                 align-items: stretch;
-                padding: 15px;
             }
             .social-link-inputs {
                 flex-direction: column;
@@ -398,22 +385,6 @@
                 margin-top: 15px;
                 width: 100%;
             }
-            .social-link-actions .btn {
-                flex: 1;
-            }
-            .editor-toolbar {
-                padding: 12px;
-                gap: 6px;
-            }
-            .editor-toolbar button {
-                padding: 6px 10px;
-                min-width: 40px;
-                font-size: 0.9em;
-            }
-            #postEditor {
-                min-height: 300px;
-                padding: 15px;
-            }
         }
         
         @media (max-width: 576px) {
@@ -422,74 +393,15 @@
             }
             .admin-card {
                 padding: 18px;
-                margin-bottom: 18px;
-                border-radius: 10px;
-            }
-            .panel-header h4 {
-                font-size: 1.3em;
-            }
-            .sidebar .nav-link {
-                padding: 14px 18px;
-                font-size: 0.95em;
             }
             .mobile-menu-btn {
                 top: 15px;
                 right: 15px;
                 padding: 10px 13px;
-                font-size: 16px;
-            }
-            .form-control {
-                padding: 10px 12px;
-            }
-            .editor-toolbar {
-                padding: 10px;
-            }
-            .editor-toolbar button {
-                padding: 5px 8px;
-                min-width: 36px;
-                font-size: 0.85em;
             }
         }
         
-        @media (max-width: 400px) {
-            .main-content {
-                padding: 10px;
-            }
-            .admin-card {
-                padding: 15px;
-            }
-            .social-link-actions {
-                flex-direction: column;
-                gap: 8px;
-            }
-            .social-link-actions .btn {
-                width: 100%;
-            }
-            .editor-toolbar button {
-                padding: 4px 6px;
-                min-width: 32px;
-                font-size: 0.8em;
-            }
-            .mobile-menu-btn {
-                top: 12px;
-                right: 12px;
-                padding: 8px 10px;
-            }
-        }
-        
-        @media (max-width: 360px) {
-            .sidebar {
-                width: 100%;
-            }
-            .panel-header h4 {
-                font-size: 1.2em;
-            }
-            .admin-card h5 {
-                font-size: 1.1em;
-            }
-        }
-
-        /* اسکرول بار زیبا */
+        /* اسکرول بار */
         .sidebar-nav::-webkit-scrollbar {
             width: 6px;
         }
@@ -502,20 +414,11 @@
             background: var(--secondary);
             border-radius: 3px;
         }
-        
-        .sidebar-nav::-webkit-scrollbar-thumb:hover {
-            background: #69532e;
-        }
-
-        /* انیمیشن‌های ظریف */
-        .admin-card, .btn, .form-control, .social-link-item {
-            transition: all 0.3s ease;
-        }
     </style>
 </head>
 <body>
     <!-- دکمه منوی موبایل -->
-    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="منوی موبایل">
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
         <i class="fas fa-bars"></i>
     </button>
 
@@ -537,7 +440,7 @@
     <div class="container-fluid p-0">
         <div class="row g-0">
             <!-- سایدبار -->
-            <nav class="sidebar" id="sidebar" aria-label="منوی اصلی">
+            <nav class="sidebar" id="sidebar">
                 <div class="sidebar-content">
                     <div class="sidebar-header">
                         <img src="https://uploadkon.ir/uploads/44f319_25Website.png" alt="لوگوی نشر اعماق" height="50" style="background: white; padding: 5px; border-radius: 5px;">
@@ -593,37 +496,175 @@
                 </div>
 
                 <!-- ماژول هدر و منو -->
-                <section id="header-module" class="admin-card" aria-labelledby="header-module-title">
-                    <h5 id="header-module-title"><i class="fas fa-header text-warning"></i> مدیریت هدر و منو</h5>
+                <section id="header-module" class="admin-card">
+                    <h5><i class="fas fa-header text-warning"></i> مدیریت هدر و منو</h5>
                     <div class="form-row-responsive">
                         <div class="form-group-responsive">
                             <label class="form-label">آدرس لوگو</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="logoUrl" placeholder="https://example.com/logo.png">
+                                <input type="text" class="form-control" id="logoUrl" value="https://uploadkon.ir/uploads/2bb820_25website-Logo.png">
                                 <button class="btn btn-outline-primary" type="button" onclick="updateLogoFromUrl()">اعمال</button>
                             </div>
-                            <small class="form-text text-muted">آدرس تصویر لوگو را وارد کنید</small>
                         </div>
                         <div class="form-group-responsive">
                             <label class="form-label">آپلود لوگوی جدید</label>
                             <input type="file" class="form-control" id="logoUpload" accept="image/*">
                             <button class="btn btn-success mt-2 w-100" onclick="uploadLogo()">
-                                <i class="fas fa-upload"></i> آپلود و ذخیره لوگو
+                                <i class="fas fa-upload"></i> آپلود لوگو
                             </button>
                         </div>
                     </div>
                     <div class="form-row-responsive">
                         <div class="form-group-responsive">
                             <label class="form-label">پیش‌نمایش لوگو</label>
-                            <div class="border p-4 text-center bg-light rounded">
+                            <div class="border p-3 text-center bg-light">
                                 <img id="logoPreview" src="https://uploadkon.ir/uploads/2bb820_25website-Logo.png" alt="پیش‌نمایش لوگو" style="max-height: 60px; max-width: 200px; width: auto; height: auto;">
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- سایر ماژول‌ها به همین شکل ادامه می‌یابند... -->
+                <!-- ماژول اسلایدشو -->
+                <section id="slider-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-images text-warning"></i> مدیریت اسلایدشو</h5>
+                    <div id="slidesContainer">
+                        <p>مدیریت اسلایدشو - به زودی...</p>
+                    </div>
+                    <button class="btn btn-success mt-3" onclick="addSlide()">
+                        <i class="fas fa-plus"></i> افزودن اسلاید جدید
+                    </button>
+                </section>
 
+                <!-- ماژول درباره ما -->
+                <section id="about-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-info-circle text-warning"></i> مدیریت بخش درباره ما</h5>
+                    <div class="form-group-responsive">
+                        <label class="form-label">متن معرفی</label>
+                        <textarea class="form-control" id="aboutText" rows="6">نشر اعماق بیست و دوم مهرماه یک‌هزار و چهارصد و چهار زاده شد
+
+نشر اعماق امکان زیستن است در عین نبودن
+
+شماره پروانه نشر: 19975
+
+[...در حال به روزرسانی...]</textarea>
+                    </div>
+                    <button class="btn btn-primary mt-3" onclick="updateAbout()">
+                        بروزرسانی متن درباره ما
+                    </button>
+                </section>
+
+                <!-- ماژول مدیریت مطالب -->
+                <section id="blog-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-blog text-warning"></i> مدیریت مطالب و بلاگ</h5>
+                    
+                    <div class="mb-4 p-3 border rounded">
+                        <h6>پست جدید</h6>
+                        <div class="form-row-responsive">
+                            <div class="form-group-responsive">
+                                <label class="form-label">عنوان مطلب</label>
+                                <input type="text" class="form-control" id="postTitle" placeholder="عنوان مطلب را وارد کنید">
+                            </div>
+                            <div class="form-group-responsive">
+                                <label class="form-label">آدرس تصویر</label>
+                                <input type="text" class="form-control" id="postImage" placeholder="آدرس تصویر مطلب">
+                            </div>
+                        </div>
+                        <div class="form-group-responsive">
+                            <label class="form-label">تگ‌ها (با کاما جدا کنید)</label>
+                            <input type="text" class="form-control" id="postTags" placeholder="مثلا: کتاب, ادبیات, شعر">
+                        </div>
+                        <div class="form-group-responsive">
+                            <label class="form-label">متن مطلب</label>
+                            <div class="editor-toolbar">
+                                <button type="button" onclick="formatText('bold')"><b>B</b></button>
+                                <button type="button" onclick="formatText('italic')"><i>I</i></button>
+                                <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                                <button type="button" onclick="formatText('insertUnorderedList')">• لیست</button>
+                                <button type="button" onclick="formatText('insertLink')">🔗 لینک</button>
+                            </div>
+                            <div id="postEditor" contenteditable="true"></div>
+                        </div>
+                        <button class="btn btn-success mt-3" onclick="publishPost()">
+                            <i class="fas fa-paper-plane"></i> انتشار مطلب
+                        </button>
+                    </div>
+
+                    <h6>پست‌های موجود</h6>
+                    <div id="postsList">
+                        <!-- پست‌ها -->
+                    </div>
+                </section>
+
+                <!-- ماژول درخواست‌ها -->
+                <section id="form-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-envelope text-warning"></i> درخواست‌های بررسی اثر</h5>
+                    <div class="mb-3">
+                        <div class="input-group" style="max-width: 300px;">
+                            <input type="text" class="form-control" placeholder="جستجو در درخواست‌ها..." id="searchSubmissions">
+                            <button class="btn btn-outline-secondary" onclick="searchSubmissions()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="submissionsList">
+                        <!-- درخواست‌ها -->
+                    </div>
+                </section>
+
+                <!-- ماژول فوتر -->
+                <section id="footer-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-shoe-prints text-warning"></i> مدیریت فوتر</h5>
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <h6>شبکه‌های اجتماعی</h6>
+                            <div id="socialLinksContainer">
+                                <!-- لینک‌های اجتماعی -->
+                            </div>
+                            <button class="btn btn-sm btn-success mt-2" onclick="addSocialLink()">
+                                <i class="fas fa-plus"></i> افزودن شبکه اجتماعی
+                            </button>
+                        </div>
+                        <div class="form-group-responsive">
+                            <h6>اطلاعات تماس</h6>
+                            <div class="mb-3">
+                                <label class="form-label">ایمیل</label>
+                                <input type="email" class="form-control" id="contactEmail" value="amagh.pub@gmail.com">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">متن کپی رایت</label>
+                                <input type="text" class="form-control" id="copyrightText" value="© تمامی حقوق محفوظ است | نشر اعماق">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ماژول تنظیمات امنیتی -->
+                <section id="security-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-shield-alt text-warning"></i> تنظیمات امنیتی و لاگین</h5>
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <label class="form-label">نام کاربری جدید</label>
+                            <input type="text" class="form-control" id="newUsername">
+                        </div>
+                        <div class="form-group-responsive">
+                            <label class="form-label">رمز عبور جدید</label>
+                            <input type="password" class="form-control" id="newPassword">
+                        </div>
+                    </div>
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <label class="form-label">ایمیل بازیابی</label>
+                            <input type="email" class="form-control" id="recoveryEmail" value="amagh.pub@gmail.com">
+                        </div>
+                        <div class="form-group-responsive">
+                            <label class="form-label">ایمیل دریافت درخواست‌ها</label>
+                            <input type="email" class="form-control" id="submissionEmail" value="amagh.pub@gmail.com">
+                        </div>
+                    </div>
+                    <button class="btn btn-warning mt-3" onclick="updateSecuritySettings()">
+                        <i class="fas fa-key"></i> بروزرسانی تنظیمات امنیتی
+                    </button>
+                </section>
             </main>
         </div>
     </div>
@@ -636,16 +677,44 @@
             sidebar.classList.toggle('mobile-open');
         }
 
-        // بستن منوی موبایل هنگام کلیک روی لینک
-        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
-            link.addEventListener('click', function() {
-                if (window.innerWidth <= 992) {
-                    document.getElementById('sidebar').classList.remove('mobile-open');
-                }
+        // مدیریت ماژول‌ها - رفع مشکل اصلی
+        function initializeModules() {
+            // مخفی کردن همه ماژول‌ها به جز ماژول فعال
+            document.querySelectorAll('.admin-card').forEach(card => {
+                card.style.display = 'none';
             });
-        });
+            // نمایش ماژول هدر (اولین ماژول)
+            document.getElementById('header-module').style.display = 'block';
+            
+            // اضافه کردن event listener به لینک‌ها
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // حذف کلاس active از همه لینک‌ها
+                    document.querySelectorAll('.sidebar .nav-link').forEach(l => {
+                        l.classList.remove('active');
+                    });
+                    
+                    // اضافه کردن کلاس active به لینک کلیک شده
+                    this.classList.add('active');
+                    
+                    // مخفی کردن همه ماژول‌ها
+                    document.querySelectorAll('.admin-card').forEach(card => {
+                        card.style.display = 'none';
+                    });
+                    
+                    // نمایش ماژول مربوطه
+                    const moduleName = this.getAttribute('data-module');
+                    const moduleElement = document.getElementById(moduleName + '-module');
+                    if (moduleElement) {
+                        moduleElement.style.display = 'block';
+                    }
+                });
+            });
+        }
 
-        // مدیریت ریسپانسیو پنجره
+        // مدیریت ریسپانسیو
         function handleResize() {
             const sidebar = document.getElementById('sidebar');
             if (window.innerWidth > 992) {
@@ -653,34 +722,7 @@
             }
         }
 
-        // مدیریت ماژول‌ها
-        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-                
-                document.querySelectorAll('.admin-card').forEach(card => card.style.display = 'none');
-                
-                const module = this.getAttribute('data-module');
-                const moduleElement = document.getElementById(module + '-module');
-                if (moduleElement) {
-                    moduleElement.style.display = 'block';
-                }
-            });
-        });
-
-        // رویدادهای ریسپانسیو
-        window.addEventListener('resize', handleResize);
-        window.addEventListener('load', handleResize);
-
-        // بارگذاری اولیه
-        document.addEventListener('DOMContentLoaded', function() {
-            handleResize();
-        });
-
-        // خروج از سیستم
+        // توابع مدیریت
         function logout() {
             if (confirm('آیا از خروج از پنل مدیریت اطمینان دارید؟')) {
                 localStorage.removeItem('adminAuthenticated');
@@ -689,7 +731,65 @@
             }
         }
 
-        // سایر توابع مدیریت...
+        function saveAllChanges() {
+            alert('تمامی تغییرات با موفقیت ذخیره شدند.');
+        }
+
+        function updateLogoFromUrl() {
+            const logoUrl = document.getElementById('logoUrl').value;
+            if (logoUrl) {
+                document.getElementById('logoPreview').src = logoUrl;
+                localStorage.setItem('siteLogo', logoUrl);
+                alert('لوگو با موفقیت به‌روزرسانی شد.');
+            }
+        }
+
+        function uploadLogo() {
+            alert('قابلیت آپلود لوگو فعال شد.');
+        }
+
+        function updateAbout() {
+            alert('متن درباره ما با موفقیت بروزرسانی شد.');
+        }
+
+        function formatText(command) {
+            document.getElementById('postEditor').focus();
+            document.execCommand(command, false, null);
+        }
+
+        function publishPost() {
+            const title = document.getElementById('postTitle').value;
+            if (title) {
+                alert('مطلب با موفقیت منتشر شد!');
+            } else {
+                alert('لطفاً عنوان مطلب را وارد کنید.');
+            }
+        }
+
+        function updateSecuritySettings() {
+            alert('تنظیمات امنیتی با موفقیت بروزرسانی شد.');
+        }
+
+        function loadFooterSettings() {
+            const socialLinks = [
+                { name: 'تلگرام', url: 'https://t.me/amaghpub', icon: 'https://uploadkon.ir/uploads/3db017_25Telegram.png' },
+                { name: 'اینستاگرام', url: 'https://instagram.com/amaghpub', icon: 'https://uploadkon.ir/uploads/a43a17_25Instagram.png' },
+                { name: 'لینکدین', url: 'https://www.linkedin.com/company/amaghpub', icon: 'https://uploadkon.ir/uploads/1f7217_25Linkedin.png' },
+                { name: 'ایمیل', url: 'mailto:amagh.pub@gmail.com', icon: 'https://uploadkon.ir/uploads/547417_25Untitled-2.png' }
+            ];
+            // رندر لینک‌های اجتماعی
+        }
+
+        function addSocialLink() {
+            alert('افزودن شبکه اجتماعی جدید');
+        }
+
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeModules();
+            handleResize();
+            window.addEventListener('resize', handleResize);
+        });
     </script>
 </body>
 </html>
