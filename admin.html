@@ -392,6 +392,75 @@
             background: #69532e;
             transform: scale(1.05);
         }
+
+        /* استایل‌های جدید برای مدیریت مطالب پیشرفته */
+        .post-editor-full {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .image-preview-container {
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .post-meta {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag-badge {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 2px;
+            font-size: 0.8em;
+        }
+
+        .edit-post-modal .modal-content {
+            border-radius: 12px;
+        }
+
+        .edit-post-modal .modal-header {
+            background: var(--primary);
+            color: white;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .full-editor {
+            min-height: 400px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
         
         @media (max-width: 1200px) {
             .sidebar {
@@ -458,6 +527,15 @@
                 justify-content: center;
                 margin-top: 15px;
                 width: 100%;
+            }
+
+            .post-actions {
+                flex-direction: column;
+            }
+
+            .post-actions .btn {
+                width: 100%;
+                margin-bottom: 8px;
             }
         }
         
@@ -675,55 +753,96 @@
                     </button>
                 </section>
 
+                <!-- بخش مدیریت مطالب کاملاً بازنویسی شده -->
                 <section id="blog-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-blog text-warning"></i> مدیریت مطالب و بلاگ</h5>
                     
-                    <div class="mb-4 p-3 border rounded">
+                    <div class="post-editor-full">
                         <h6>پست جدید</h6>
                         <div class="form-row-responsive">
                             <div class="form-group-responsive">
                                 <label class="form-label">عنوان مطلب</label>
-                                <input type="text" class="form-control" id="postTitle" placeholder="عنوان مطلب را وارد کنید">
+                                <input type="text" class="form-control" id="postTitle" placeholder="عنوان جذاب و کوتاه برای مطلب">
                             </div>
                             <div class="form-group-responsive">
                                 <label class="form-label">خلاصه مطلب</label>
-                                <textarea class="form-control" id="postExcerpt" placeholder="خلاصه کوتاه از مطلب" rows="2"></textarea>
+                                <textarea class="form-control" id="postExcerpt" placeholder="خلاصه کوتاه و جذاب از مطلب (حداکثر 150 کاراکتر)" rows="2" maxlength="150"></textarea>
+                                <small class="text-muted"><span id="excerptCounter">0</span>/150 کاراکتر</small>
                             </div>
                         </div>
+                        
                         <div class="form-row-responsive">
                             <div class="form-group-responsive">
                                 <label class="form-label">آپلود تصویر شاخص</label>
-                                <input type="file" class="form-control" id="postImageUpload" accept="image/*">
+                                <input type="file" class="form-control" id="postImageUpload" accept="image/*" onchange="previewPostImage(this)">
+                                <small class="text-muted">تصویر با کیفیت و مرتبط با مطلب (حداکثر 2MB)</small>
                             </div>
                             <div class="form-group-responsive">
                                 <label class="form-label">یا آدرس تصویر</label>
-                                <input type="text" class="form-control" id="postImage" placeholder="آدرس تصویر مطلب">
+                                <input type="text" class="form-control" id="postImage" placeholder="https://example.com/image.jpg" onchange="updateImagePreview(this.value)">
+                                <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="clearImage()">
+                                    <i class="fas fa-times"></i> حذف تصویر
+                                </button>
                             </div>
                         </div>
+
+                        <div class="image-preview-container" id="imagePreviewContainer" style="display: none;">
+                            <img id="postImagePreview" class="image-preview" alt="پیش‌نمایش تصویر">
+                            <div>
+                                <small class="text-muted">پیش‌نمایش تصویر شاخص</small>
+                            </div>
+                        </div>
+
                         <div class="form-group-responsive">
                             <label class="form-label">تگ‌ها (با کاما جدا کنید)</label>
-                            <input type="text" class="form-control" id="postTags" placeholder="مثلا: کتاب, ادبیات, شعر">
+                            <input type="text" class="form-control" id="postTags" placeholder="مثلا: کتاب, ادبیات, شعر, داستان">
+                            <small class="text-muted">حداکثر 5 تگ مجاز است</small>
                         </div>
+
                         <div class="form-group-responsive">
                             <label class="form-label">متن مطلب</label>
                             <div class="editor-toolbar">
-                                <button type="button" onclick="formatText('bold')"><b>B</b></button>
-                                <button type="button" onclick="formatText('italic')"><i>I</i></button>
-                                <button type="button" onclick="formatText('underline')"><u>U</u></button>
-                                <button type="button" onclick="formatText('insertUnorderedList')">• لیست</button>
-                                <button type="button" onclick="formatText('insertOrderedList')">۱٫ لیست شماره‌دار</button>
-                                <button type="button" onclick="formatText('insertLink')">🔗 لینک</button>
-                                <button type="button" onclick="formatText('formatBlock', '<h2>')">عنوان ۲</button>
-                                <button type="button" onclick="formatText('formatBlock', '<h3>')">عنوان ۳</button>
+                                <button type="button" onclick="formatText('bold')" title="پررنگ"><b>B</b></button>
+                                <button type="button" onclick="formatText('italic')" title="ایتالیک"><i>I</i></button>
+                                <button type="button" onclick="formatText('underline')" title="زیرخط"><u>U</u></button>
+                                <button type="button" onclick="formatText('justifyLeft')" title="چپ چین">⎡</button>
+                                <button type="button" onclick="formatText('justifyCenter')" title="وسط چین">⎢</button>
+                                <button type="button" onclick="formatText('justifyRight')" title="راست چین">⎣</button>
+                                <button type="button" onclick="formatText('insertUnorderedList')" title="لیست نقطه‌ای">•</button>
+                                <button type="button" onclick="formatText('insertOrderedList')" title="لیست شماره‌ای">۱</button>
+                                <button type="button" onclick="insertLink()" title="درج لینک">🔗</button>
+                                <button type="button" onclick="formatText('formatBlock', '<h2>')" title="عنوان ۲">H2</button>
+                                <button type="button" onclick="formatText('formatBlock', '<h3>')" title="عنوان ۳">H3</button>
+                                <button type="button" onclick="formatText('formatBlock', '<p>')" title="پاراگراف">¶</button>
                             </div>
-                            <div id="postEditor" contenteditable="true"></div>
+                            <div id="postEditor" contenteditable="true" class="full-editor" placeholder="محتوا مطلب را اینجا بنویسید..."></div>
+                            <small class="text-muted">می‌توانید از ابزارهای فوق برای فرمت‌دهی متن استفاده کنید</small>
                         </div>
-                        <button class="btn btn-success mt-3" onclick="publishPost()">
-                            <i class="fas fa-paper-plane"></i> انتشار مطلب
-                        </button>
+
+                        <div class="post-actions">
+                            <button class="btn btn-success" onclick="publishPost()">
+                                <i class="fas fa-paper-plane"></i> انتشار مطلب
+                            </button>
+                            <button class="btn btn-outline-secondary" onclick="saveDraft()">
+                                <i class="fas fa-save"></i> ذخیره پیش‌نویس
+                            </button>
+                            <button class="btn btn-outline-danger" onclick="clearForm()">
+                                <i class="fas fa-times"></i> پاک کردن فرم
+                            </button>
+                        </div>
                     </div>
 
-                    <h6>پست‌های موجود</h6>
+                    <h6 class="mt-4">پست‌های منتشر شده</h6>
+                    <div class="post-meta">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>تعداد کل مطالب:</strong> <span id="totalPosts">0</span>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>آخرین به‌روزرسانی:</strong> <span id="lastUpdate">-</span>
+                            </div>
+                        </div>
+                    </div>
                     <div id="postsList">
                         <!-- پست‌ها -->
                     </div>
@@ -889,6 +1008,68 @@
         </div>
     </div>
 
+    <!-- مودال ویرایش مطلب -->
+    <div class="modal fade edit-post-modal" id="editPostModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">ویرایش مطلب</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <label class="form-label">عنوان مطلب</label>
+                            <input type="text" class="form-control" id="editPostTitle">
+                        </div>
+                        <div class="form-group-responsive">
+                            <label class="form-label">خلاصه مطلب</label>
+                            <textarea class="form-control" id="editPostExcerpt" rows="2" maxlength="150"></textarea>
+                            <small class="text-muted"><span id="editExcerptCounter">0</span>/150 کاراکتر</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <label class="form-label">آدرس تصویر شاخص</label>
+                            <input type="text" class="form-control" id="editPostImage" onchange="updateEditImagePreview(this.value)">
+                        </div>
+                        <div class="form-group-responsive">
+                            <label class="form-label">تگ‌ها</label>
+                            <input type="text" class="form-control" id="editPostTags">
+                        </div>
+                    </div>
+
+                    <div class="image-preview-container" id="editImagePreviewContainer">
+                        <img id="editPostImagePreview" class="image-preview" alt="پیش‌نمایش تصویر">
+                        <div>
+                            <small class="text-muted">پیش‌نمایش تصویر شاخص</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group-responsive">
+                        <label class="form-label">متن مطلب</label>
+                        <div class="editor-toolbar">
+                            <button type="button" onclick="formatEditText('bold')"><b>B</b></button>
+                            <button type="button" onclick="formatEditText('italic')"><i>I</i></button>
+                            <button type="button" onclick="formatEditText('underline')"><u>U</u></button>
+                            <button type="button" onclick="formatEditText('insertUnorderedList')">•</button>
+                            <button type="button" onclick="formatEditText('insertOrderedList')">۱</button>
+                            <button type="button" onclick="insertEditLink()">🔗</button>
+                            <button type="button" onclick="formatEditText('formatBlock', '<h2>')">H2</button>
+                            <button type="button" onclick="formatEditText('formatBlock', '<h3>')">H3</button>
+                        </div>
+                        <div id="editPostEditor" contenteditable="true" class="full-editor"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                    <button type="button" class="btn btn-primary" onclick="updatePost()">ذخیره تغییرات</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // مدیریت منوی موبایل
@@ -927,7 +1108,10 @@
                             loadPages();
                         }
                         if (moduleName === 'slider') loadSlides();
-                        if (moduleName === 'blog') loadPosts();
+                        if (moduleName === 'blog') {
+                            loadPosts();
+                            initializePostEditor();
+                        }
                         if (moduleName === 'form') loadSubmissions();
                         if (moduleName === 'stats') loadStats();
                         if (moduleName === 'footer') loadFooterSettings();
@@ -974,9 +1158,330 @@
             alert('متن درباره ما با موفقیت بروزرسانی شد.');
         }
 
+        // ============================================================================
+        // بخش مدیریت مطالب کاملاً بازنویسی شده
+        // ============================================================================
+
+        let currentEditingPostId = null;
+        const defaultImage = 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg';
+
+        function initializePostEditor() {
+            // شمارنده کاراکترهای خلاصه مطلب
+            const excerptInput = document.getElementById('postExcerpt');
+            const excerptCounter = document.getElementById('excerptCounter');
+            
+            excerptInput.addEventListener('input', function() {
+                excerptCounter.textContent = this.value.length;
+            });
+
+            const editExcerptInput = document.getElementById('editPostExcerpt');
+            const editExcerptCounter = document.getElementById('editExcerptCounter');
+            
+            editExcerptInput.addEventListener('input', function() {
+                editExcerptCounter.textContent = this.value.length;
+            });
+        }
+
+        function previewPostImage(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('postImage').value = e.target.result;
+                    updateImagePreview(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateImagePreview(imageUrl) {
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const previewImg = document.getElementById('postImagePreview');
+            
+            if (imageUrl) {
+                previewImg.src = imageUrl;
+                previewContainer.style.display = 'block';
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        }
+
+        function updateEditImagePreview(imageUrl) {
+            const previewContainer = document.getElementById('editImagePreviewContainer');
+            const previewImg = document.getElementById('editPostImagePreview');
+            
+            if (imageUrl) {
+                previewImg.src = imageUrl;
+                previewContainer.style.display = 'block';
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        }
+
+        function clearImage() {
+            document.getElementById('postImage').value = '';
+            document.getElementById('postImageUpload').value = '';
+            updateImagePreview('');
+        }
+
         function formatText(command, value = null) {
             document.getElementById('postEditor').focus();
             document.execCommand(command, false, value);
+        }
+
+        function formatEditText(command, value = null) {
+            document.getElementById('editPostEditor').focus();
+            document.execCommand(command, false, value);
+        }
+
+        function insertLink() {
+            const url = prompt('آدرس لینک را وارد کنید:', 'https://');
+            if (url) {
+                formatText('createLink', url);
+            }
+        }
+
+        function insertEditLink() {
+            const url = prompt('آدرس لینک را وارد کنید:', 'https://');
+            if (url) {
+                formatEditText('createLink', url);
+            }
+        }
+
+        function publishPost() {
+            const title = document.getElementById('postTitle').value.trim();
+            const excerpt = document.getElementById('postExcerpt').value.trim();
+            const image = document.getElementById('postImage').value.trim() || defaultImage;
+            const tags = document.getElementById('postTags').value;
+            const content = document.getElementById('postEditor').innerHTML.trim();
+
+            if (!title) {
+                alert('لطفاً عنوان مطلب را وارد کنید.');
+                return;
+            }
+
+            if (!excerpt) {
+                alert('لطفاً خلاصه مطلب را وارد کنید.');
+                return;
+            }
+
+            if (!content || content === '<br>') {
+                alert('لطفاً محتوای مطلب را وارد کنید.');
+                return;
+            }
+
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const newPost = {
+                id: Date.now(),
+                title: title,
+                excerpt: excerpt,
+                image: image,
+                content: content,
+                tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag).slice(0, 5),
+                date: new Date().toLocaleDateString('fa-IR'),
+                timestamp: new Date().getTime(),
+                status: 'published',
+                views: 0
+            };
+
+            posts.unshift(newPost);
+            localStorage.setItem('blogPosts', JSON.stringify(posts));
+
+            alert('مطلب با موفقیت منتشر شد و در بخش آخرین مطالب نمایش داده می‌شود.');
+            clearForm();
+            loadPosts();
+        }
+
+        function saveDraft() {
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postEditor').innerHTML.trim();
+
+            if (!title && !content) {
+                alert('هیچ محتوایی برای ذخیره وجود ندارد.');
+                return;
+            }
+
+            const draft = {
+                title: title,
+                excerpt: document.getElementById('postExcerpt').value.trim(),
+                image: document.getElementById('postImage').value.trim() || defaultImage,
+                tags: document.getElementById('postTags').value,
+                content: content,
+                savedAt: new Date().toLocaleString('fa-IR')
+            };
+
+            localStorage.setItem('blogDraft', JSON.stringify(draft));
+            alert('پیش‌نویس با موفقیت ذخیره شد.');
+        }
+
+        function clearForm() {
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postExcerpt').value = '';
+            document.getElementById('postImage').value = '';
+            document.getElementById('postImageUpload').value = '';
+            document.getElementById('postTags').value = '';
+            document.getElementById('postEditor').innerHTML = '';
+            document.getElementById('excerptCounter').textContent = '0';
+            updateImagePreview('');
+        }
+
+        function loadPosts() {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const container = document.getElementById('postsList');
+            container.innerHTML = '';
+
+            document.getElementById('totalPosts').textContent = posts.length;
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleString('fa-IR');
+
+            if (posts.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-newspaper fa-3x mb-3"></i>
+                        <p>هنوز هیچ مطلبی منتشر نشده است.</p>
+                        <p>اولین مطلب خود را ایجاد کنید!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            posts.forEach(post => {
+                const postItem = document.createElement('div');
+                postItem.className = 'post-item';
+                postItem.innerHTML = `
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <img src="${post.image}" alt="${post.title}" class="post-preview">
+                            <div class="mt-2">
+                                <small class="text-muted">بازدید: ${post.views || 0}</small>
+                            </div>
+                        </div>
+                        <div class="form-group-responsive">
+                            <h6>${post.title}</h6>
+                            <p class="text-muted">${post.excerpt}</p>
+                            <div class="mb-2">
+                                ${post.tags.map(tag => `<span class="tag-badge">${tag}</span>`).join('')}
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">${post.date}</small>
+                                <span class="badge ${post.status === 'published' ? 'bg-success' : 'bg-warning'}">
+                                    ${post.status === 'published' ? 'منتشر شده' : 'پیش‌نویس'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 mt-3 flex-wrap">
+                        <button class="btn btn-sm btn-outline-primary" onclick="editPost(${post.id})">
+                            <i class="fas fa-edit"></i> ویرایش کامل
+                        </button>
+                        <button class="btn btn-sm btn-outline-info" onclick="previewPost(${post.id})">
+                            <i class="fas fa-eye"></i> پیش‌نمایش
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning" onclick="togglePostStatus(${post.id})">
+                            <i class="fas fa-exchange-alt"></i> تغییر وضعیت
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deletePost(${post.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                `;
+                container.appendChild(postItem);
+            });
+        }
+
+        function editPost(id) {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const post = posts.find(p => p.id === id);
+            
+            if (post) {
+                currentEditingPostId = id;
+                
+                document.getElementById('editPostTitle').value = post.title;
+                document.getElementById('editPostExcerpt').value = post.excerpt;
+                document.getElementById('editPostImage').value = post.image;
+                document.getElementById('editPostTags').value = post.tags.join(', ');
+                document.getElementById('editPostEditor').innerHTML = post.content;
+                
+                document.getElementById('editExcerptCounter').textContent = post.excerpt.length;
+                updateEditImagePreview(post.image);
+                
+                const modal = new bootstrap.Modal(document.getElementById('editPostModal'));
+                modal.show();
+            }
+        }
+
+        function updatePost() {
+            if (!currentEditingPostId) return;
+
+            const title = document.getElementById('editPostTitle').value.trim();
+            const excerpt = document.getElementById('editPostExcerpt').value.trim();
+            const image = document.getElementById('editPostImage').value.trim() || defaultImage;
+            const tags = document.getElementById('editPostTags').value;
+            const content = document.getElementById('editPostEditor').innerHTML.trim();
+
+            if (!title || !excerpt || !content) {
+                alert('لطفاً تمام فیلدهای ضروری را پر کنید.');
+                return;
+            }
+
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const postIndex = posts.findIndex(p => p.id === currentEditingPostId);
+            
+            if (postIndex !== -1) {
+                posts[postIndex] = {
+                    ...posts[postIndex],
+                    title: title,
+                    excerpt: excerpt,
+                    image: image,
+                    content: content,
+                    tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag).slice(0, 5),
+                    lastModified: new Date().getTime()
+                };
+
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editPostModal'));
+                modal.hide();
+                
+                alert('مطلب با موفقیت به‌روزرسانی شد.');
+                loadPosts();
+            }
+        }
+
+        function previewPost(id) {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const post = posts.find(p => p.id === id);
+            
+            if (post) {
+                localStorage.setItem('currentPost', JSON.stringify(post));
+                window.open('post.html', '_blank');
+                
+                // افزایش تعداد بازدیدها
+                post.views = (post.views || 0) + 1;
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+            }
+        }
+
+        function togglePostStatus(id) {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const postIndex = posts.findIndex(p => p.id === id);
+            
+            if (postIndex !== -1) {
+                posts[postIndex].status = posts[postIndex].status === 'published' ? 'draft' : 'published';
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                loadPosts();
+                
+                alert(`وضعیت مطلب به ${posts[postIndex].status === 'published' ? 'منتشر شده' : 'پیش‌نویس'} تغییر کرد.`);
+            }
+        }
+
+        function deletePost(id) {
+            if (confirm('آیا از حذف این مطلب اطمینان دارید؟ این عمل قابل بازگشت نیست.')) {
+                const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+                const filteredPosts = posts.filter(post => post.id !== id);
+                localStorage.setItem('blogPosts', JSON.stringify(filteredPosts));
+                loadPosts();
+                alert('مطلب با موفقیت حذف شد.');
+            }
         }
 
         function updateSecuritySettings() {
@@ -1189,131 +1694,6 @@
                 const filteredPages = pages.filter(page => page.id !== id);
                 localStorage.setItem('pages', JSON.stringify(filteredPages));
                 renderPages(filteredPages);
-            }
-        }
-
-        // بخش مدیریت مطالب - توابع جدید
-        function publishPost() {
-            const title = document.getElementById('postTitle').value;
-            const excerpt = document.getElementById('postExcerpt').value;
-            const image = document.getElementById('postImage').value;
-            const tags = document.getElementById('postTags').value;
-            const content = document.getElementById('postEditor').innerHTML;
-
-            if (!title || !excerpt || !content) {
-                alert('لطفاً عنوان، خلاصه و محتوای مطلب را وارد کنید.');
-                return;
-            }
-
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const newPost = {
-                id: Date.now(),
-                title: title,
-                excerpt: excerpt,
-                image: image || 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg',
-                content: content,
-                tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-                date: new Date().toLocaleDateString('fa-IR'),
-                timestamp: new Date().getTime()
-            };
-
-            posts.unshift(newPost);
-            localStorage.setItem('blogPosts', JSON.stringify(posts));
-
-            // پاک کردن فرم
-            document.getElementById('postTitle').value = '';
-            document.getElementById('postExcerpt').value = '';
-            document.getElementById('postImage').value = '';
-            document.getElementById('postTags').value = '';
-            document.getElementById('postEditor').innerHTML = '';
-
-            alert('مطلب با موفقیت منتشر شد و در بخش آخرین مطالب نمایش داده می‌شود.');
-            loadPosts();
-        }
-
-        function loadPosts() {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const container = document.getElementById('postsList');
-            container.innerHTML = '';
-
-            if (posts.length === 0) {
-                container.innerHTML = '<p class="text-center text-muted">هنوز هیچ مطلبی منتشر نشده است.</p>';
-                return;
-            }
-
-            posts.forEach(post => {
-                const postItem = document.createElement('div');
-                postItem.className = 'post-item';
-                postItem.innerHTML = `
-                    <div class="form-row-responsive">
-                        <div class="form-group-responsive">
-                            <img src="${post.image}" alt="${post.title}" class="post-preview">
-                        </div>
-                        <div class="form-group-responsive">
-                            <input type="text" class="form-control mb-2" value="${post.title}" onchange="updatePost(${post.id}, 'title', this.value)">
-                            <textarea class="form-control mb-2" rows="2" onchange="updatePost(${post.id}, 'excerpt', this.value)">${post.excerpt}</textarea>
-                            <input type="text" class="form-control mb-2" value="${post.image}" onchange="updatePost(${post.id}, 'image', this.value)">
-                            <input type="text" class="form-control mb-2" value="${post.tags.join(', ')}" onchange="updatePost(${post.id}, 'tags', this.value)">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">${post.date}</small>
-                                <button class="btn btn-sm btn-outline-primary" onclick="editPostContent(${post.id})">
-                                    <i class="fas fa-edit"></i> ویرایش محتوا
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex gap-2 mt-3">
-                        <button class="btn btn-sm btn-outline-primary" onclick="previewPost(${post.id})">
-                            <i class="fas fa-eye"></i> پیش‌نمایش
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deletePost(${post.id})">
-                            <i class="fas fa-trash"></i> حذف
-                        </button>
-                    </div>
-                `;
-                container.appendChild(postItem);
-            });
-        }
-
-        function updatePost(id, field, value) {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const postIndex = posts.findIndex(post => post.id === id);
-            if (postIndex !== -1) {
-                if (field === 'tags') {
-                    posts[postIndex][field] = value.split(',').map(tag => tag.trim()).filter(tag => tag);
-                } else {
-                    posts[postIndex][field] = value;
-                }
-                localStorage.setItem('blogPosts', JSON.stringify(posts));
-            }
-        }
-
-        function editPostContent(id) {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const post = posts.find(p => p.id === id);
-            if (post) {
-                const content = prompt('محتوای مطلب:', post.content);
-                if (content !== null) {
-                    updatePost(id, 'content', content);
-                }
-            }
-        }
-
-        function previewPost(id) {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const post = posts.find(p => p.id === id);
-            if (post) {
-                localStorage.setItem('currentPost', JSON.stringify(post));
-                window.open('post.html', '_blank');
-            }
-        }
-
-        function deletePost(id) {
-            if (confirm('آیا از حذف این مطلب اطمینان دارید؟')) {
-                const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-                const filteredPosts = posts.filter(post => post.id !== id);
-                localStorage.setItem('blogPosts', JSON.stringify(filteredPosts));
-                loadPosts();
             }
         }
 
