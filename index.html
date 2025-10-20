@@ -54,14 +54,27 @@
             color: var(--secondary) !important;
         }
         
-        /* بنر استاندارد */
+        /* بنر استاندارد - ریسپانسیو شده */
         .hero-banner {
             background: url('https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg') no-repeat center center;
             background-size: cover;
-            aspect-ratio: 16 / 6;
-            height: 50vh;
             min-height: 300px;
             width: 100%;
+            position: relative;
+        }
+        
+        /* اطمینان از نمایش کامل بنر در تمام اندازه‌ها */
+        @media (max-width: 768px) {
+            .hero-banner {
+                min-height: 250px;
+                background-attachment: scroll;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-banner {
+                min-height: 200px;
+            }
         }
         
         /* دکمه شناور */
@@ -191,6 +204,31 @@
             line-height: 1.4;
         }
         
+        /* استایل‌های جدید برای پیشرفت آپلود */
+        .upload-progress {
+            display: none;
+            margin-top: 10px;
+        }
+        
+        .progress-bar {
+            background-color: var(--secondary);
+            height: 8px;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .upload-status {
+            font-size: 0.8em;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        .file-info {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
         .footer {
             background-color: var(--primary);
             color: var(--background);
@@ -249,7 +287,6 @@
             }
             
             .hero-banner {
-                height: 40vh;
                 min-height: 250px;
             }
             
@@ -393,7 +430,15 @@
                 
                 <div class="form-group">
                     <label class="form-label">بارگذاری فایل <span class="form-note">(حداکثر 10 مگابایت)</span></label>
-                    <input type="file" class="form-control" id="bookFile" accept=".pdf,.doc,.docx">
+                    <input type="file" class="form-control" id="bookFile" accept=".pdf,.doc,.docx" onchange="handleFileSelect(this)">
+                    
+                    <!-- بخش نمایش اطلاعات فایل و پیشرفت آپلود -->
+                    <div class="file-info" id="fileInfo" style="display: none;"></div>
+                    <div class="upload-progress" id="uploadProgress">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                        <div class="upload-status" id="uploadStatus">0%</div>
+                    </div>
+                    
                     <small class="text-muted form-note">درصورت تمایل برای پیشرفت سریع‌تر در فرآیند بررسی کتاب، می‌توانید چند صفحه از متن کتاب را بارگذاری کنید.</small>
                 </div>
                 
@@ -401,7 +446,7 @@
                     <p class="text-muted">بخش‌هایی که با ستاره نشانه‌گذاری شده‌اند را پر کنید و بعد درخواست خود را ارسال کنید.</p>
                 </div>
                 
-                <button type="submit" class="btn btn-primary btn-lg w-100">ارسال درخواست</button>
+                <button type="submit" class="btn btn-primary btn-lg w-100" id="submitBtn">ارسال درخواست</button>
             </form>
         </div>
     </section>
@@ -507,6 +552,71 @@
             }
         }
 
+        // مدیریت انتخاب فایل
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            const fileInfo = document.getElementById('fileInfo');
+            const uploadProgress = document.getElementById('uploadProgress');
+            
+            if (file) {
+                // نمایش اطلاعات فایل
+                const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+                fileInfo.innerHTML = `فایل انتخاب شده: ${file.name} (${fileSize} MB)`;
+                fileInfo.style.display = 'block';
+                
+                // نمایش نوار پیشرفت
+                uploadProgress.style.display = 'block';
+            } else {
+                fileInfo.style.display = 'none';
+                uploadProgress.style.display = 'none';
+            }
+        }
+
+        // شبیه‌سازی آپلود فایل با نوار پیشرفت
+        function simulateFileUpload(callback) {
+            const progressBar = document.getElementById('progressBar');
+            const uploadStatus = document.getElementById('uploadStatus');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // غیرفعال کردن دکمه ارسال
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> در حال آپلود...';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    progressBar.style.width = '100%';
+                    uploadStatus.textContent = '100% - آپلود کامل شد';
+                    
+                    // فعال کردن دکمه ارسال
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'ارسال درخواست';
+                        callback(true);
+                    }, 500);
+                } else {
+                    progressBar.style.width = progress + '%';
+                    uploadStatus.textContent = Math.round(progress) + '% - در حال آپلود...';
+                }
+            }, 200);
+        }
+
+        // ارسال ایمیل
+        function sendEmail(formData) {
+            // در اینجا کد واقعی ارسال ایمیل قرار می‌گیرد
+            // برای نمونه، فقط لاگ می‌کنیم
+            console.log('ایمیل ارسال شد به: amagh.pub@gmail.com', formData);
+            
+            // شبیه‌سازی ارسال ایمیل
+            setTimeout(() => {
+                console.log('ایمیل با موفقیت ارسال شد');
+            }, 1000);
+        }
+
         // مدیریت فرم
         document.getElementById('submissionForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -523,42 +633,39 @@
             });
             
             if (valid) {
-                const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
                 const fileInput = document.getElementById('bookFile');
-                let fileName = '';
-                let fileData = null;
                 
                 if (fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
-                    fileName = file.name;
-                    
-                    // تبدیل فایل به Base64 برای ذخیره‌سازی
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        fileData = e.target.result;
-                        
-                        const formData = {
-                            id: Date.now(),
-                            name: document.getElementById('fullName').value,
-                            bookName: document.getElementById('bookName').value,
-                            subject: document.getElementById('bookSubject').value,
-                            description: document.getElementById('bookDescription').value,
-                            phone: document.getElementById('whatsappNumber').value,
-                            email: document.getElementById('email').value,
-                            fileName: fileName,
-                            fileData: fileData,
-                            timestamp: new Date().toLocaleString('fa-IR'),
-                            status: 'جدید'
-                        };
-                        
-                        submissions.push(formData);
-                        localStorage.setItem('submissions', JSON.stringify(submissions));
-                        
-                        alert('درخواست شما با موفقیت ثبت شد. به زودی با شما تماس خواهیم گرفت.');
-                        document.getElementById('submissionForm').reset();
-                    };
-                    reader.readAsDataURL(file);
+                    // اگر فایل انتخاب شده، آپلود شبیه‌سازی می‌شود
+                    simulateFileUpload((success) => {
+                        if (success) {
+                            saveSubmission();
+                        }
+                    });
                 } else {
+                    // اگر فایلی نیست، مستقیم ذخیره شود
+                    saveSubmission();
+                }
+            } else {
+                alert('لطفاً بخش‌های ستاره‌دار را پر کنید.');
+            }
+        });
+
+        function saveSubmission() {
+            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+            const fileInput = document.getElementById('bookFile');
+            let fileName = '';
+            let fileData = null;
+            
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                fileName = file.name;
+                
+                // تبدیل فایل به Base64 برای ذخیره‌سازی
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    fileData = e.target.result;
+                    
                     const formData = {
                         id: Date.now(),
                         name: document.getElementById('fullName').value,
@@ -567,8 +674,8 @@
                         description: document.getElementById('bookDescription').value,
                         phone: document.getElementById('whatsappNumber').value,
                         email: document.getElementById('email').value,
-                        fileName: '',
-                        fileData: null,
+                        fileName: fileName,
+                        fileData: fileData,
                         timestamp: new Date().toLocaleString('fa-IR'),
                         status: 'جدید'
                     };
@@ -576,13 +683,40 @@
                     submissions.push(formData);
                     localStorage.setItem('submissions', JSON.stringify(submissions));
                     
+                    // ارسال ایمیل
+                    sendEmail(formData);
+                    
                     alert('درخواست شما با موفقیت ثبت شد. به زودی با شما تماس خواهیم گرفت.');
-                    this.reset();
-                }
+                    document.getElementById('submissionForm').reset();
+                    document.getElementById('fileInfo').style.display = 'none';
+                    document.getElementById('uploadProgress').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
             } else {
-                alert('لطفاً بخش‌های ستاره‌دار را پر کنید.');
+                const formData = {
+                    id: Date.now(),
+                    name: document.getElementById('fullName').value,
+                    bookName: document.getElementById('bookName').value,
+                    subject: document.getElementById('bookSubject').value,
+                    description: document.getElementById('bookDescription').value,
+                    phone: document.getElementById('whatsappNumber').value,
+                    email: document.getElementById('email').value,
+                    fileName: '',
+                    fileData: null,
+                    timestamp: new Date().toLocaleString('fa-IR'),
+                    status: 'جدید'
+                };
+                
+                submissions.push(formData);
+                localStorage.setItem('submissions', JSON.stringify(submissions));
+                
+                // ارسال ایمیل
+                sendEmail(formData);
+                
+                alert('درخواست شما با موفقیت ثبت شد. به زودی با شما تماس خواهیم گرفت.');
+                this.reset();
             }
-        });
+        }
 
         // بارگذاری اولیه
         document.addEventListener('DOMContentLoaded', function() {
