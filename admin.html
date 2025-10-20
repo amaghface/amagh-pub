@@ -1192,6 +1192,131 @@
             }
         }
 
+        // بخش مدیریت مطالب - توابع جدید
+        function publishPost() {
+            const title = document.getElementById('postTitle').value;
+            const excerpt = document.getElementById('postExcerpt').value;
+            const image = document.getElementById('postImage').value;
+            const tags = document.getElementById('postTags').value;
+            const content = document.getElementById('postEditor').innerHTML;
+
+            if (!title || !excerpt || !content) {
+                alert('لطفاً عنوان، خلاصه و محتوای مطلب را وارد کنید.');
+                return;
+            }
+
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const newPost = {
+                id: Date.now(),
+                title: title,
+                excerpt: excerpt,
+                image: image || 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg',
+                content: content,
+                tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+                date: new Date().toLocaleDateString('fa-IR'),
+                timestamp: new Date().getTime()
+            };
+
+            posts.unshift(newPost);
+            localStorage.setItem('blogPosts', JSON.stringify(posts));
+
+            // پاک کردن فرم
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postExcerpt').value = '';
+            document.getElementById('postImage').value = '';
+            document.getElementById('postTags').value = '';
+            document.getElementById('postEditor').innerHTML = '';
+
+            alert('مطلب با موفقیت منتشر شد و در بخش آخرین مطالب نمایش داده می‌شود.');
+            loadPosts();
+        }
+
+        function loadPosts() {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const container = document.getElementById('postsList');
+            container.innerHTML = '';
+
+            if (posts.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted">هنوز هیچ مطلبی منتشر نشده است.</p>';
+                return;
+            }
+
+            posts.forEach(post => {
+                const postItem = document.createElement('div');
+                postItem.className = 'post-item';
+                postItem.innerHTML = `
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <img src="${post.image}" alt="${post.title}" class="post-preview">
+                        </div>
+                        <div class="form-group-responsive">
+                            <input type="text" class="form-control mb-2" value="${post.title}" onchange="updatePost(${post.id}, 'title', this.value)">
+                            <textarea class="form-control mb-2" rows="2" onchange="updatePost(${post.id}, 'excerpt', this.value)">${post.excerpt}</textarea>
+                            <input type="text" class="form-control mb-2" value="${post.image}" onchange="updatePost(${post.id}, 'image', this.value)">
+                            <input type="text" class="form-control mb-2" value="${post.tags.join(', ')}" onchange="updatePost(${post.id}, 'tags', this.value)">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">${post.date}</small>
+                                <button class="btn btn-sm btn-outline-primary" onclick="editPostContent(${post.id})">
+                                    <i class="fas fa-edit"></i> ویرایش محتوا
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 mt-3">
+                        <button class="btn btn-sm btn-outline-primary" onclick="previewPost(${post.id})">
+                            <i class="fas fa-eye"></i> پیش‌نمایش
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deletePost(${post.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                `;
+                container.appendChild(postItem);
+            });
+        }
+
+        function updatePost(id, field, value) {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const postIndex = posts.findIndex(post => post.id === id);
+            if (postIndex !== -1) {
+                if (field === 'tags') {
+                    posts[postIndex][field] = value.split(',').map(tag => tag.trim()).filter(tag => tag);
+                } else {
+                    posts[postIndex][field] = value;
+                }
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+            }
+        }
+
+        function editPostContent(id) {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const post = posts.find(p => p.id === id);
+            if (post) {
+                const content = prompt('محتوای مطلب:', post.content);
+                if (content !== null) {
+                    updatePost(id, 'content', content);
+                }
+            }
+        }
+
+        function previewPost(id) {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const post = posts.find(p => p.id === id);
+            if (post) {
+                localStorage.setItem('currentPost', JSON.stringify(post));
+                window.open('post.html', '_blank');
+            }
+        }
+
+        function deletePost(id) {
+            if (confirm('آیا از حذف این مطلب اطمینان دارید؟')) {
+                const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+                const filteredPosts = posts.filter(post => post.id !== id);
+                localStorage.setItem('blogPosts', JSON.stringify(filteredPosts));
+                loadPosts();
+            }
+        }
+
         // مدیریت درخواست‌ها با قابلیت دانلود فایل
         function loadSubmissions() {
             const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
