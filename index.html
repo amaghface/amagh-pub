@@ -616,7 +616,7 @@
             const aboutContainer = document.getElementById('aboutContent');
             if (aboutContainer) {
                 // تبدیل خطوط جدید به پاراگراف‌های HTML
-                const paragraphs = aboutText.split('\n\n').filter(p => p.trim());
+                const paragraphs = aboutText.split('\n').filter(p => p.trim());
                 let htmlContent = '';
                 
                 paragraphs.forEach(paragraph => {
