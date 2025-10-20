@@ -17,38 +17,41 @@
         }
         
         @font-face {
-            font-family: 'IRAN Kharazmi';
-            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/irankharazmi-font@latest/fonts/woff2/IRANKharazmi.woff2') format('woff2');
+            font-family: 'IRAN Rounded';
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/irann rounded-font@latest/fonts/woff2/IRANRounded.woff2') format('woff2');
             font-weight: normal;
             font-style: normal;
         }
         
         * {
-            font-family: 'IRAN Kharazmi', Vazir, sans-serif !important;
+            font-family: 'IRAN Rounded', Vazir, sans-serif !important;
         }
         
         body {
             background-color: var(--background);
             color: var(--primary);
             line-height: 1.8;
+            margin: 0;
+            padding: 0;
         }
         
-        /* هدر با لوگوی مستطیلی */
+        /* هدر با لوگوی استاندارد */
         .navbar {
             background-color: var(--light) !important;
             border-bottom: 3px solid var(--secondary);
-            padding: 8px 0;
+            padding: 10px 0;
         }
         
         .logo-container img {
-            height: 45px;
+            height: 50px;
             width: auto;
+            max-width: 200px;
         }
         
         .nav-link {
             color: var(--primary) !important;
             font-weight: bold;
-            margin: 0 8px;
+            margin: 0 10px;
             transition: color 0.3s ease;
         }
         
@@ -56,17 +59,17 @@
             color: var(--secondary) !important;
         }
         
-        /* بنر - سایز: 60vh ارتفاع با حداقل 400px */
+        /* بنر استاندارد */
         .hero-banner {
             background: url('https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg') no-repeat center center;
             background-size: cover;
-            background-attachment: fixed;
-            height: 60vh;
-            min-height: 400px;
-            position: relative;
+            aspect-ratio: 16 / 6;
+            height: 50vh;
+            min-height: 300px;
+            width: 100%;
         }
         
-        /* دکمه شناور ساده */
+        /* دکمه شناور */
         .floating-btn {
             position: fixed;
             bottom: 30px;
@@ -139,7 +142,7 @@
         /* فرم با پس‌زمینه رنگ سازمانی */
         .form-section {
             padding: 80px 0;
-            background-color: #f8f7e8; /* رنگ روشن سازمانی */
+            background-color: #f8f7e8;
         }
         
         .form-container {
@@ -213,7 +216,7 @@
             
             .hero-banner {
                 height: 40vh;
-                min-height: 300px;
+                min-height: 250px;
             }
             
             .floating-btn {
@@ -222,16 +225,21 @@
                 padding: 10px 15px;
                 font-size: 0.8em;
             }
+            
+            .logo-container img {
+                height: 40px;
+                max-width: 150px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- دکمه شناور ساده -->
+    <!-- دکمه شناور -->
     <a href="#form" class="floating-btn">
         ثبت درخواست بررسی اثر
     </a>
 
-    <!-- هدر با لوگوی مستطیلی -->
+    <!-- هدر -->
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="index.html">
@@ -244,7 +252,7 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="index.html">خانه</a></li>
                     <li class="nav-item"><a class="nav-link" href="about.html">درباره ما</a></li>
-                    <li class="nav-link" href="contact.html">تماس با ما</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">تماس با ما</a></li>
                     <li class="nav-item"><a class="nav-link" href="books.html">کتاب‌ها</a></li>
                     <li class="nav-item"><a class="nav-link" href="blog.html">بلاگ</a></li>
                 </ul>
@@ -252,7 +260,7 @@
         </div>
     </nav>
 
-    <!-- بنر - سایز: 60vh ارتفاع -->
+    <!-- بنر استاندارد -->
     <section class="hero-banner"></section>
 
     <!-- درباره نشر -->
@@ -280,7 +288,7 @@
         </div>
     </section>
 
-    <!-- فرم درخواست با پس‌زمینه رنگ سازمانی -->
+    <!-- فرم درخواست -->
     <section id="form" class="form-section">
         <div class="form-container">
             <h2 class="section-title text-center">فرم ثبت درخواست بررسی اثر</h2>
@@ -423,8 +431,6 @@
             });
             
             if (valid) {
-                // ذخیره درخواست در localStorage
-                const formData = new FormData(this);
                 const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
                 submissions.push({
                     name: this.querySelector('input[type="text"]').value,
