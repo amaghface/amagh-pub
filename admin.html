@@ -29,7 +29,7 @@
             min-height: 100vh;
             padding: 0;
             position: fixed;
-            width: 250px;
+            width: 280px;
         }
         
         .sidebar .nav-link {
@@ -46,7 +46,7 @@
         }
         
         .main-content {
-            margin-right: 250px;
+            margin-right: 280px;
             padding: 20px;
             min-height: 100vh;
         }
@@ -61,7 +61,7 @@
         }
         
         .module-icon {
-            font-size: 20px;
+            font-size: 18px;
             margin-left: 10px;
             color: var(--secondary);
         }
@@ -75,16 +75,39 @@
             background-color: #69532e;
             border-color: #69532e;
         }
+        
+        .editor-toolbar {
+            background: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .editor-toolbar button {
+            margin: 0 2px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            background: white;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        #postEditor {
+            min-height: 300px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
-    <!-- بررسی امنیت - هر بار چک میشه -->
+    <!-- بررسی امنیت -->
     <script>
         if (!localStorage.getItem('adminAuthenticated') || !localStorage.getItem('loginTime')) {
             window.location.href = 'login.html';
         }
         
-        // بررسی انقضای session (30 دقیقه)
         const loginTime = parseInt(localStorage.getItem('loginTime'));
         const now = Date.now();
         if (now - loginTime > 30 * 60 * 1000) {
@@ -99,7 +122,7 @@
             <!-- سایدبار -->
             <div class="col-md-3 col-lg-2 sidebar">
                 <div class="text-center py-4">
-                    <img src="http://www.blogfa.com/photo/nj/amaagh_owcva.jpg" alt="لوگو" height="40" style="background: white; padding: 5px; border-radius: 5px;">
+                    <img src="https://uploadkon.ir/uploads/44f319_25Website.png" alt="لوگو" height="50" style="background: white; padding: 5px; border-radius: 5px;">
                     <h6 class="mt-2">پنل مدیریت نشر اعماق</h6>
                 </div>
                 <nav class="nav flex-column">
@@ -139,7 +162,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4>مدیریت وبسایت نشر اعماق</h4>
                     <div>
-                        <button class="btn btn-primary me-2" onclick="saveAll()">
+                        <button class="btn btn-primary me-2" onclick="saveAllChanges()">
                             <i class="fas fa-save"></i>
                             ذخیره تمام تغییرات
                         </button>
@@ -158,20 +181,31 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label>آدرس لوگو</label>
-                                <input type="text" class="form-control" id="logoUrl" value="http://www.blogfa.com/photo/nj/amaagh_owcva.jpg">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="logoUrl" value="https://uploadkon.ir/uploads/2bb820_25website-Logo.png">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="clearLogo()">حذف لوگو</button>
+                                </div>
+                                <small class="text-muted">آدرس تصویر لوگو را وارد کنید یا از کامپیوتر آپلود کنید</small>
+                            </div>
+                            <div class="mb-3">
+                                <label>آپلود لوگوی جدید</label>
+                                <input type="file" class="form-control" id="logoUpload" accept="image/*">
+                                <button class="btn btn-success mt-2" onclick="uploadLogo()">آپلود لوگو</button>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Alt لوگو</label>
-                                <input type="text" class="form-control" id="logoAlt" value="لوگوی نشر اعماق">
+                                <label>پیش‌نمایش لوگو</label>
+                                <div class="border p-3 text-center">
+                                    <img id="logoPreview" src="https://uploadkon.ir/uploads/2bb820_25website-Logo.png" alt="پیش‌نمایش لوگو" style="max-height: 60px; max-width: 200px;">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label>مدیریت منوها</label>
                         <div id="menuItems">
-                            <!-- منوها به صورت داینامیک ساخته می‌شوند -->
+                            <!-- منوها -->
                         </div>
                         <button class="btn btn-sm btn-success mt-2" onclick="addMenuItem()">
                             <i class="fas fa-plus"></i> افزودن منوی جدید
@@ -184,9 +218,9 @@
                     <h5><i class="fas fa-images text-warning"></i> مدیریت اسلایدشو</h5>
                     <hr>
                     <div id="slidesContainer">
-                        <!-- اسلایدها به صورت داینامیک -->
+                        <!-- اسلایدها -->
                     </div>
-                    <button class="btn btn-success" onclick="addSlide()">
+                    <button class="btn btn-success mt-3" onclick="addSlide()">
                         <i class="fas fa-plus"></i> افزودن اسلاید جدید
                     </button>
                 </div>
@@ -197,7 +231,7 @@
                     <hr>
                     <div class="mb-3">
                         <label>متن معرفی</label>
-                        <textarea class="form-control" id="aboutText" rows="4">نشر اعماق بیست و دوم مهرماه یک‌هزار و چهارصد و چهار زاده شد
+                        <textarea class="form-control" id="aboutText" rows="6">نشر اعماق بیست و دوم مهرماه یک‌هزار و چهارصد و چهار زاده شد
 
 نشر اعماق امکان زیستن است در عین نبودن
 
@@ -205,17 +239,50 @@
 
 [...در حال به روزرسانی...]</textarea>
                     </div>
+                    <button class="btn btn-primary" onclick="updateAbout()">بروزرسانی متن درباره ما</button>
                 </div>
 
-                <!-- ماژول مطالب -->
+                <!-- ماژول مدیریت مطالب -->
                 <div id="blog-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-blog text-warning"></i> مدیریت مطالب و بلاگ</h5>
                     <hr>
-                    <button class="btn btn-success mb-3" onclick="addNewPost()">
-                        <i class="fas fa-plus"></i> نوشته جدید
-                    </button>
-                    <div id="postsContainer">
-                        <!-- پست‌ها به صورت داینامیک -->
+                    
+                    <!-- ویرایشگر پست جدید -->
+                    <div class="mb-4 p-3 border rounded">
+                        <h6>پست جدید</h6>
+                        <div class="mb-3">
+                            <label>عنوان مطلب</label>
+                            <input type="text" class="form-control" id="postTitle" placeholder="عنوان مطلب را وارد کنید">
+                        </div>
+                        <div class="mb-3">
+                            <label>آدرس تصویر</label>
+                            <input type="text" class="form-control" id="postImage" placeholder="آدرس تصویر مطلب">
+                        </div>
+                        <div class="mb-3">
+                            <label>تگ‌ها (با کاما جدا کنید)</label>
+                            <input type="text" class="form-control" id="postTags" placeholder="مثلا: کتاب, ادبیات, شعر">
+                        </div>
+                        <div class="mb-3">
+                            <label>متن مطلب</label>
+                            <div class="editor-toolbar">
+                                <button type="button" onclick="formatText('bold')"><b>B</b></button>
+                                <button type="button" onclick="formatText('italic')"><i>I</i></button>
+                                <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                                <button type="button" onclick="formatText('insertLink')">🔗 لینک</button>
+                                <button type="button" onclick="formatText('formatBlock', '<h2>')">عنوان</button>
+                                <button type="button" onclick="formatText('formatBlock', '<p>')">پاراگراف</button>
+                            </div>
+                            <div id="postEditor" contenteditable="true"></div>
+                        </div>
+                        <button class="btn btn-success" onclick="publishPost()">
+                            <i class="fas fa-paper-plane"></i> انتشار مطلب
+                        </button>
+                    </div>
+
+                    <!-- لیست پست‌های موجود -->
+                    <h6>پست‌های موجود</h6>
+                    <div id="postsList">
+                        <!-- پست‌ها -->
                     </div>
                 </div>
 
@@ -223,8 +290,8 @@
                 <div id="form-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-envelope text-warning"></i> درخواست‌های بررسی اثر</h5>
                     <hr>
-                    <div id="submissionsContainer">
-                        <p>درخواست‌های ارسالی از طریق فرم در اینجا نمایش داده می‌شود.</p>
+                    <div id="submissionsList">
+                        <!-- درخواست‌ها -->
                     </div>
                 </div>
 
@@ -235,18 +302,12 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h6>شبکه‌های اجتماعی</h6>
-                            <div class="mb-3">
-                                <label>تلگرام</label>
-                                <input type="text" class="form-control" id="telegramUrl" value="https://t.me/amaghpub">
+                            <div id="socialLinks">
+                                <!-- لینک‌های اجتماعی -->
                             </div>
-                            <div class="mb-3">
-                                <label>اینستاگرام</label>
-                                <input type="text" class="form-control" id="instagramUrl" value="https://instagram.com/amaghpub">
-                            </div>
-                            <div class="mb-3">
-                                <label>لینکدین</label>
-                                <input type="text" class="form-control" id="linkedinUrl" value="https://www.linkedin.com/company/amaghpub">
-                            </div>
+                            <button class="btn btn-sm btn-success mt-2" onclick="addSocialLink()">
+                                <i class="fas fa-plus"></i> افزودن شبکه اجتماعی
+                            </button>
                         </div>
                         <div class="col-md-6">
                             <h6>اطلاعات تماس</h6>
@@ -280,12 +341,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle"></i>
-                        پس از تغییر نام کاربری و رمز عبور، برای ورود مجدد از اطلاعات جدید استفاده کنید.
+                    <div class="mb-3">
+                        <label>ایمیل بازیابی</label>
+                        <input type="email" class="form-control" id="recoveryEmail" value="amagh.pub@gmail.com">
+                        <small class="text-muted">این ایمیل برای بازیابی اطلاعات ورود استفاده می‌شود</small>
                     </div>
-                    <button class="btn btn-warning" onclick="updateCredentials()">
-                        <i class="fas fa-key"></i> بروزرسانی اطلاعات ورود
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        پس از تغییر اطلاعات، برای ورود مجدد از اطلاعات جدید استفاده کنید.
+                    </div>
+                    <button class="btn btn-warning" onclick="updateSecuritySettings()">
+                        <i class="fas fa-key"></i> بروزرسانی تنظیمات امنیتی
                     </button>
                 </div>
             </div>
@@ -306,6 +372,12 @@
                 
                 const module = this.getAttribute('data-module');
                 document.getElementById(module + '-module').style.display = 'block';
+                
+                // بارگذاری داده‌های ماژول
+                if (module === 'blog') loadPosts();
+                if (module === 'form') loadSubmissions();
+                if (module === 'header') loadHeaderSettings();
+                if (module === 'footer') loadFooterSettings();
             });
         });
 
@@ -318,96 +390,203 @@
             }
         }
 
-        // ذخیره تمام تغییرات
-        function saveAll() {
-            alert('تمامی تغییرات با موفقیت ذخیره شد.');
-            // اینجا کد ذخیره‌سازی در localStorage یا ارسال به سرور اضافه می‌شود
-        }
-
-        // بروزرسانی اطلاعات ورود
-        function updateCredentials() {
+        // 🔒 تنظیمات امنیتی
+        function updateSecuritySettings() {
             const newUsername = document.getElementById('newUsername').value;
             const newPassword = document.getElementById('newPassword').value;
+            const recoveryEmail = document.getElementById('recoveryEmail').value;
             
+            // اعتبارسنجی امنیتی
             if (newUsername && newPassword) {
+                if (newPassword.length < 6) {
+                    alert('رمز عبور باید حداقل 6 کاراکتر باشد.');
+                    return;
+                }
+                
+                // ذخیره امن
                 localStorage.setItem('adminUsername', newUsername);
                 localStorage.setItem('adminPassword', newPassword);
-                alert('نام کاربری و رمز عبور با موفقیت بروزرسانی شد.');
+                localStorage.setItem('recoveryEmail', recoveryEmail);
+                
+                alert('تنظیمات امنیتی با موفقیت بروزرسانی شد.');
                 document.getElementById('newUsername').value = '';
                 document.getElementById('newPassword').value = '';
             } else {
-                alert('لطفاً هر دو فیلد را پر کنید.');
+                alert('لطفاً نام کاربری و رمز عبور جدید را وارد کنید.');
             }
         }
 
-        // بارگذاری اولیه داده‌ها
-        function loadInitialData() {
-            // بارگذاری منوها
-            const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
-                { text: 'خانه', url: 'index.html' },
-                { text: 'درباره ما', url: '#' },
-                { text: 'تماس با ما', url: '#' },
-                { text: 'کتاب‌ها', url: '#' },
-                { text: 'بلاگ', url: '#' }
-            ];
-            renderMenuItems(menuItems);
+        // 📝 مدیریت پست‌ها
+        function formatText(command, value = null) {
+            document.getElementById('postEditor').focus();
+            if (command === 'insertLink') {
+                const url = prompt('آدرس لینک را وارد کنید:');
+                if (url) document.execCommand('createLink', false, url);
+            } else if (value) {
+                document.execCommand(command, false, value);
+            } else {
+                document.execCommand(command, false, null);
+            }
         }
 
-        // رندر منوها
-        function renderMenuItems(menuItems) {
-            const container = document.getElementById('menuItems');
+        function publishPost() {
+            const title = document.getElementById('postTitle').value;
+            const image = document.getElementById('postImage').value;
+            const tags = document.getElementById('postTags').value;
+            const content = document.getElementById('postEditor').innerHTML;
+            
+            if (!title || !content) {
+                alert('لطفاً عنوان و محتوای مطلب را وارد کنید.');
+                return;
+            }
+            
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const newPost = {
+                id: Date.now(),
+                title: title,
+                image: image || 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg',
+                excerpt: content.substring(0, 150) + '...',
+                content: content,
+                tags: tags.split(',').map(tag => tag.trim()),
+                date: new Date().toLocaleDateString('fa-IR'),
+                published: true
+            };
+            
+            posts.unshift(newPost);
+            localStorage.setItem('blogPosts', JSON.stringify(posts));
+            
+            alert('مطلب با موفقیت منتشر شد!');
+            // ریست فرم
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postImage').value = '';
+            document.getElementById('postTags').value = '';
+            document.getElementById('postEditor').innerHTML = '';
+            
+            loadPosts();
+        }
+
+        function loadPosts() {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const container = document.getElementById('postsList');
             container.innerHTML = '';
             
-            menuItems.forEach((item, index) => {
+            posts.forEach((post, index) => {
                 container.innerHTML += `
-                    <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
-                        <span>${item.text} - ${item.url}</span>
-                        <div>
-                            <button class="btn btn-sm btn-outline-primary me-1" onclick="editMenuItem(${index})">ویرایش</button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteMenuItem(${index})">حذف</button>
+                    <div class="border p-3 mb-2 rounded">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6>${post.title}</h6>
+                                <small class="text-muted">${post.date}</small>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-1" onclick="editPost(${index})">ویرایش</button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deletePost(${index})">حذف</button>
+                            </div>
                         </div>
                     </div>
                 `;
             });
         }
 
-        // افزودن منوی جدید
-        function addMenuItem() {
-            const text = prompt('عنوان منو:');
-            const url = prompt('آدرس منو:');
-            if (text && url) {
-                const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
-                menuItems.push({ text, url });
-                localStorage.setItem('menuItems', JSON.stringify(menuItems));
-                renderMenuItems(menuItems);
-            }
-        }
-
-        // ویرایش منو
-        function editMenuItem(index) {
-            const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
-            const newText = prompt('عنوان جدید:', menuItems[index].text);
-            const newUrl = prompt('آدرس جدید:', menuItems[index].url);
+        // 🖼️ مدیریت هدر
+        function loadHeaderSettings() {
+            const logoUrl = localStorage.getItem('siteLogo') || 'https://uploadkon.ir/uploads/2bb820_25website-Logo.png';
+            document.getElementById('logoUrl').value = logoUrl;
+            document.getElementById('logoPreview').src = logoUrl;
             
-            if (newText && newUrl) {
-                menuItems[index] = { text: newText, url: newUrl };
-                localStorage.setItem('menuItems', JSON.stringify(menuItems));
-                renderMenuItems(menuItems);
+            // بارگذاری منوها
+            const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
+                { text: 'خانه', url: 'index.html' },
+                { text: 'درباره ما', url: 'about.html' },
+                { text: 'تماس با ما', url: 'contact.html' },
+                { text: 'کتاب‌ها', url: 'books.html' },
+                { text: 'بلاگ', url: 'blog.html' }
+            ];
+            renderMenuItems(menuItems);
+        }
+
+        function uploadLogo() {
+            const fileInput = document.getElementById('logoUpload');
+            const file = fileInput.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageUrl = e.target.result;
+                    localStorage.setItem('siteLogo', imageUrl);
+                    document.getElementById('logoUrl').value = imageUrl;
+                    document.getElementById('logoPreview').src = imageUrl;
+                    alert('لوگو با موفقیت آپلود شد.');
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        // حذف منو
-        function deleteMenuItem(index) {
-            if (confirm('آیا از حذف این منو اطمینان دارید؟')) {
-                const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
-                menuItems.splice(index, 1);
-                localStorage.setItem('menuItems', JSON.stringify(menuItems));
-                renderMenuItems(menuItems);
+        function clearLogo() {
+            localStorage.removeItem('siteLogo');
+            document.getElementById('logoUrl').value = '';
+            document.getElementById('logoPreview').src = '';
+            alert('لوگو حذف شد.');
+        }
+
+        // 📧 مدیریت درخواست‌ها
+        function loadSubmissions() {
+            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+            const container = document.getElementById('submissionsList');
+            container.innerHTML = '';
+            
+            if (submissions.length === 0) {
+                container.innerHTML = '<p class="text-muted">هیچ درخواستی ثبت نشده است.</p>';
+                return;
             }
+            
+            submissions.forEach((submission, index) => {
+                container.innerHTML += `
+                    <div class="border p-3 mb-3 rounded">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6>${submission.name} - ${submission.bookName}</h6>
+                                <p class="mb-1"><strong>موضوع:</strong> ${submission.subject}</p>
+                                <p class="mb-1"><strong>ایمیل:</strong> ${submission.email}</p>
+                                <small class="text-muted">${submission.timestamp}</small>
+                            </div>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteSubmission(${index})">حذف</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteSubmission(index) {
+            if (confirm('آیا از حذف این درخواست اطمینان دارید؟')) {
+                const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+                submissions.splice(index, 1);
+                localStorage.setItem('submissions', JSON.stringify(submissions));
+                loadSubmissions();
+            }
+        }
+
+        // 💾 ذخیره تمام تغییرات
+        function saveAllChanges() {
+            // ذخیره تنظیمات فوتر
+            const contactEmail = document.getElementById('contactEmail').value;
+            const copyrightText = document.getElementById('copyrightText').value;
+            localStorage.setItem('contactEmail', contactEmail);
+            localStorage.setItem('copyrightText', copyrightText);
+            
+            // ذخیره تنظیمات درباره ما
+            const aboutText = document.getElementById('aboutText').value;
+            localStorage.setItem('aboutText', aboutText);
+            
+            alert('تمامی تغییرات با موفقیت ذخیره شدند.');
         }
 
         // بارگذاری اولیه
-        document.addEventListener('DOMContentLoaded', loadInitialData);
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeaderSettings();
+            loadPosts();
+            loadSubmissions();
+        });
     </script>
 </body>
 </html>
