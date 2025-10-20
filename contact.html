@@ -83,25 +83,37 @@
             background: white;
             border-radius: 10px;
             box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
         }
         
         .contact-item:hover {
             transform: translateY(-3px);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: inherit;
         }
         
         .contact-icon {
             width: 60px;
             height: 60px;
-            background: var(--secondary);
-            color: white;
+            background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-left: 20px;
-            font-size: 1.4em;
             flex-shrink: 0;
+            border: 2px solid var(--secondary);
+            padding: 8px;
+        }
+        
+        .contact-icon img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
         }
         
         .contact-details h4 {
@@ -200,45 +212,45 @@
                     <div class="contact-info">
                         <h3 class="text-center mb-4" style="color: var(--primary);">راه‌های ارتباطی</h3>
                         
-                        <div class="contact-item">
+                        <a href="mailto:amagh.pub@gmail.com" class="contact-item" target="_blank">
                             <div class="contact-icon">
-                                <i class="fas fa-envelope"></i>
+                                <img src="https://uploadkon.ir/uploads/547417_25Untitled-2.png" alt="ایمیل">
                             </div>
                             <div class="contact-details">
                                 <h4>ایمیل</h4>
                                 <p>amagh.pub@gmail.com</p>
                             </div>
-                        </div>
+                        </a>
                         
-                        <div class="contact-item">
+                        <a href="https://t.me/amaghpub" class="contact-item" target="_blank">
                             <div class="contact-icon">
-                                <i class="fab fa-telegram"></i>
+                                <img src="https://uploadkon.ir/uploads/3db017_25Telegram.png" alt="تلگرام">
                             </div>
                             <div class="contact-details">
                                 <h4>تلگرام</h4>
                                 <p>@amaghpub</p>
                             </div>
-                        </div>
+                        </a>
                         
-                        <div class="contact-item">
+                        <a href="https://instagram.com/amaghpub" class="contact-item" target="_blank">
                             <div class="contact-icon">
-                                <i class="fab fa-instagram"></i>
+                                <img src="https://uploadkon.ir/uploads/a43a17_25Instagram.png" alt="اینستاگرام">
                             </div>
                             <div class="contact-details">
                                 <h4>اینستاگرام</h4>
                                 <p>@amaghpub</p>
                             </div>
-                        </div>
+                        </a>
                         
-                        <div class="contact-item">
+                        <a href="https://www.linkedin.com/company/amaghpub" class="contact-item" target="_blank">
                             <div class="contact-icon">
-                                <i class="fab fa-linkedin"></i>
+                                <img src="https://uploadkon.ir/uploads/1f7217_25Linkedin.png" alt="لینکدین">
                             </div>
                             <div class="contact-details">
                                 <h4>لینکدین</h4>
                                 <p>شرکت نشر اعماق</p>
                             </div>
-                        </div>
+                        </a>
                         
                         <div class="text-center mt-4">
                             <p class="lead" style="color: var(--primary); font-weight: 500;">
