@@ -69,67 +69,52 @@
         
         .contact-info {
             background: #f8f7e8;
-            padding: 30px;
-            border-radius: 10px;
+            padding: 40px;
+            border-radius: 15px;
             margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
         
         .contact-item {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            padding: 15px;
+            margin-bottom: 25px;
+            padding: 20px;
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            transform: translateY(-3px);
         }
         
         .contact-icon {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             background: var(--secondary);
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 15px;
-            font-size: 1.2em;
+            margin-left: 20px;
+            font-size: 1.4em;
+            flex-shrink: 0;
         }
         
         .contact-details h4 {
             margin: 0;
             color: var(--primary);
-            font-size: 1.1em;
+            font-size: 1.2em;
+            font-weight: bold;
         }
         
         .contact-details p {
-            margin: 5px 0 0 0;
+            margin: 8px 0 0 0;
             color: #666;
-        }
-        
-        .social-contact {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-        
-        .social-contact a {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-        }
-        
-        .social-contact a:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
+            font-size: 1.1em;
         }
         
         .footer {
@@ -169,21 +154,16 @@
             .contact-item {
                 flex-direction: column;
                 text-align: center;
+                padding: 15px;
             }
             
             .contact-icon {
                 margin-left: 0;
-                margin-bottom: 10px;
+                margin-bottom: 15px;
             }
             
-            .social-contact {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .social-contact a {
-                width: 200px;
-                justify-content: center;
+            .contact-info {
+                padding: 25px;
             }
         }
     </style>
@@ -218,7 +198,7 @@
             <div class="row">
                 <div class="col-lg-8 mx-auto">
                     <div class="contact-info">
-                        <h3 class="text-center mb-4">راه‌های ارتباطی</h3>
+                        <h3 class="text-center mb-4" style="color: var(--primary);">راه‌های ارتباطی</h3>
                         
                         <div class="contact-item">
                             <div class="contact-icon">
@@ -261,23 +241,10 @@
                         </div>
                         
                         <div class="text-center mt-4">
-                            <p class="lead">برای ارتباط سریع‌تر با ما از شبکه‌های اجتماعی استفاده کنید</p>
+                            <p class="lead" style="color: var(--primary); font-weight: 500;">
+                                برای ارتباط سریع‌تر با ما از شبکه‌های اجتماعی استفاده کنید
+                            </p>
                         </div>
-                    </div>
-                    
-                    <div class="social-contact">
-                        <a href="https://t.me/amaghpub" target="_blank">
-                            <i class="fab fa-telegram"></i>
-                            پیام در تلگرام
-                        </a>
-                        <a href="https://instagram.com/amaghpub" target="_blank">
-                            <i class="fab fa-instagram"></i>
-                            پیج اینستاگرام
-                        </a>
-                        <a href="mailto:amagh.pub@gmail.com">
-                            <i class="fas fa-envelope"></i>
-                            ارسال ایمیل
-                        </a>
                     </div>
                 </div>
             </div>
