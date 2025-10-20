@@ -99,6 +99,19 @@
             padding: 15px;
             border-radius: 5px;
         }
+        
+        .submission-details {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .social-icon-preview {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
@@ -182,34 +195,27 @@
                             <div class="mb-3">
                                 <label>آدرس لوگو</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="logoUrl" value="https://uploadkon.ir/uploads/2bb820_25website-Logo.png">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="clearLogo()">حذف لوگو</button>
+                                    <input type="text" class="form-control" id="logoUrl">
+                                    <button class="btn btn-outline-primary" type="button" onclick="updateLogoFromUrl()">اعمال</button>
                                 </div>
-                                <small class="text-muted">آدرس تصویر لوگو را وارد کنید یا از کامپیوتر آپلود کنید</small>
+                                <small class="text-muted">آدرس تصویر لوگو را وارد کنید</small>
                             </div>
                             <div class="mb-3">
                                 <label>آپلود لوگوی جدید</label>
                                 <input type="file" class="form-control" id="logoUpload" accept="image/*">
-                                <button class="btn btn-success mt-2" onclick="uploadLogo()">آپلود لوگو</button>
+                                <button class="btn btn-success mt-2" onclick="uploadLogo()">
+                                    <i class="fas fa-upload"></i> آپلود لوگو
+                                </button>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label>پیش‌نمایش لوگو</label>
-                                <div class="border p-3 text-center">
-                                    <img id="logoPreview" src="https://uploadkon.ir/uploads/2bb820_25website-Logo.png" alt="پیش‌نمایش لوگو" style="max-height: 60px; max-width: 200px;">
+                                <div class="border p-3 text-center bg-light">
+                                    <img id="logoPreview" src="" alt="پیش‌نمایش لوگو" style="max-height: 60px; max-width: 200px; width: auto; height: auto;">
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label>مدیریت منوها</label>
-                        <div id="menuItems">
-                            <!-- منوها -->
-                        </div>
-                        <button class="btn btn-sm btn-success mt-2" onclick="addMenuItem()">
-                            <i class="fas fa-plus"></i> افزودن منوی جدید
-                        </button>
                     </div>
                 </div>
 
@@ -231,13 +237,7 @@
                     <hr>
                     <div class="mb-3">
                         <label>متن معرفی</label>
-                        <textarea class="form-control" id="aboutText" rows="6">نشر اعماق بیست و دوم مهرماه یک‌هزار و چهارصد و چهار زاده شد
-
-نشر اعماق امکان زیستن است در عین نبودن
-
-شماره پروانه نشر: 19975
-
-[...در حال به روزرسانی...]</textarea>
+                        <textarea class="form-control" id="aboutText" rows="6"></textarea>
                     </div>
                     <button class="btn btn-primary" onclick="updateAbout()">بروزرسانی متن درباره ما</button>
                 </div>
@@ -256,7 +256,11 @@
                         </div>
                         <div class="mb-3">
                             <label>آدرس تصویر</label>
-                            <input type="text" class="form-control" id="postImage" placeholder="آدرس تصویر مطلب">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="postImage" placeholder="آدرس تصویر مطلب">
+                                <button class="btn btn-outline-secondary" type="button" onclick="browseImages()">انتخاب تصویر</button>
+                            </div>
+                            <small class="text-muted">لینک مستقیم تصویر را وارد کنید</small>
                         </div>
                         <div class="mb-3">
                             <label>تگ‌ها (با کاما جدا کنید)</label>
@@ -268,6 +272,7 @@
                                 <button type="button" onclick="formatText('bold')"><b>B</b></button>
                                 <button type="button" onclick="formatText('italic')"><i>I</i></button>
                                 <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                                <button type="button" onclick="formatText('insertUnorderedList')">• لیست</button>
                                 <button type="button" onclick="formatText('insertLink')">🔗 لینک</button>
                                 <button type="button" onclick="formatText('formatBlock', '<h2>')">عنوان</button>
                                 <button type="button" onclick="formatText('formatBlock', '<p>')">پاراگراف</button>
@@ -290,6 +295,14 @@
                 <div id="form-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-envelope text-warning"></i> درخواست‌های بررسی اثر</h5>
                     <hr>
+                    <div class="mb-3">
+                        <div class="input-group" style="max-width: 300px;">
+                            <input type="text" class="form-control" placeholder="جستجو در درخواست‌ها..." id="searchSubmissions">
+                            <button class="btn btn-outline-secondary" onclick="searchSubmissions()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
                     <div id="submissionsList">
                         <!-- درخواست‌ها -->
                     </div>
@@ -302,7 +315,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h6>شبکه‌های اجتماعی</h6>
-                            <div id="socialLinks">
+                            <div id="socialLinksContainer">
                                 <!-- لینک‌های اجتماعی -->
                             </div>
                             <button class="btn btn-sm btn-success mt-2" onclick="addSocialLink()">
@@ -346,6 +359,11 @@
                         <input type="email" class="form-control" id="recoveryEmail" value="amagh.pub@gmail.com">
                         <small class="text-muted">این ایمیل برای بازیابی اطلاعات ورود استفاده می‌شود</small>
                     </div>
+                    <div class="mb-3">
+                        <label>ایمیل دریافت درخواست‌ها</label>
+                        <input type="email" class="form-control" id="submissionEmail" value="amagh.pub@gmail.com">
+                        <small class="text-muted">درخواست‌های جدید به این ایمیل ارسال می‌شوند</small>
+                    </div>
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle"></i>
                         پس از تغییر اطلاعات، برای ورود مجدد از اطلاعات جدید استفاده کنید.
@@ -353,6 +371,21 @@
                     <button class="btn btn-warning" onclick="updateSecuritySettings()">
                         <i class="fas fa-key"></i> بروزرسانی تنظیمات امنیتی
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal مشاهده جزئیات درخواست -->
+    <div class="modal fade" id="submissionModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">جزئیات درخواست</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="submissionDetails">
+                    <!-- جزئیات درخواست -->
                 </div>
             </div>
         </div>
@@ -378,6 +411,7 @@
                 if (module === 'form') loadSubmissions();
                 if (module === 'header') loadHeaderSettings();
                 if (module === 'footer') loadFooterSettings();
+                if (module === 'about') loadAboutSettings();
             });
         });
 
@@ -395,18 +429,18 @@
             const newUsername = document.getElementById('newUsername').value;
             const newPassword = document.getElementById('newPassword').value;
             const recoveryEmail = document.getElementById('recoveryEmail').value;
+            const submissionEmail = document.getElementById('submissionEmail').value;
             
-            // اعتبارسنجی امنیتی
             if (newUsername && newPassword) {
                 if (newPassword.length < 6) {
                     alert('رمز عبور باید حداقل 6 کاراکتر باشد.');
                     return;
                 }
                 
-                // ذخیره امن
                 localStorage.setItem('adminUsername', newUsername);
                 localStorage.setItem('adminPassword', newPassword);
                 localStorage.setItem('recoveryEmail', recoveryEmail);
+                localStorage.setItem('submissionEmail', submissionEmail);
                 
                 alert('تنظیمات امنیتی با موفقیت بروزرسانی شد.');
                 document.getElementById('newUsername').value = '';
@@ -429,6 +463,13 @@
             }
         }
 
+        function browseImages() {
+            const imageUrl = prompt('لینک مستقیم تصویر را وارد کنید:');
+            if (imageUrl) {
+                document.getElementById('postImage').value = imageUrl;
+            }
+        }
+
         function publishPost() {
             const title = document.getElementById('postTitle').value;
             const image = document.getElementById('postImage').value;
@@ -445,7 +486,7 @@
                 id: Date.now(),
                 title: title,
                 image: image || 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg',
-                excerpt: content.substring(0, 150) + '...',
+                excerpt: content.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
                 content: content,
                 tags: tags.split(',').map(tag => tag.trim()),
                 date: new Date().toLocaleDateString('fa-IR'),
@@ -470,6 +511,11 @@
             const container = document.getElementById('postsList');
             container.innerHTML = '';
             
+            if (posts.length === 0) {
+                container.innerHTML = '<p class="text-muted">هنوز هیچ پستی منتشر نشده است.</p>';
+                return;
+            }
+            
             posts.forEach((post, index) => {
                 container.innerHTML += `
                     <div class="border p-3 mb-2 rounded">
@@ -493,16 +539,6 @@
             const logoUrl = localStorage.getItem('siteLogo') || 'https://uploadkon.ir/uploads/2bb820_25website-Logo.png';
             document.getElementById('logoUrl').value = logoUrl;
             document.getElementById('logoPreview').src = logoUrl;
-            
-            // بارگذاری منوها
-            const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
-                { text: 'خانه', url: 'index.html' },
-                { text: 'درباره ما', url: 'about.html' },
-                { text: 'تماس با ما', url: 'contact.html' },
-                { text: 'کتاب‌ها', url: 'books.html' },
-                { text: 'بلاگ', url: 'blog.html' }
-            ];
-            renderMenuItems(menuItems);
         }
 
         function uploadLogo() {
@@ -510,23 +546,40 @@
             const file = fileInput.files[0];
             
             if (file) {
+                if (!file.type.startsWith('image/')) {
+                    alert('لطفاً یک فایل تصویری انتخاب کنید.');
+                    return;
+                }
+                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const imageUrl = e.target.result;
+                    
                     localStorage.setItem('siteLogo', imageUrl);
                     document.getElementById('logoUrl').value = imageUrl;
                     document.getElementById('logoPreview').src = imageUrl;
-                    alert('لوگو با موفقیت آپلود شد.');
+                    updateSiteLogo(imageUrl);
+                    
+                    alert('لوگو با موفقیت آپلود و اعمال شد.');
                 };
                 reader.readAsDataURL(file);
+            } else {
+                alert('لطفاً یک فایل انتخاب کنید.');
             }
         }
 
-        function clearLogo() {
-            localStorage.removeItem('siteLogo');
-            document.getElementById('logoUrl').value = '';
-            document.getElementById('logoPreview').src = '';
-            alert('لوگو حذف شد.');
+        function updateLogoFromUrl() {
+            const logoUrl = document.getElementById('logoUrl').value;
+            if (logoUrl) {
+                localStorage.setItem('siteLogo', logoUrl);
+                document.getElementById('logoPreview').src = logoUrl;
+                updateSiteLogo(logoUrl);
+                alert('لوگو با موفقیت به‌روزرسانی شد.');
+            }
+        }
+
+        function updateSiteLogo(logoUrl) {
+            localStorage.setItem('currentSiteLogo', logoUrl);
         }
 
         // 📧 مدیریت درخواست‌ها
@@ -541,20 +594,76 @@
             }
             
             submissions.forEach((submission, index) => {
+                const statusClass = submission.status === 'جدید' ? 'bg-warning' : 'bg-success';
                 container.innerHTML += `
                     <div class="border p-3 mb-3 rounded">
                         <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <h6>${submission.name} - ${submission.bookName}</h6>
+                            <div style="flex: 1;">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge ${statusClass} me-2">${submission.status}</span>
+                                    <h6 class="mb-0">${submission.name} - ${submission.bookName}</h6>
+                                </div>
                                 <p class="mb-1"><strong>موضوع:</strong> ${submission.subject}</p>
                                 <p class="mb-1"><strong>ایمیل:</strong> ${submission.email}</p>
+                                <p class="mb-1"><strong>تلفن:</strong> ${submission.phone || 'ثبت نشده'}</p>
                                 <small class="text-muted">${submission.timestamp}</small>
                             </div>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteSubmission(${index})">حذف</button>
+                            <div class="d-flex flex-column">
+                                <button class="btn btn-sm btn-outline-primary mb-1" onclick="viewSubmissionDetails(${index})">
+                                    مشاهده جزئیات
+                                </button>
+                                ${submission.fileName ? `
+                                    <button class="btn btn-sm btn-outline-success mb-1" onclick="downloadFile(${index})">
+                                        دریافت فایل
+                                    </button>
+                                ` : ''}
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteSubmission(${index})">
+                                    حذف
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
             });
+        }
+
+        function viewSubmissionDetails(index) {
+            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+            const submission = submissions[index];
+            
+            const detailsHtml = `
+                <div class="submission-details">
+                    <h6>اطلاعات کامل درخواست</h6>
+                    <p><strong>نام و نام خانوادگی:</strong> ${submission.name}</p>
+                    <p><strong>نام کتاب:</strong> ${submission.bookName}</p>
+                    <p><strong>موضوع کتاب:</strong> ${submission.subject}</p>
+                    <p><strong>توضیحات:</strong> ${submission.description || 'ثبت نشده'}</p>
+                    <p><strong>شماره تماس:</strong> ${submission.phone || 'ثبت نشده'}</p>
+                    <p><strong>ایمیل:</strong> ${submission.email}</p>
+                    <p><strong>فایل ارسالی:</strong> ${submission.fileName || 'فاقد فایل'}</p>
+                    <p><strong>تاریخ ثبت:</strong> ${submission.timestamp}</p>
+                    <p><strong>وضعیت:</strong> ${submission.status}</p>
+                </div>
+            `;
+            
+            document.getElementById('submissionDetails').innerHTML = detailsHtml;
+            const modal = new bootstrap.Modal(document.getElementById('submissionModal'));
+            modal.show();
+        }
+
+        function downloadFile(index) {
+            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+            const submission = submissions[index];
+            
+            if (submission.fileData) {
+                // ایجاد لینک دانلود برای فایل
+                const link = document.createElement('a');
+                link.href = submission.fileData;
+                link.download = submission.fileName;
+                link.click();
+            } else {
+                alert('فایل موجود نیست.');
+            }
         }
 
         function deleteSubmission(index) {
@@ -566,6 +675,168 @@
             }
         }
 
+        function searchSubmissions() {
+            const searchTerm = document.getElementById('searchSubmissions').value.toLowerCase();
+            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+            const container = document.getElementById('submissionsList');
+            
+            if (!searchTerm) {
+                loadSubmissions();
+                return;
+            }
+            
+            const filteredSubmissions = submissions.filter(sub => 
+                sub.name.toLowerCase().includes(searchTerm) ||
+                sub.bookName.toLowerCase().includes(searchTerm) ||
+                sub.email.toLowerCase().includes(searchTerm) ||
+                sub.subject.toLowerCase().includes(searchTerm)
+            );
+            
+            container.innerHTML = '';
+            
+            if (filteredSubmissions.length === 0) {
+                container.innerHTML = '<p class="text-muted">هیچ درخواستی matching یافت نشد.</p>';
+                return;
+            }
+            
+            filteredSubmissions.forEach((submission, index) => {
+                const originalIndex = submissions.findIndex(s => s.id === submission.id);
+                const statusClass = submission.status === 'جدید' ? 'bg-warning' : 'bg-success';
+                container.innerHTML += `
+                    <div class="border p-3 mb-3 rounded">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div style="flex: 1;">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge ${statusClass} me-2">${submission.status}</span>
+                                    <h6 class="mb-0">${submission.name} - ${submission.bookName}</h6>
+                                </div>
+                                <p class="mb-1"><strong>موضوع:</strong> ${submission.subject}</p>
+                                <p class="mb-1"><strong>ایمیل:</strong> ${submission.email}</p>
+                                <small class="text-muted">${submission.timestamp}</small>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <button class="btn btn-sm btn-outline-primary mb-1" onclick="viewSubmissionDetails(${originalIndex})">
+                                    مشاهده جزئیات
+                                </button>
+                                ${submission.fileName ? `
+                                    <button class="btn btn-sm btn-outline-success mb-1" onclick="downloadFile(${originalIndex})">
+                                        دریافت فایل
+                                    </button>
+                                ` : ''}
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteSubmission(${originalIndex})">
+                                    حذف
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // 👣 مدیریت فوتر
+        function loadFooterSettings() {
+            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [
+                { name: 'تلگرام', url: 'https://t.me/amaghpub', icon: 'https://uploadkon.ir/uploads/3db017_25Telegram.png' },
+                { name: 'اینستاگرام', url: 'https://instagram.com/amaghpub', icon: 'https://uploadkon.ir/uploads/a43a17_25Instagram.png' },
+                { name: 'لینکدین', url: 'https://www.linkedin.com/company/amaghpub', icon: 'https://uploadkon.ir/uploads/1f7217_25Linkedin.png' },
+                { name: 'ایمیل', url: 'mailto:amagh.pub@gmail.com', icon: 'https://uploadkon.ir/uploads/547417_25Untitled-2.png' }
+            ];
+            
+            renderSocialLinks(socialLinks);
+            
+            // بارگذاری اطلاعات تماس
+            const contactEmail = localStorage.getItem('contactEmail') || 'amagh.pub@gmail.com';
+            const copyrightText = localStorage.getItem('copyrightText') || '© تمامی حقوق محفوظ است | نشر اعماق';
+            
+            document.getElementById('contactEmail').value = contactEmail;
+            document.getElementById('copyrightText').value = copyrightText;
+        }
+
+        function renderSocialLinks(socialLinks) {
+            const container = document.getElementById('socialLinksContainer');
+            container.innerHTML = '';
+            
+            socialLinks.forEach((link, index) => {
+                container.innerHTML += `
+                    <div class="border p-2 mb-2 rounded">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <img src="${link.icon}" alt="${link.name}" class="social-icon-preview">
+                            </div>
+                            <div class="col-4">
+                                <input type="text" class="form-control form-control-sm" value="${link.name}" onchange="updateSocialLink(${index}, 'name', this.value)">
+                            </div>
+                            <div class="col-4">
+                                <input type="text" class="form-control form-control-sm" value="${link.url}" onchange="updateSocialLink(${index}, 'url', this.value)">
+                            </div>
+                            <div class="col-2">
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-secondary" onclick="changeSocialIcon(${index})">تغییر آیکون</button>
+                                    <button class="btn btn-outline-danger" onclick="removeSocialLink(${index})">حذف</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function addSocialLink() {
+            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+            socialLinks.push({
+                name: 'شبکه جدید',
+                url: '#',
+                icon: 'https://uploadkon.ir/uploads/3db017_25Telegram.png'
+            });
+            
+            localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+            renderSocialLinks(socialLinks);
+        }
+
+        function updateSocialLink(index, field, value) {
+            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+            socialLinks[index][field] = value;
+            localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+        }
+
+        function changeSocialIcon(index) {
+            const iconUrl = prompt('لینک آیکون جدید را وارد کنید:');
+            if (iconUrl) {
+                const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+                socialLinks[index].icon = iconUrl;
+                localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+                renderSocialLinks(socialLinks);
+            }
+        }
+
+        function removeSocialLink(index) {
+            if (confirm('آیا از حذف این شبکه اجتماعی اطمینان دارید؟')) {
+                const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+                socialLinks.splice(index, 1);
+                localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+                renderSocialLinks(socialLinks);
+            }
+        }
+
+        // ℹ️ مدیریت درباره ما
+        function loadAboutSettings() {
+            const aboutText = localStorage.getItem('aboutText') || `نشر اعماق بیست و دوم مهرماه یک‌هزار و چهارصد و چهار زاده شد
+
+نشر اعماق امکان زیستن است در عین نبودن
+
+شماره پروانه نشر: 19975
+
+[...در حال به روزرسانی...]`;
+            
+            document.getElementById('aboutText').value = aboutText;
+        }
+
+        function updateAbout() {
+            const aboutText = document.getElementById('aboutText').value;
+            localStorage.setItem('aboutText', aboutText);
+            alert('متن درباره ما با موفقیت بروزرسانی شد.');
+        }
+
         // 💾 ذخیره تمام تغییرات
         function saveAllChanges() {
             // ذخیره تنظیمات فوتر
@@ -574,18 +845,14 @@
             localStorage.setItem('contactEmail', contactEmail);
             localStorage.setItem('copyrightText', copyrightText);
             
-            // ذخیره تنظیمات درباره ما
-            const aboutText = document.getElementById('aboutText').value;
-            localStorage.setItem('aboutText', aboutText);
-            
             alert('تمامی تغییرات با موفقیت ذخیره شدند.');
         }
 
         // بارگذاری اولیه
         document.addEventListener('DOMContentLoaded', function() {
             loadHeaderSettings();
-            loadPosts();
-            loadSubmissions();
+            loadAboutSettings();
+            loadFooterSettings();
         });
     </script>
 </body>
