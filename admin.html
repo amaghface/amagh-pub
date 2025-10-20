@@ -677,34 +677,27 @@
             sidebar.classList.toggle('mobile-open');
         }
 
-        // مدیریت ماژول‌ها - رفع مشکل اصلی
+        // مدیریت ماژول‌ها
         function initializeModules() {
-            // مخفی کردن همه ماژول‌ها به جز ماژول فعال
             document.querySelectorAll('.admin-card').forEach(card => {
                 card.style.display = 'none';
             });
-            // نمایش ماژول هدر (اولین ماژول)
             document.getElementById('header-module').style.display = 'block';
             
-            // اضافه کردن event listener به لینک‌ها
             document.querySelectorAll('.sidebar .nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     
-                    // حذف کلاس active از همه لینک‌ها
                     document.querySelectorAll('.sidebar .nav-link').forEach(l => {
                         l.classList.remove('active');
                     });
                     
-                    // اضافه کردن کلاس active به لینک کلیک شده
                     this.classList.add('active');
                     
-                    // مخفی کردن همه ماژول‌ها
                     document.querySelectorAll('.admin-card').forEach(card => {
                         card.style.display = 'none';
                     });
                     
-                    // نمایش ماژول مربوطه
                     const moduleName = this.getAttribute('data-module');
                     const moduleElement = document.getElementById(moduleName + '-module');
                     if (moduleElement) {
@@ -770,24 +763,87 @@
             alert('تنظیمات امنیتی با موفقیت بروزرسانی شد.');
         }
 
+        // مدیریت فوتر - لوگوهای شبکه‌های اجتماعی
         function loadFooterSettings() {
-            const socialLinks = [
+            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [
                 { name: 'تلگرام', url: 'https://t.me/amaghpub', icon: 'https://uploadkon.ir/uploads/3db017_25Telegram.png' },
                 { name: 'اینستاگرام', url: 'https://instagram.com/amaghpub', icon: 'https://uploadkon.ir/uploads/a43a17_25Instagram.png' },
                 { name: 'لینکدین', url: 'https://www.linkedin.com/company/amaghpub', icon: 'https://uploadkon.ir/uploads/1f7217_25Linkedin.png' },
                 { name: 'ایمیل', url: 'mailto:amagh.pub@gmail.com', icon: 'https://uploadkon.ir/uploads/547417_25Untitled-2.png' }
             ];
-            // رندر لینک‌های اجتماعی
+            
+            renderSocialLinks(socialLinks);
+        }
+
+        function renderSocialLinks(links) {
+            const container = document.getElementById('socialLinksContainer');
+            container.innerHTML = '';
+            
+            links.forEach((link, index) => {
+                const linkItem = document.createElement('div');
+                linkItem.className = 'social-link-item';
+                linkItem.innerHTML = `
+                    <img src="${link.icon}" alt="${link.name}" class="social-icon-preview">
+                    <div class="social-link-inputs">
+                        <input type="text" class="form-control" value="${link.name}" placeholder="نام شبکه اجتماعی" onchange="updateSocialLink(${index}, 'name', this.value)">
+                        <input type="url" class="form-control" value="${link.url}" placeholder="آدرس لینک" onchange="updateSocialLink(${index}, 'url', this.value)">
+                        <input type="url" class="form-control" value="${link.icon}" placeholder="آدرس آیکون" onchange="updateSocialLink(${index}, 'icon', this.value)">
+                    </div>
+                    <div class="social-link-actions">
+                        <button class="btn btn-sm btn-outline-primary" onclick="updateSocialIconPreview(${index})">
+                            <i class="fas fa-sync"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="removeSocialLink(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(linkItem);
+            });
+        }
+
+        function updateSocialLink(index, field, value) {
+            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+            if (socialLinks[index]) {
+                socialLinks[index][field] = value;
+                localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+            }
+        }
+
+        function updateSocialIconPreview(index) {
+            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+            if (socialLinks[index]) {
+                const linkItem = document.querySelectorAll('.social-link-item')[index];
+                const iconImg = linkItem.querySelector('.social-icon-preview');
+                iconImg.src = socialLinks[index].icon;
+            }
+        }
+
+        function removeSocialLink(index) {
+            if (confirm('آیا از حذف این شبکه اجتماعی اطمینان دارید؟')) {
+                const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+                socialLinks.splice(index, 1);
+                localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+                renderSocialLinks(socialLinks);
+            }
         }
 
         function addSocialLink() {
-            alert('افزودن شبکه اجتماعی جدید');
+            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+            socialLinks.push({
+                name: 'شبکه اجتماعی جدید',
+                url: '#',
+                icon: 'https://uploadkon.ir/uploads/547417_25Untitled-2.png'
+            });
+            localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+            renderSocialLinks(socialLinks);
         }
 
         // بارگذاری اولیه
         document.addEventListener('DOMContentLoaded', function() {
             initializeModules();
             handleResize();
+            loadFooterSettings();
             window.addEventListener('resize', handleResize);
         });
     </script>
