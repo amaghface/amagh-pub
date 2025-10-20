@@ -27,7 +27,6 @@
             padding: 0;
         }
         
-        /* سایدبار */
         .sidebar {
             background-color: var(--primary);
             color: var(--light);
@@ -96,7 +95,6 @@
             color: var(--light);
         }
         
-        /* محتوای اصلی */
         .main-content {
             margin-right: 280px;
             padding: 20px;
@@ -105,7 +103,6 @@
             width: calc(100% - 280px);
         }
         
-        /* هدر پنل مدیریت */
         .panel-header {
             display: flex;
             flex-wrap: wrap;
@@ -138,7 +135,6 @@
             flex-shrink: 0;
         }
         
-        /* کارت‌های مدیریت */
         .admin-card {
             background: var(--light);
             border-radius: 12px;
@@ -178,7 +174,6 @@
             transform: translateY(-2px);
         }
         
-        /* فرم‌ها */
         .form-row-responsive {
             display: flex;
             flex-wrap: wrap;
@@ -206,7 +201,6 @@
             box-shadow: 0 0 0 0.2rem rgba(122, 101, 56, 0.15);
         }
         
-        /* ویرایشگر */
         .editor-toolbar {
             background: #f8f9fa;
             padding: 15px;
@@ -247,7 +241,6 @@
             line-height: 1.8;
         }
         
-        /* مدیریت شبکه‌های اجتماعی */
         .social-link-item {
             border: 1px solid #e9ecef;
             padding: 20px;
@@ -296,7 +289,47 @@
             border: 1px solid #ddd;
         }
         
-        /* منوی موبایل */
+        .slide-item, .post-item {
+            border: 1px solid #e9ecef;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            background: #fafafa;
+            transition: all 0.3s ease;
+        }
+        
+        .slide-item:hover, .post-item:hover {
+            background: #f0f0f0;
+        }
+        
+        .slide-preview, .post-preview {
+            width: 100%;
+            max-width: 300px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, var(--primary), #2a3a45);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stats-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stats-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
         .mobile-menu-btn {
             display: none;
             position: fixed;
@@ -318,7 +351,6 @@
             transform: scale(1.05);
         }
         
-        /* استایل‌های ریسپانسیو */
         @media (max-width: 1200px) {
             .sidebar {
                 width: 260px;
@@ -372,7 +404,7 @@
             .form-group-responsive {
                 min-width: 100%;
             }
-            .social-link-item {
+            .social-link-item, .slide-item, .post-item {
                 flex-direction: column;
                 align-items: stretch;
             }
@@ -401,7 +433,6 @@
             }
         }
         
-        /* اسکرول بار */
         .sidebar-nav::-webkit-scrollbar {
             width: 6px;
         }
@@ -417,12 +448,10 @@
     </style>
 </head>
 <body>
-    <!-- دکمه منوی موبایل -->
     <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
         <i class="fas fa-bars"></i>
     </button>
 
-    <!-- بررسی امنیت -->
     <script>
         if (!localStorage.getItem('adminAuthenticated') || !localStorage.getItem('loginTime')) {
             window.location.href = 'login.html';
@@ -439,7 +468,6 @@
 
     <div class="container-fluid p-0">
         <div class="row g-0">
-            <!-- سایدبار -->
             <nav class="sidebar" id="sidebar">
                 <div class="sidebar-content">
                     <div class="sidebar-header">
@@ -467,6 +495,10 @@
                             <i class="fas fa-envelope module-icon"></i>
                             درخواست‌ها
                         </a>
+                        <a class="nav-link" href="#" data-module="stats">
+                            <i class="fas fa-chart-bar module-icon"></i>
+                            آمار و گزارشات
+                        </a>
                         <a class="nav-link" href="#" data-module="footer">
                             <i class="fas fa-shoe-prints module-icon"></i>
                             فوتر
@@ -479,7 +511,6 @@
                 </div>
             </nav>
 
-            <!-- محتوای اصلی -->
             <main class="main-content" id="mainContent">
                 <div class="panel-header">
                     <h4>مدیریت وبسایت نشر اعماق</h4>
@@ -495,7 +526,6 @@
                     </div>
                 </div>
 
-                <!-- ماژول هدر و منو -->
                 <section id="header-module" class="admin-card">
                     <h5><i class="fas fa-header text-warning"></i> مدیریت هدر و منو</h5>
                     <div class="form-row-responsive">
@@ -524,18 +554,42 @@
                     </div>
                 </section>
 
-                <!-- ماژول اسلایدشو -->
                 <section id="slider-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-images text-warning"></i> مدیریت اسلایدشو</h5>
-                    <div id="slidesContainer">
-                        <p>مدیریت اسلایدشو - به زودی...</p>
+                    <div class="mb-4 p-3 border rounded">
+                        <h6>اسلاید جدید</h6>
+                        <div class="form-row-responsive">
+                            <div class="form-group-responsive">
+                                <label class="form-label">عنوان اسلاید</label>
+                                <input type="text" class="form-control" id="slideTitle" placeholder="عنوان اسلاید">
+                            </div>
+                            <div class="form-group-responsive">
+                                <label class="form-label">لینک اسلاید</label>
+                                <input type="url" class="form-control" id="slideLink" placeholder="https://example.com">
+                            </div>
+                        </div>
+                        <div class="form-row-responsive">
+                            <div class="form-group-responsive">
+                                <label class="form-label">آپلود تصویر اسلاید</label>
+                                <input type="file" class="form-control" id="slideImageUpload" accept="image/*">
+                                <small class="text-muted">تصویر باید با ابعاد 1200x600 پیکسل باشد</small>
+                            </div>
+                            <div class="form-group-responsive">
+                                <label class="form-label">یا آدرس تصویر</label>
+                                <input type="text" class="form-control" id="slideImageUrl" placeholder="https://example.com/image.jpg">
+                            </div>
+                        </div>
+                        <button class="btn btn-success mt-3" onclick="addSlide()">
+                            <i class="fas fa-plus"></i> افزودن اسلاید جدید
+                        </button>
                     </div>
-                    <button class="btn btn-success mt-3" onclick="addSlide()">
-                        <i class="fas fa-plus"></i> افزودن اسلاید جدید
-                    </button>
+
+                    <h6>اسلایدهای موجود</h6>
+                    <div id="slidesContainer">
+                        <!-- اسلایدها -->
+                    </div>
                 </section>
 
-                <!-- ماژول درباره ما -->
                 <section id="about-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-info-circle text-warning"></i> مدیریت بخش درباره ما</h5>
                     <div class="form-group-responsive">
@@ -553,7 +607,6 @@
                     </button>
                 </section>
 
-                <!-- ماژول مدیریت مطالب -->
                 <section id="blog-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-blog text-warning"></i> مدیریت مطالب و بلاگ</h5>
                     
@@ -565,7 +618,17 @@
                                 <input type="text" class="form-control" id="postTitle" placeholder="عنوان مطلب را وارد کنید">
                             </div>
                             <div class="form-group-responsive">
-                                <label class="form-label">آدرس تصویر</label>
+                                <label class="form-label">خلاصه مطلب</label>
+                                <textarea class="form-control" id="postExcerpt" placeholder="خلاصه کوتاه از مطلب" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row-responsive">
+                            <div class="form-group-responsive">
+                                <label class="form-label">آپلود تصویر شاخص</label>
+                                <input type="file" class="form-control" id="postImageUpload" accept="image/*">
+                            </div>
+                            <div class="form-group-responsive">
+                                <label class="form-label">یا آدرس تصویر</label>
                                 <input type="text" class="form-control" id="postImage" placeholder="آدرس تصویر مطلب">
                             </div>
                         </div>
@@ -580,7 +643,10 @@
                                 <button type="button" onclick="formatText('italic')"><i>I</i></button>
                                 <button type="button" onclick="formatText('underline')"><u>U</u></button>
                                 <button type="button" onclick="formatText('insertUnorderedList')">• لیست</button>
+                                <button type="button" onclick="formatText('insertOrderedList')">۱٫ لیست شماره‌دار</button>
                                 <button type="button" onclick="formatText('insertLink')">🔗 لینک</button>
+                                <button type="button" onclick="formatText('formatBlock', '<h2>')">عنوان ۲</button>
+                                <button type="button" onclick="formatText('formatBlock', '<h3>')">عنوان ۳</button>
                             </div>
                             <div id="postEditor" contenteditable="true"></div>
                         </div>
@@ -595,7 +661,6 @@
                     </div>
                 </section>
 
-                <!-- ماژول درخواست‌ها -->
                 <section id="form-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-envelope text-warning"></i> درخواست‌های بررسی اثر</h5>
                     <div class="mb-3">
@@ -611,7 +676,70 @@
                     </div>
                 </section>
 
-                <!-- ماژول فوتر -->
+                <section id="stats-module" class="admin-card" style="display: none;">
+                    <h5><i class="fas fa-chart-bar text-warning"></i> آمار و گزارشات وبسایت</h5>
+                    
+                    <div class="form-row-responsive mb-4">
+                        <div class="form-group-responsive">
+                            <label class="form-label">بازه زمانی</label>
+                            <select class="form-control" id="statsPeriod" onchange="loadStats()">
+                                <option value="today">امروز</option>
+                                <option value="week">هفته جاری</option>
+                                <option value="month">ماه جاری</option>
+                                <option value="year">سال جاری</option>
+                                <option value="all">تمام زمان</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 col-6">
+                            <div class="stats-card">
+                                <div class="stats-number" id="totalVisits">0</div>
+                                <div class="stats-label">بازدید کل</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="stats-card">
+                                <div class="stats-number" id="uniqueVisitors">0</div>
+                                <div class="stats-label">بازدیدکننده منحصر به فرد</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="stats-card">
+                                <div class="stats-number" id="pageViews">0</div>
+                                <div class="stats-label">تعداد صفحات مشاهده شده</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="stats-card">
+                                <div class="stats-number" id="submissionCount">0</div>
+                                <div class="stats-label">درخواست‌های ثبت شده</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h6>جزئیات بازدیدها</h6>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>تاریخ</th>
+                                        <th>IP</th>
+                                        <th>صفحه</th>
+                                        <th>مرورگر</th>
+                                        <th>دستگاه</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="visitsDetails">
+                                    <!-- جزئیات بازدیدها -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
                 <section id="footer-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-shoe-prints text-warning"></i> مدیریت فوتر</h5>
                     <div class="form-row-responsive">
@@ -638,7 +766,6 @@
                     </div>
                 </section>
 
-                <!-- ماژول تنظیمات امنیتی -->
                 <section id="security-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-shield-alt text-warning"></i> تنظیمات امنیتی و لاگین</h5>
                     <div class="form-row-responsive">
@@ -702,6 +829,10 @@
                     const moduleElement = document.getElementById(moduleName + '-module');
                     if (moduleElement) {
                         moduleElement.style.display = 'block';
+                        if (moduleName === 'slider') loadSlides();
+                        if (moduleName === 'blog') loadPosts();
+                        if (moduleName === 'stats') loadStats();
+                        if (moduleName === 'footer') loadFooterSettings();
                     }
                 });
             });
@@ -715,7 +846,7 @@
             }
         }
 
-        // توابع مدیریت
+        // توابع مدیریت عمومی
         function logout() {
             if (confirm('آیا از خروج از پنل مدیریت اطمینان دارید؟')) {
                 localStorage.removeItem('adminAuthenticated');
@@ -745,25 +876,288 @@
             alert('متن درباره ما با موفقیت بروزرسانی شد.');
         }
 
-        function formatText(command) {
+        function formatText(command, value = null) {
             document.getElementById('postEditor').focus();
-            document.execCommand(command, false, null);
-        }
-
-        function publishPost() {
-            const title = document.getElementById('postTitle').value;
-            if (title) {
-                alert('مطلب با موفقیت منتشر شد!');
-            } else {
-                alert('لطفاً عنوان مطلب را وارد کنید.');
-            }
+            document.execCommand(command, false, value);
         }
 
         function updateSecuritySettings() {
             alert('تنظیمات امنیتی با موفقیت بروزرسانی شد.');
         }
 
-        // مدیریت فوتر - لوگوهای شبکه‌های اجتماعی
+        // مدیریت اسلایدشو
+        function loadSlides() {
+            const slides = JSON.parse(localStorage.getItem('slides')) || [
+                {
+                    id: 1,
+                    title: "خوش آمدید به نشر اعماق",
+                    image: "https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg",
+                    link: "index.html",
+                    order: 1
+                }
+            ];
+            
+            renderSlides(slides);
+        }
+
+        function renderSlides(slides) {
+            const container = document.getElementById('slidesContainer');
+            container.innerHTML = '';
+            
+            slides.sort((a, b) => a.order - b.order).forEach((slide, index) => {
+                const slideItem = document.createElement('div');
+                slideItem.className = 'slide-item';
+                slideItem.innerHTML = `
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <img src="${slide.image}" alt="${slide.title}" class="slide-preview">
+                        </div>
+                        <div class="form-group-responsive">
+                            <input type="text" class="form-control mb-2" value="${slide.title}" onchange="updateSlide(${slide.id}, 'title', this.value)" placeholder="عنوان اسلاید">
+                            <input type="url" class="form-control mb-2" value="${slide.link}" onchange="updateSlide(${slide.id}, 'link', this.value)" placeholder="لینک اسلاید">
+                            <input type="text" class="form-control mb-2" value="${slide.image}" onchange="updateSlide(${slide.id}, 'image', this.value)" placeholder="آدرس تصویر">
+                            <input type="number" class="form-control mb-2" value="${slide.order}" onchange="updateSlide(${slide.id}, 'order', this.value)" placeholder="ترتیب نمایش">
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 mt-3">
+                        <button class="btn btn-sm btn-outline-primary" onclick="moveSlideUp(${index})">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" onclick="moveSlideDown(${index})">
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="removeSlide(${slide.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                `;
+                container.appendChild(slideItem);
+            });
+        }
+
+        function addSlide() {
+            const title = document.getElementById('slideTitle').value || 'اسلاید جدید';
+            const link = document.getElementById('slideLink').value || '#';
+            const imageUrl = document.getElementById('slideImageUrl').value || 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg';
+            
+            const slides = JSON.parse(localStorage.getItem('slides')) || [];
+            const newSlide = {
+                id: Date.now(),
+                title: title,
+                link: link,
+                image: imageUrl,
+                order: slides.length + 1
+            };
+            
+            slides.push(newSlide);
+            localStorage.setItem('slides', JSON.stringify(slides));
+            renderSlides(slides);
+            
+            // پاک کردن فرم
+            document.getElementById('slideTitle').value = '';
+            document.getElementById('slideLink').value = '';
+            document.getElementById('slideImageUrl').value = '';
+        }
+
+        function updateSlide(id, field, value) {
+            const slides = JSON.parse(localStorage.getItem('slides')) || [];
+            const slideIndex = slides.findIndex(slide => slide.id === id);
+            if (slideIndex !== -1) {
+                slides[slideIndex][field] = value;
+                localStorage.setItem('slides', JSON.stringify(slides));
+            }
+        }
+
+        function removeSlide(id) {
+            if (confirm('آیا از حذف این اسلاید اطمینان دارید؟')) {
+                const slides = JSON.parse(localStorage.getItem('slides')) || [];
+                const filteredSlides = slides.filter(slide => slide.id !== id);
+                localStorage.setItem('slides', JSON.stringify(filteredSlides));
+                renderSlides(filteredSlides);
+            }
+        }
+
+        function moveSlideUp(index) {
+            const slides = JSON.parse(localStorage.getItem('slides')) || [];
+            if (index > 0) {
+                [slides[index].order, slides[index - 1].order] = [slides[index - 1].order, slides[index].order];
+                localStorage.setItem('slides', JSON.stringify(slides));
+                renderSlides(slides);
+            }
+        }
+
+        function moveSlideDown(index) {
+            const slides = JSON.parse(localStorage.getItem('slides')) || [];
+            if (index < slides.length - 1) {
+                [slides[index].order, slides[index + 1].order] = [slides[index + 1].order, slides[index].order];
+                localStorage.setItem('slides', JSON.stringify(slides));
+                renderSlides(slides);
+            }
+        }
+
+        // مدیریت مطالب
+        function loadPosts() {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [
+                {
+                    id: 1,
+                    title: "عنوان مطلب اول",
+                    excerpt: "خلاصه‌ای از مطلب اول که کاربر را ترغیب به خواندن ادامه مطلب کند...",
+                    image: "https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg",
+                    content: "<h2>این محتوای کامل مطلب اول است</h2><p>این یک پاراگراف نمونه از محتوای کامل مطلب است.</p>",
+                    tags: "کتاب, ادبیات",
+                    date: "۱۴۰۳/۱۰/۱۵",
+                    status: "published"
+                }
+            ];
+            
+            renderPosts(posts);
+        }
+
+        function renderPosts(posts) {
+            const container = document.getElementById('postsList');
+            container.innerHTML = '';
+            
+            posts.forEach(post => {
+                const postItem = document.createElement('div');
+                postItem.className = 'post-item';
+                postItem.innerHTML = `
+                    <div class="form-row-responsive">
+                        <div class="form-group-responsive">
+                            <img src="${post.image}" alt="${post.title}" class="post-preview">
+                        </div>
+                        <div class="form-group-responsive">
+                            <input type="text" class="form-control mb-2" value="${post.title}" onchange="updatePost(${post.id}, 'title', this.value)">
+                            <textarea class="form-control mb-2" rows="2" onchange="updatePost(${post.id}, 'excerpt', this.value)">${post.excerpt}</textarea>
+                            <input type="text" class="form-control mb-2" value="${post.image}" onchange="updatePost(${post.id}, 'image', this.value)" placeholder="آدرس تصویر">
+                            <input type="text" class="form-control mb-2" value="${post.tags}" onchange="updatePost(${post.id}, 'tags', this.value)" placeholder="تگ‌ها">
+                            <small class="text-muted">آخرین ویرایش: ${post.date}</small>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 mt-3">
+                        <button class="btn btn-sm btn-outline-primary" onclick="editPost(${post.id})">
+                            <i class="fas fa-edit"></i> ویرایش محتوا
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="removePost(${post.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                `;
+                container.appendChild(postItem);
+            });
+        }
+
+        function publishPost() {
+            const title = document.getElementById('postTitle').value;
+            const excerpt = document.getElementById('postExcerpt').value;
+            const image = document.getElementById('postImage').value || 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg';
+            const tags = document.getElementById('postTags').value;
+            const content = document.getElementById('postEditor').innerHTML;
+            
+            if (!title) {
+                alert('لطفاً عنوان مطلب را وارد کنید.');
+                return;
+            }
+            
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const newPost = {
+                id: Date.now(),
+                title: title,
+                excerpt: excerpt || 'خلاصه‌ای از مطلب...',
+                image: image,
+                content: content || '<p>محتوا...</p>',
+                tags: tags,
+                date: new Date().toLocaleDateString('fa-IR'),
+                status: "published"
+            };
+            
+            posts.push(newPost);
+            localStorage.setItem('blogPosts', JSON.stringify(posts));
+            renderPosts(posts);
+            
+            // پاک کردن فرم
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postExcerpt').value = '';
+            document.getElementById('postImage').value = '';
+            document.getElementById('postTags').value = '';
+            document.getElementById('postEditor').innerHTML = '';
+            
+            alert('مطلب با موفقیت منتشر شد!');
+        }
+
+        function updatePost(id, field, value) {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const postIndex = posts.findIndex(post => post.id === id);
+            if (postIndex !== -1) {
+                posts[postIndex][field] = value;
+                posts[postIndex].date = new Date().toLocaleDateString('fa-IR');
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+            }
+        }
+
+        function editPost(id) {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const post = posts.find(p => p.id === id);
+            if (post) {
+                document.getElementById('postTitle').value = post.title;
+                document.getElementById('postExcerpt').value = post.excerpt;
+                document.getElementById('postImage').value = post.image;
+                document.getElementById('postTags').value = post.tags;
+                document.getElementById('postEditor').innerHTML = post.content;
+                
+                // حذف پست قدیمی
+                removePost(id);
+            }
+        }
+
+        function removePost(id) {
+            if (confirm('آیا از حذف این مطلب اطمینان دارید؟')) {
+                const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+                const filteredPosts = posts.filter(post => post.id !== id);
+                localStorage.setItem('blogPosts', JSON.stringify(filteredPosts));
+                renderPosts(filteredPosts);
+            }
+        }
+
+        // مدیریت آمار
+        function loadStats() {
+            const stats = JSON.parse(localStorage.getItem('websiteStats')) || {
+                totalVisits: 1254,
+                uniqueVisitors: 892,
+                pageViews: 3567,
+                submissionCount: 45,
+                visits: [
+                    {
+                        date: '۱۴۰۳/۱۰/۲۰ - ۱۰:۳۰',
+                        ip: '185.105.239.12',
+                        page: '/index.html',
+                        browser: 'Chrome',
+                        device: 'Desktop'
+                    }
+                ]
+            };
+            
+            document.getElementById('totalVisits').textContent = stats.totalVisits.toLocaleString();
+            document.getElementById('uniqueVisitors').textContent = stats.uniqueVisitors.toLocaleString();
+            document.getElementById('pageViews').textContent = stats.pageViews.toLocaleString();
+            document.getElementById('submissionCount').textContent = stats.submissionCount.toLocaleString();
+            
+            const visitsContainer = document.getElementById('visitsDetails');
+            visitsContainer.innerHTML = '';
+            
+            stats.visits.forEach(visit => {
+                visitsContainer.innerHTML += `
+                    <tr>
+                        <td>${visit.date}</td>
+                        <td>${visit.ip}</td>
+                        <td>${visit.page}</td>
+                        <td>${visit.browser}</td>
+                        <td>${visit.device}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // مدیریت فوتر
         function loadFooterSettings() {
             const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [
                 { name: 'تلگرام', url: 'https://t.me/amaghpub', icon: 'https://uploadkon.ir/uploads/3db017_25Telegram.png' },
