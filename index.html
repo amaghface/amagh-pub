@@ -36,9 +36,9 @@
         }
         
         .logo-container img {
-            height: 45px;
+            height: 40px;
             width: auto;
-            max-width: 180px;
+            max-width: 160px;
             object-fit: contain;
         }
         
@@ -186,6 +186,11 @@
             color: red;
         }
         
+        .form-note {
+            font-size: 0.8em;
+            line-height: 1.4;
+        }
+        
         .footer {
             background-color: var(--primary);
             color: var(--background);
@@ -256,8 +261,8 @@
             }
             
             .logo-container img {
-                height: 38px;
-                max-width: 150px;
+                height: 35px;
+                max-width: 140px;
             }
             
             .section-title {
@@ -277,8 +282,8 @@
         
         @media (max-width: 576px) {
             .logo-container img {
-                height: 35px;
-                max-width: 130px;
+                height: 32px;
+                max-width: 120px;
             }
             
             .nav-link {
@@ -377,19 +382,19 @@
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">شماره تماس واتساپی (جلسه آنلاین)</label>
+                        <label class="form-label">شماره تماس واتساپی <span class="form-note">(جلسه آنلاین)</span></label>
                         <input type="tel" class="form-control" id="whatsappNumber">
                     </div>
                     <div class="form-group">
-                        <label class="form-label required">ایمیل (جهت برگزاری جلسه آنلاین در Google Meet)</label>
+                        <label class="form-label required">ایمیل <span class="form-note">(جهت برگزاری جلسه آنلاین در Google Meet)</span></label>
                         <input type="email" class="form-control" id="email" required>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">بارگذاری فایل (حداکثر 10 مگابایت)</label>
+                    <label class="form-label">بارگذاری فایل <span class="form-note">(حداکثر 10 مگابایت)</span></label>
                     <input type="file" class="form-control" id="bookFile" accept=".pdf,.doc,.docx">
-                    <small class="text-muted">درصورت تمایل برای پیشرفت سریع‌تر در فرآیند بررسی کتاب، می‌توانید چند صفحه از متن کتاب را بارگذاری کنید.</small>
+                    <small class="text-muted form-note">درصورت تمایل برای پیشرفت سریع‌تر در فرآیند بررسی کتاب، می‌توانید چند صفحه از متن کتاب را بارگذاری کنید.</small>
                 </div>
                 
                 <div class="form-note">
