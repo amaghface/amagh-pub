@@ -1248,6 +1248,8 @@
         }
 
         function updateAbout() {
+            const aboutText = document.getElementById('aboutText').value;
+            localStorage.setItem('aboutText', aboutText);
             alert('متن درباره ما با موفقیت بروزرسانی شد.');
         }
 
@@ -1976,7 +1978,7 @@
                             <input type="text" class="form-control mb-2" value="${page.title}" placeholder="عنوان صفحه" onchange="updatePage(${page.id}, 'title', this.value)">
                             <input type="text" class="form-control mb-2" value="${page.slug}" placeholder="اسلاگ صفحه" onchange="updatePage(${page.id}, 'slug', this.value)">
                             <input type="text" class="form-control mb-2" value="${page.image}" placeholder="آدرس تصویر" onchange="updatePage(${page.id}, 'image', this.value)">
-                            <input type="text" class="form-control mb-2" value="${page.metaDescription}" placeholder="توضیحات متا" onchange="updatePage(${page.id}, 'metaDescription', this.value)">
+                            <input type="text" class="form-control mb-2" value="${page.metaDescription}" placeholder="توضیحات متa" onchange="updatePage(${page.id}, 'metaDescription', this.value)">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" ${page.visible ? 'checked' : ''} onchange="updatePage(${page.id}, 'visible', this.checked)">
                                 <label class="form-check-label">صفحه فعال</label>
