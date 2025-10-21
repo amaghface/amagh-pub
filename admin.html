@@ -201,46 +201,6 @@
             box-shadow: 0 0 0 0.2rem rgba(122, 101, 56, 0.15);
         }
         
-        .editor-toolbar {
-            background: #f8f9fa;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-        }
-        
-        .editor-toolbar button {
-            margin: 0;
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            background: white;
-            border-radius: 6px;
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: all 0.3s ease;
-            min-width: 44px;
-        }
-        
-        .editor-toolbar button:hover {
-            background: var(--secondary);
-            color: white;
-            border-color: var(--secondary);
-        }
-        
-        #postEditor {
-            min-height: 350px;
-            border: 1px solid #ddd;
-            padding: 20px;
-            border-radius: 8px;
-            width: 100%;
-            background: white;
-            line-height: 1.8;
-        }
-        
         .social-link-item {
             border: 1px solid #e9ecef;
             padding: 20px;
@@ -393,89 +353,18 @@
             transform: scale(1.05);
         }
 
-        /* استایل‌های جدید برای مدیریت مطالب پیشرفته */
-        .post-editor-full {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .image-preview-container {
-            text-align: center;
-            margin: 15px 0;
-            padding: 15px;
-            border: 2px dashed #ddd;
-            border-radius: 8px;
-            background: #fafafa;
-        }
-
-        .image-preview {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .post-actions {
+        .social-link-header {
             display: flex;
+            align-items: center;
             gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .post-meta {
+            margin-bottom: 10px;
+            padding: 10px;
             background: #f8f9fa;
-            padding: 15px;
             border-radius: 8px;
-            margin-bottom: 20px;
         }
 
-        .tag-badge {
-            display: inline-block;
-            background: var(--secondary);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin: 2px;
-            font-size: 0.8em;
-        }
-
-        .edit-post-modal .modal-content {
-            border-radius: 12px;
-        }
-
-        .edit-post-modal .modal-header {
-            background: var(--primary);
-            color: white;
-            border-bottom: 2px solid var(--secondary);
-        }
-
-        .full-editor {
-            min-height: 400px;
-            border: 1px solid #ddd;
-            padding: 20px;
-            border-radius: 8px;
-            background: white;
-            line-height: 1.8;
-            margin-bottom: 15px;
-        }
-
-        /* استایل‌های جدید برای مدیریت اسلایدشو */
-        .slide-editor {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .slide-image-preview {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-            margin: 10px 0;
+        .social-link-header strong {
+            color: var(--primary);
         }
         
         @media (max-width: 1200px) {
@@ -544,15 +433,6 @@
                 margin-top: 15px;
                 width: 100%;
             }
-
-            .post-actions {
-                flex-direction: column;
-            }
-
-            .post-actions .btn {
-                width: 100%;
-                margin-bottom: 8px;
-            }
         }
         
         @media (max-width: 576px) {
@@ -607,7 +487,6 @@
             <nav class="sidebar" id="sidebar">
                 <div class="sidebar-content">
                     <div class="sidebar-header">
-                        <!-- لوگوی بزرگ‌تر شده -->
                         <img src="https://uploadkon.ir/uploads/44f319_25Website.png" alt="لوگوی نشر اعماق" height="100" style="background: white; padding: 10px; border-radius: 8px;">
                         <h6 class="mt-2 mb-0">پنل مدیریت نشر اعماق</h6>
                     </div>
@@ -716,11 +595,11 @@
                     </div>
                 </section>
 
-                <!-- ماژول اسلایدشو کاملاً بازنویسی شده -->
+                <!-- ماژول اسلایدشو -->
                 <section id="slider-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-images text-warning"></i> مدیریت اسلایدشو</h5>
                     
-                    <div class="slide-editor">
+                    <div class="mb-4">
                         <h6>اسلاید جدید</h6>
                         <div class="form-row-responsive">
                             <div class="form-group-responsive">
@@ -735,23 +614,8 @@
                         
                         <div class="form-row-responsive">
                             <div class="form-group-responsive">
-                                <label class="form-label">آپلود تصویر اسلاید</label>
-                                <input type="file" class="form-control" id="slideImageUpload" accept="image/*" onchange="previewSlideImage(this)">
-                                <small class="text-muted">تصویر با کیفیت مناسب (ترجیحاً 1200x600 پیکسل)</small>
-                            </div>
-                            <div class="form-group-responsive">
-                                <label class="form-label">یا آدرس تصویر</label>
-                                <input type="text" class="form-control" id="slideImageUrl" placeholder="https://example.com/image.jpg" onchange="updateSlideImagePreview(this.value)">
-                                <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="clearSlideImage()">
-                                    <i class="fas fa-times"></i> حذف تصویر
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="image-preview-container" id="slideImagePreviewContainer" style="display: none;">
-                            <img id="slideImagePreview" class="slide-image-preview" alt="پیش‌نمایش تصویر اسلاید">
-                            <div>
-                                <small class="text-muted">پیش‌نمایش تصویر اسلاید</small>
+                                <label class="form-label">آدرس تصویر اسلاید</label>
+                                <input type="text" class="form-control" id="slideImageUrl" placeholder="https://example.com/image.jpg">
                             </div>
                         </div>
 
@@ -766,16 +630,6 @@
                     </div>
 
                     <h6 class="mt-4">اسلایدهای موجود</h6>
-                    <div class="post-meta">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <strong>تعداد اسلایدها:</strong> <span id="totalSlides">0</span>
-                            </div>
-                            <div class="col-md-6">
-                                <strong>وضعیت:</strong> <span id="slidesStatus">فعال</span>
-                            </div>
-                        </div>
-                    </div>
                     <div id="slidesContainer">
                         <!-- اسلایدها -->
                     </div>
@@ -785,13 +639,7 @@
                     <h5><i class="fas fa-info-circle text-warning"></i> مدیریت بخش درباره ما</h5>
                     <div class="form-group-responsive">
                         <label class="form-label">متن معرفی</label>
-                        <textarea class="form-control" id="aboutText" rows="6">نشر اعماق بیست و دوم مهرماه یک‌هزار و چهارصد و چهار زاده شد
-
-نشر اعماق امکان زیستن است در عین نبودن
-
-شماره پروانه نشر: 19975
-
-[...در حال به روزرسانی...]</textarea>
+                        <textarea class="form-control" id="aboutText" rows="6"></textarea>
                     </div>
                     <button class="btn btn-primary mt-3" onclick="updateAbout()">
                         بروزرسانی متن درباره ما
@@ -802,7 +650,7 @@
                 <section id="blog-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-blog text-warning"></i> مدیریت مطالب و بلاگ</h5>
                     
-                    <div class="post-editor-full">
+                    <div class="mb-4">
                         <h6>پست جدید</h6>
                         <div class="form-row-responsive">
                             <div class="form-group-responsive">
@@ -811,117 +659,37 @@
                             </div>
                             <div class="form-group-responsive">
                                 <label class="form-label">خلاصه مطلب</label>
-                                <textarea class="form-control" id="postExcerpt" placeholder="خلاصه کوتاه و جذاب از مطلب (حداکثر 150 کاراکتر)" rows="2" maxlength="150"></textarea>
-                                <small class="text-muted"><span id="excerptCounter">0</span>/150 کاراکتر</small>
+                                <textarea class="form-control" id="postExcerpt" placeholder="خلاصه کوتاه و جذاب از مطلب" rows="2"></textarea>
                             </div>
                         </div>
                         
                         <div class="form-row-responsive">
                             <div class="form-group-responsive">
-                                <label class="form-label">آپلود تصویر شاخص</label>
-                                <input type="file" class="form-control" id="postImageUpload" accept="image/*" onchange="previewPostImage(this)">
-                                <small class="text-muted">تصویر با کیفیت و مرتبط با مطلب (حداکثر 2MB)</small>
+                                <label class="form-label">آدرس تصویر شاخص</label>
+                                <input type="text" class="form-control" id="postImage" placeholder="https://example.com/image.jpg">
                             </div>
-                            <div class="form-group-responsive">
-                                <label class="form-label">یا آدرس تصویر</label>
-                                <input type="text" class="form-control" id="postImage" placeholder="https://example.com/image.jpg" onchange="updateImagePreview(this.value)">
-                                <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="clearImage()">
-                                    <i class="fas fa-times"></i> حذف تصویر
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="image-preview-container" id="imagePreviewContainer" style="display: none;">
-                            <img id="postImagePreview" class="image-preview" alt="پیش‌نمایش تصویر">
-                            <div>
-                                <small class="text-muted">پیش‌نمایش تصویر شاخص</small>
-                            </div>
-                        </div>
-
-                        <div class="form-group-responsive">
-                            <label class="form-label">تگ‌ها (با کاما جدا کنید)</label>
-                            <input type="text" class="form-control" id="postTags" placeholder="مثلا: کتاب, ادبیات, شعر, داستان">
-                            <small class="text-muted">حداکثر 5 تگ مجاز است</small>
                         </div>
 
                         <div class="form-group-responsive">
                             <label class="form-label">متن مطلب</label>
-                            <div class="editor-toolbar">
-                                <button type="button" onclick="formatText('bold')" title="پررنگ"><b>B</b></button>
-                                <button type="button" onclick="formatText('italic')" title="ایتالیک"><i>I</i></button>
-                                <button type="button" onclick="formatText('underline')" title="زیرخط"><u>U</u></button>
-                                <button type="button" onclick="formatText('justifyLeft')" title="چپ چین">⎡</button>
-                                <button type="button" onclick="formatText('justifyCenter')" title="وسط چین">⎢</button>
-                                <button type="button" onclick="formatText('justifyRight')" title="راست چین">⎣</button>
-                                <button type="button" onclick="formatText('insertUnorderedList')" title="لیست نقطه‌ای">•</button>
-                                <button type="button" onclick="formatText('insertOrderedList')" title="لیست شماره‌ای">۱</button>
-                                <button type="button" onclick="insertLink()" title="درج لینک">🔗</button>
-                                <button type="button" onclick="formatText('formatBlock', '<h2>')" title="عنوان ۲">H2</button>
-                                <button type="button" onclick="formatText('formatBlock', '<h3>')" title="عنوان ۳">H3</button>
-                                <button type="button" onclick="formatText('formatBlock', '<p>')" title="پاراگراف">¶</button>
-                            </div>
-                            <div id="postEditor" contenteditable="true" class="full-editor" placeholder="محتوا مطلب را اینجا بنویسید..."></div>
-                            <small class="text-muted">می‌توانید از ابزارهای فوق برای فرمت‌دهی متن استفاده کنید</small>
+                            <textarea class="form-control" id="postContent" rows="6" placeholder="محتوا مطلب را اینجا بنویسید..."></textarea>
                         </div>
 
-                        <div class="post-actions">
-                            <button class="btn btn-success" onclick="publishPost()">
-                                <i class="fas fa-paper-plane"></i> انتشار مطلب
-                            </button>
-                            <button class="btn btn-outline-secondary" onclick="saveDraft()">
-                                <i class="fas fa-save"></i> ذخیره پیش‌نویس
-                            </button>
-                            <button class="btn btn-outline-danger" onclick="clearForm()">
-                                <i class="fas fa-times"></i> پاک کردن فرم
-                            </button>
-                        </div>
+                        <button class="btn btn-success mt-3" onclick="publishPost()">
+                            <i class="fas fa-paper-plane"></i> انتشار مطلب
+                        </button>
                     </div>
 
                     <h6 class="mt-4">پست‌های منتشر شده</h6>
-                    <div class="post-meta">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <strong>تعداد کل مطالب:</strong> <span id="totalPosts">0</span>
-                            </div>
-                            <div class="col-md-6">
-                                <strong>آخرین به‌روزرسانی:</strong> <span id="lastUpdate">-</span>
-                            </div>
-                        </div>
-                    </div>
                     <div id="postsList">
                         <!-- پست‌ها -->
                     </div>
                 </section>
 
-                <!-- ماژول درخواست‌ها با قابلیت دانلود فایل -->
+                <!-- ماژول درخواست‌ها -->
                 <section id="form-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-envelope text-warning"></i> درخواست‌های بررسی اثر</h5>
                     
-                    <div class="form-row-responsive mb-4">
-                        <div class="form-group-responsive">
-                            <label class="form-label">فیلتر بر اساس تاریخ</label>
-                            <input type="date" class="form-control" id="filterDate" onchange="filterSubmissions()">
-                        </div>
-                        <div class="form-group-responsive">
-                            <label class="form-label">فیلتر بر اساس وضعیت</label>
-                            <select class="form-control" id="filterStatus" onchange="filterSubmissions()">
-                                <option value="all">همه وضعیت‌ها</option>
-                                <option value="new">جدید</option>
-                                <option value="read">خوانده شده</option>
-                                <option value="replied">پاسخ داده شده</option>
-                            </select>
-                        </div>
-                        <div class="form-group-responsive">
-                            <label class="form-label">جستجو</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="جستجو در درخواست‌ها..." id="searchSubmissions">
-                                <button class="btn btn-outline-secondary" onclick="searchSubmissions()">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h6>لیست درخواست‌ها</h6>
                         <span class="badge bg-primary" id="submissionsCount">0 درخواست</span>
@@ -935,19 +703,6 @@
                 <section id="stats-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-chart-bar text-warning"></i> آمار و گزارشات وبسایت</h5>
                     
-                    <div class="form-row-responsive mb-4">
-                        <div class="form-group-responsive">
-                            <label class="form-label">بازه زمانی</label>
-                            <select class="form-control" id="statsPeriod" onchange="loadStats()">
-                                <option value="today">امروز</option>
-                                <option value="week">هفته جاری</option>
-                                <option value="month">ماه جاری</option>
-                                <option value="year">سال جاری</option>
-                                <option value="all">تمام زمان</option>
-                            </select>
-                        </div>
-                    </div>
-
                     <div class="row">
                         <div class="col-md-3 col-6">
                             <div class="stats-card">
@@ -974,31 +729,12 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="mt-4">
-                        <h6>جزئیات بازدیدها</h6>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>تاریخ</th>
-                                        <th>IP</th>
-                                        <th>صفحه</th>
-                                        <th>مرورگر</th>
-                                        <th>دستگاه</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="visitsDetails">
-                                    <!-- جزئیات بازدیدها -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </section>
 
-                <!-- ماژول فوتر به حالت اول برگردانده شده -->
+                <!-- ماژول فوتر به‌روزرسانی شده -->
                 <section id="footer-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-shoe-prints text-warning"></i> مدیریت فوتر</h5>
+                    
                     <div class="form-row-responsive">
                         <div class="form-group-responsive">
                             <h6>شبکه‌های اجتماعی</h6>
@@ -1006,9 +742,10 @@
                                 <!-- لینک‌های اجتماعی -->
                             </div>
                             <button class="btn btn-sm btn-success mt-2" onclick="addSocialLink()">
-                                <i class="fas fa-plus"></i> افزودن شبکه اجتماعی
+                                <i class="fas fa-plus"></i> افزودن شبکه اجتماعی جدید
                             </button>
                         </div>
+                        
                         <div class="form-group-responsive">
                             <h6>اطلاعات تماس</h6>
                             <div class="mb-3">
@@ -1019,6 +756,9 @@
                                 <label class="form-label">متن کپی رایت</label>
                                 <input type="text" class="form-control" id="copyrightText" value="© تمامی حقوق محفوظ است | نشر اعماق">
                             </div>
+                            <button class="btn btn-primary mt-2" onclick="updateFooterSettings()">
+                                <i class="fas fa-save"></i> ذخیره تنظیمات فوتر
+                            </button>
                         </div>
                     </div>
                 </section>
@@ -1035,128 +775,11 @@
                             <input type="password" class="form-control" id="newPassword">
                         </div>
                     </div>
-                    <div class="form-row-responsive">
-                        <div class="form-group-responsive">
-                            <label class="form-label">ایمیل بازیابی</label>
-                            <input type="email" class="form-control" id="recoveryEmail" value="amagh.pub@gmail.com">
-                        </div>
-                        <div class="form-group-responsive">
-                            <label class="form-label">ایمیل دریافت درخواست‌ها</label>
-                            <input type="email" class="form-control" id="submissionEmail" value="amagh.pub@gmail.com">
-                        </div>
-                    </div>
                     <button class="btn btn-warning mt-3" onclick="updateSecuritySettings()">
                         <i class="fas fa-key"></i> بروزرسانی تنظیمات امنیتی
                     </button>
                 </section>
             </main>
-        </div>
-    </div>
-
-    <!-- مودال ویرایش مطلب -->
-    <div class="modal fade edit-post-modal" id="editPostModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">ویرایش مطلب</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-row-responsive">
-                        <div class="form-group-responsive">
-                            <label class="form-label">عنوان مطلب</label>
-                            <input type="text" class="form-control" id="editPostTitle">
-                        </div>
-                        <div class="form-group-responsive">
-                            <label class="form-label">خلاصه مطلب</label>
-                            <textarea class="form-control" id="editPostExcerpt" rows="2" maxlength="150"></textarea>
-                            <small class="text-muted"><span id="editExcerptCounter">0</span>/150 کاراکتر</small>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row-responsive">
-                        <div class="form-group-responsive">
-                            <label class="form-label">آدرس تصویر شاخص</label>
-                            <input type="text" class="form-control" id="editPostImage" onchange="updateEditImagePreview(this.value)">
-                        </div>
-                        <div class="form-group-responsive">
-                            <label class="form-label">تگ‌ها</label>
-                            <input type="text" class="form-control" id="editPostTags">
-                        </div>
-                    </div>
-
-                    <div class="image-preview-container" id="editImagePreviewContainer">
-                        <img id="editPostImagePreview" class="image-preview" alt="پیش‌نمایش تصویر">
-                        <div>
-                            <small class="text-muted">پیش‌نمایش تصویر شاخص</small>
-                        </div>
-                    </div>
-
-                    <div class="form-group-responsive">
-                        <label class="form-label">متن مطلب</label>
-                        <div class="editor-toolbar">
-                            <button type="button" onclick="formatEditText('bold')"><b>B</b></button>
-                            <button type="button" onclick="formatEditText('italic')"><i>I</i></button>
-                            <button type="button" onclick="formatEditText('underline')"><u>U</u></button>
-                            <button type="button" onclick="formatEditText('insertUnorderedList')">•</button>
-                            <button type="button" onclick="formatEditText('insertOrderedList')">۱</button>
-                            <button type="button" onclick="insertEditLink()">🔗</button>
-                            <button type="button" onclick="formatEditText('formatBlock', '<h2>')">H2</button>
-                            <button type="button" onclick="formatEditText('formatBlock', '<h3>')">H3</button>
-                        </div>
-                        <div id="editPostEditor" contenteditable="true" class="full-editor"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
-                    <button type="button" class="btn btn-primary" onclick="updatePost()">ذخیره تغییرات</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- مودال ویرایش اسلاید -->
-    <div class="modal fade edit-post-modal" id="editSlideModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">ویرایش اسلاید</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-row-responsive">
-                        <div class="form-group-responsive">
-                            <label class="form-label">عنوان اسلاید</label>
-                            <input type="text" class="form-control" id="editSlideTitle">
-                        </div>
-                        <div class="form-group-responsive">
-                            <label class="form-label">لینک اسلاید</label>
-                            <input type="url" class="form-control" id="editSlideLink" placeholder="https://example.com">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group-responsive">
-                        <label class="form-label">آدرس تصویر اسلاید</label>
-                        <input type="text" class="form-control" id="editSlideImage" onchange="updateEditSlideImagePreview(this.value)">
-                    </div>
-
-                    <div class="image-preview-container" id="editSlideImagePreviewContainer">
-                        <img id="editSlideImagePreview" class="slide-image-preview" alt="پیش‌نمایش تصویر اسلاید">
-                        <div>
-                            <small class="text-muted">پیش‌نمایش تصویر اسلاید</small>
-                        </div>
-                    </div>
-
-                    <div class="form-group-responsive">
-                        <label class="form-label">توضیحات اسلاید</label>
-                        <textarea class="form-control" id="editSlideDescription" rows="2"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
-                    <button type="button" class="btn btn-primary" onclick="updateSlide()">ذخیره تغییرات</button>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -1199,11 +822,9 @@
                         }
                         if (moduleName === 'slider') {
                             loadSlides();
-                            initializeSlideEditor();
                         }
                         if (moduleName === 'blog') {
                             loadPosts();
-                            initializePostEditor();
                         }
                         if (moduleName === 'form') loadSubmissions();
                         if (moduleName === 'stats') loadStats();
@@ -1253,72 +874,15 @@
             alert('متن درباره ما با موفقیت بروزرسانی شد.');
         }
 
-        // ============================================================================
-        // بخش مدیریت اسلایدشو کاملاً بازنویسی شده
-        // ============================================================================
-
-        let currentEditingSlideId = null;
-        const defaultSlideImage = 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg';
-
-        function initializeSlideEditor() {
-            // هیچ تنظیمات خاصی نیاز نیست
-        }
-
-        function previewSlideImage(input) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('slideImageUrl').value = e.target.result;
-                    updateSlideImagePreview(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function updateSlideImagePreview(imageUrl) {
-            const previewContainer = document.getElementById('slideImagePreviewContainer');
-            const previewImg = document.getElementById('slideImagePreview');
-            
-            if (imageUrl) {
-                previewImg.src = imageUrl;
-                previewContainer.style.display = 'block';
-            } else {
-                previewContainer.style.display = 'none';
-            }
-        }
-
-        function updateEditSlideImagePreview(imageUrl) {
-            const previewContainer = document.getElementById('editSlideImagePreviewContainer');
-            const previewImg = document.getElementById('editSlideImagePreview');
-            
-            if (imageUrl) {
-                previewImg.src = imageUrl;
-                previewContainer.style.display = 'block';
-            } else {
-                previewContainer.style.display = 'none';
-            }
-        }
-
-        function clearSlideImage() {
-            document.getElementById('slideImageUrl').value = '';
-            document.getElementById('slideImageUpload').value = '';
-            updateSlideImagePreview('');
-        }
-
+        // مدیریت اسلایدشو
         function addSlide() {
             const title = document.getElementById('slideTitle').value.trim();
             const link = document.getElementById('slideLink').value.trim();
-            const image = document.getElementById('slideImageUrl').value.trim() || defaultSlideImage;
+            const image = document.getElementById('slideImageUrl').value.trim();
             const description = document.getElementById('slideDescription').value.trim();
 
-            if (!title) {
-                alert('لطفاً عنوان اسلاید را وارد کنید.');
-                return;
-            }
-
-            if (!image) {
-                alert('لطفاً تصویر اسلاید را انتخاب کنید.');
+            if (!title || !image) {
+                alert('لطفاً عنوان و تصویر اسلاید را وارد کنید.');
                 return;
             }
 
@@ -1329,27 +893,19 @@
                 link: link,
                 image: image,
                 description: description,
-                order: slides.length + 1,
                 active: true,
-                createdAt: new Date().toLocaleDateString('fa-IR'),
-                timestamp: new Date().getTime()
+                createdAt: new Date().toLocaleDateString('fa-IR')
             };
 
             slides.unshift(newSlide);
             localStorage.setItem('slides', JSON.stringify(slides));
 
             alert('اسلاید با موفقیت اضافه شد.');
-            clearSlideForm();
-            loadSlides();
-        }
-
-        function clearSlideForm() {
             document.getElementById('slideTitle').value = '';
             document.getElementById('slideLink').value = '';
             document.getElementById('slideImageUrl').value = '';
-            document.getElementById('slideImageUpload').value = '';
             document.getElementById('slideDescription').value = '';
-            updateSlideImagePreview('');
+            loadSlides();
         }
 
         function loadSlides() {
@@ -1357,17 +913,8 @@
             const container = document.getElementById('slidesContainer');
             container.innerHTML = '';
 
-            document.getElementById('totalSlides').textContent = slides.length;
-            document.getElementById('slidesStatus').textContent = slides.length > 0 ? 'فعال' : 'غیرفعال';
-
             if (slides.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center text-muted py-5">
-                        <i class="fas fa-images fa-3x mb-3"></i>
-                        <p>هنوز هیچ اسلایدی ایجاد نشده است.</p>
-                        <p>اولین اسلاید خود را ایجاد کنید!</p>
-                    </div>
-                `;
+                container.innerHTML = '<p class="text-center text-muted">هنوز هیچ اسلایدی ایجاد نشده است.</p>';
                 return;
             }
 
@@ -1378,9 +925,6 @@
                     <div class="form-row-responsive">
                         <div class="form-group-responsive">
                             <img src="${slide.image}" alt="${slide.title}" class="slide-preview">
-                            <div class="mt-2">
-                                <small class="text-muted">ترتیب: ${slide.order}</small>
-                            </div>
                         </div>
                         <div class="form-group-responsive">
                             <h6>${slide.title}</h6>
@@ -1395,15 +939,6 @@
                         </div>
                     </div>
                     <div class="d-flex gap-2 mt-3 flex-wrap">
-                        <button class="btn btn-sm btn-outline-primary" onclick="editSlide(${slide.id})">
-                            <i class="fas fa-edit"></i> ویرایش
-                        </button>
-                        <button class="btn btn-sm btn-outline-info" onclick="previewSlide(${slide.id})">
-                            <i class="fas fa-eye"></i> پیش‌نمایش
-                        </button>
-                        <button class="btn btn-sm btn-outline-warning" onclick="toggleSlideStatus(${slide.id})">
-                            <i class="fas fa-exchange-alt"></i> تغییر وضعیت
-                        </button>
                         <button class="btn btn-sm btn-outline-danger" onclick="deleteSlide(${slide.id})">
                             <i class="fas fa-trash"></i> حذف
                         </button>
@@ -1413,90 +948,8 @@
             });
         }
 
-        function editSlide(id) {
-            const slides = JSON.parse(localStorage.getItem('slides')) || [];
-            const slide = slides.find(s => s.id === id);
-            
-            if (slide) {
-                currentEditingSlideId = id;
-                
-                document.getElementById('editSlideTitle').value = slide.title;
-                document.getElementById('editSlideLink').value = slide.link || '';
-                document.getElementById('editSlideImage').value = slide.image;
-                document.getElementById('editSlideDescription').value = slide.description || '';
-                
-                updateEditSlideImagePreview(slide.image);
-                
-                const modal = new bootstrap.Modal(document.getElementById('editSlideModal'));
-                modal.show();
-            }
-        }
-
-        function updateSlide() {
-            if (!currentEditingSlideId) return;
-
-            const title = document.getElementById('editSlideTitle').value.trim();
-            const link = document.getElementById('editSlideLink').value.trim();
-            const image = document.getElementById('editSlideImage').value.trim() || defaultSlideImage;
-            const description = document.getElementById('editSlideDescription').value.trim();
-
-            if (!title) {
-                alert('لطفاً عنوان اسلاید را وارد کنید.');
-                return;
-            }
-
-            if (!image) {
-                alert('لطفاً تصویر اسلاید را انتخاب کنید.');
-                return;
-            }
-
-            const slides = JSON.parse(localStorage.getItem('slides')) || [];
-            const slideIndex = slides.findIndex(s => s.id === currentEditingSlideId);
-            
-            if (slideIndex !== -1) {
-                slides[slideIndex] = {
-                    ...slides[slideIndex],
-                    title: title,
-                    link: link,
-                    image: image,
-                    description: description,
-                    updatedAt: new Date().getTime()
-                };
-
-                localStorage.setItem('slides', JSON.stringify(slides));
-                
-                const modal = bootstrap.Modal.getInstance(document.getElementById('editSlideModal'));
-                modal.hide();
-                
-                alert('اسلاید با موفقیت به‌روزرسانی شد.');
-                loadSlides();
-            }
-        }
-
-        function previewSlide(id) {
-            const slides = JSON.parse(localStorage.getItem('slides')) || [];
-            const slide = slides.find(s => s.id === id);
-            
-            if (slide) {
-                window.open(slide.image, '_blank');
-            }
-        }
-
-        function toggleSlideStatus(id) {
-            const slides = JSON.parse(localStorage.getItem('slides')) || [];
-            const slideIndex = slides.findIndex(s => s.id === id);
-            
-            if (slideIndex !== -1) {
-                slides[slideIndex].active = !slides[slideIndex].active;
-                localStorage.setItem('slides', JSON.stringify(slides));
-                loadSlides();
-                
-                alert(`وضعیت اسلاید به ${slides[slideIndex].active ? 'فعال' : 'غیرفعال'} تغییر کرد.`);
-            }
-        }
-
         function deleteSlide(id) {
-            if (confirm('آیا از حذف این اسلاید اطمینان دارید؟ این عمل قابل بازگشت نیست.')) {
+            if (confirm('آیا از حذف این اسلاید اطمینان دارید؟')) {
                 const slides = JSON.parse(localStorage.getItem('slides')) || [];
                 const filteredSlides = slides.filter(slide => slide.id !== id);
                 localStorage.setItem('slides', JSON.stringify(filteredSlides));
@@ -1505,115 +958,15 @@
             }
         }
 
-        // ============================================================================
-        // بخش مدیریت مطالب 
-        // ============================================================================
-
-        let currentEditingPostId = null;
-        const defaultImage = 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg';
-
-        function initializePostEditor() {
-            // شمارنده کاراکترهای خلاصه مطلب
-            const excerptInput = document.getElementById('postExcerpt');
-            const excerptCounter = document.getElementById('excerptCounter');
-            
-            excerptInput.addEventListener('input', function() {
-                excerptCounter.textContent = this.value.length;
-            });
-
-            const editExcerptInput = document.getElementById('editPostExcerpt');
-            const editExcerptCounter = document.getElementById('editExcerptCounter');
-            
-            editExcerptInput.addEventListener('input', function() {
-                editExcerptCounter.textContent = this.value.length;
-            });
-        }
-
-        function previewPostImage(input) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('postImage').value = e.target.result;
-                    updateImagePreview(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function updateImagePreview(imageUrl) {
-            const previewContainer = document.getElementById('imagePreviewContainer');
-            const previewImg = document.getElementById('postImagePreview');
-            
-            if (imageUrl) {
-                previewImg.src = imageUrl;
-                previewContainer.style.display = 'block';
-            } else {
-                previewContainer.style.display = 'none';
-            }
-        }
-
-        function updateEditImagePreview(imageUrl) {
-            const previewContainer = document.getElementById('editImagePreviewContainer');
-            const previewImg = document.getElementById('editPostImagePreview');
-            
-            if (imageUrl) {
-                previewImg.src = imageUrl;
-                previewContainer.style.display = 'block';
-            } else {
-                previewContainer.style.display = 'none';
-            }
-        }
-
-        function clearImage() {
-            document.getElementById('postImage').value = '';
-            document.getElementById('postImageUpload').value = '';
-            updateImagePreview('');
-        }
-
-        function formatText(command, value = null) {
-            document.getElementById('postEditor').focus();
-            document.execCommand(command, false, value);
-        }
-
-        function formatEditText(command, value = null) {
-            document.getElementById('editPostEditor').focus();
-            document.execCommand(command, false, value);
-        }
-
-        function insertLink() {
-            const url = prompt('آدرس لینک را وارد کنید:', 'https://');
-            if (url) {
-                formatText('createLink', url);
-            }
-        }
-
-        function insertEditLink() {
-            const url = prompt('آدرس لینک را وارد کنید:', 'https://');
-            if (url) {
-                formatEditText('createLink', url);
-            }
-        }
-
+        // مدیریت مطالب
         function publishPost() {
             const title = document.getElementById('postTitle').value.trim();
             const excerpt = document.getElementById('postExcerpt').value.trim();
-            const image = document.getElementById('postImage').value.trim() || defaultImage;
-            const tags = document.getElementById('postTags').value;
-            const content = document.getElementById('postEditor').innerHTML.trim();
+            const image = document.getElementById('postImage').value.trim();
+            const content = document.getElementById('postContent').value.trim();
 
-            if (!title) {
-                alert('لطفاً عنوان مطلب را وارد کنید.');
-                return;
-            }
-
-            if (!excerpt) {
-                alert('لطفاً خلاصه مطلب را وارد کنید.');
-                return;
-            }
-
-            if (!content || content === '<br>') {
-                alert('لطفاً محتوای مطلب را وارد کنید.');
+            if (!title || !excerpt || !content) {
+                alert('لطفاً تمام فیلدهای ضروری را پر کنید.');
                 return;
             }
 
@@ -1624,52 +977,19 @@
                 excerpt: excerpt,
                 image: image,
                 content: content,
-                tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag).slice(0, 5),
                 date: new Date().toLocaleDateString('fa-IR'),
-                timestamp: new Date().getTime(),
-                status: 'published',
-                views: 0
+                status: 'published'
             };
 
             posts.unshift(newPost);
             localStorage.setItem('blogPosts', JSON.stringify(posts));
 
-            alert('مطلب با موفقیت منتشر شد و در بخش آخرین مطالب نمایش داده می‌شود.');
-            clearForm();
-            loadPosts();
-        }
-
-        function saveDraft() {
-            const title = document.getElementById('postTitle').value.trim();
-            const content = document.getElementById('postEditor').innerHTML.trim();
-
-            if (!title && !content) {
-                alert('هیچ محتوایی برای ذخیره وجود ندارد.');
-                return;
-            }
-
-            const draft = {
-                title: title,
-                excerpt: document.getElementById('postExcerpt').value.trim(),
-                image: document.getElementById('postImage').value.trim() || defaultImage,
-                tags: document.getElementById('postTags').value,
-                content: content,
-                savedAt: new Date().toLocaleString('fa-IR')
-            };
-
-            localStorage.setItem('blogDraft', JSON.stringify(draft));
-            alert('پیش‌نویس با موفقیت ذخیره شد.');
-        }
-
-        function clearForm() {
+            alert('مطلب با موفقیت منتشر شد.');
             document.getElementById('postTitle').value = '';
             document.getElementById('postExcerpt').value = '';
             document.getElementById('postImage').value = '';
-            document.getElementById('postImageUpload').value = '';
-            document.getElementById('postTags').value = '';
-            document.getElementById('postEditor').innerHTML = '';
-            document.getElementById('excerptCounter').textContent = '0';
-            updateImagePreview('');
+            document.getElementById('postContent').value = '';
+            loadPosts();
         }
 
         function loadPosts() {
@@ -1677,17 +997,8 @@
             const container = document.getElementById('postsList');
             container.innerHTML = '';
 
-            document.getElementById('totalPosts').textContent = posts.length;
-            document.getElementById('lastUpdate').textContent = new Date().toLocaleString('fa-IR');
-
             if (posts.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center text-muted py-5">
-                        <i class="fas fa-newspaper fa-3x mb-3"></i>
-                        <p>هنوز هیچ مطلبی منتشر نشده است.</p>
-                        <p>اولین مطلب خود را ایجاد کنید!</p>
-                    </div>
-                `;
+                container.innerHTML = '<p class="text-center text-muted">هنوز هیچ مطلبی منتشر نشده است.</p>';
                 return;
             }
 
@@ -1698,16 +1009,10 @@
                     <div class="form-row-responsive">
                         <div class="form-group-responsive">
                             <img src="${post.image}" alt="${post.title}" class="post-preview">
-                            <div class="mt-2">
-                                <small class="text-muted">بازدید: ${post.views || 0}</small>
-                            </div>
                         </div>
                         <div class="form-group-responsive">
                             <h6>${post.title}</h6>
                             <p class="text-muted">${post.excerpt}</p>
-                            <div class="mb-2">
-                                ${post.tags.map(tag => `<span class="tag-badge">${tag}</span>`).join('')}
-                            </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <small class="text-muted">${post.date}</small>
                                 <span class="badge ${post.status === 'published' ? 'bg-success' : 'bg-warning'}">
@@ -1717,15 +1022,6 @@
                         </div>
                     </div>
                     <div class="d-flex gap-2 mt-3 flex-wrap">
-                        <button class="btn btn-sm btn-outline-primary" onclick="editPost(${post.id})">
-                            <i class="fas fa-edit"></i> ویرایش کامل
-                        </button>
-                        <button class="btn btn-sm btn-outline-info" onclick="previewPost(${post.id})">
-                            <i class="fas fa-eye"></i> پیش‌نمایش
-                        </button>
-                        <button class="btn btn-sm btn-outline-warning" onclick="togglePostStatus(${post.id})">
-                            <i class="fas fa-exchange-alt"></i> تغییر وضعیت
-                        </button>
                         <button class="btn btn-sm btn-outline-danger" onclick="deletePost(${post.id})">
                             <i class="fas fa-trash"></i> حذف
                         </button>
@@ -1735,94 +1031,8 @@
             });
         }
 
-        function editPost(id) {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const post = posts.find(p => p.id === id);
-            
-            if (post) {
-                currentEditingPostId = id;
-                
-                document.getElementById('editPostTitle').value = post.title;
-                document.getElementById('editPostExcerpt').value = post.excerpt;
-                document.getElementById('editPostImage').value = post.image;
-                document.getElementById('editPostTags').value = post.tags.join(', ');
-                document.getElementById('editPostEditor').innerHTML = post.content;
-                
-                document.getElementById('editExcerptCounter').textContent = post.excerpt.length;
-                updateEditImagePreview(post.image);
-                
-                const modal = new bootstrap.Modal(document.getElementById('editPostModal'));
-                modal.show();
-            }
-        }
-
-        function updatePost() {
-            if (!currentEditingPostId) return;
-
-            const title = document.getElementById('editPostTitle').value.trim();
-            const excerpt = document.getElementById('editPostExcerpt').value.trim();
-            const image = document.getElementById('editPostImage').value.trim() || defaultImage;
-            const tags = document.getElementById('editPostTags').value;
-            const content = document.getElementById('editPostEditor').innerHTML.trim();
-
-            if (!title || !excerpt || !content) {
-                alert('لطفاً تمام فیلدهای ضروری را پر کنید.');
-                return;
-            }
-
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const postIndex = posts.findIndex(p => p.id === currentEditingPostId);
-            
-            if (postIndex !== -1) {
-                posts[postIndex] = {
-                    ...posts[postIndex],
-                    title: title,
-                    excerpt: excerpt,
-                    image: image,
-                    content: content,
-                    tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag).slice(0, 5),
-                    lastModified: new Date().getTime()
-                };
-
-                localStorage.setItem('blogPosts', JSON.stringify(posts));
-                
-                const modal = bootstrap.Modal.getInstance(document.getElementById('editPostModal'));
-                modal.hide();
-                
-                alert('مطلب با موفقیت به‌روزرسانی شد.');
-                loadPosts();
-            }
-        }
-
-        function previewPost(id) {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const post = posts.find(p => p.id === id);
-            
-            if (post) {
-                localStorage.setItem('currentPost', JSON.stringify(post));
-                window.open('post.html', '_blank');
-                
-                // افزایش تعداد بازدیدها
-                post.views = (post.views || 0) + 1;
-                localStorage.setItem('blogPosts', JSON.stringify(posts));
-            }
-        }
-
-        function togglePostStatus(id) {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const postIndex = posts.findIndex(p => p.id === id);
-            
-            if (postIndex !== -1) {
-                posts[postIndex].status = posts[postIndex].status === 'published' ? 'draft' : 'published';
-                localStorage.setItem('blogPosts', JSON.stringify(posts));
-                loadPosts();
-                
-                alert(`وضعیت مطلب به ${posts[postIndex].status === 'published' ? 'منتشر شده' : 'پیش‌نویس'} تغییر کرد.`);
-            }
-        }
-
         function deletePost(id) {
-            if (confirm('آیا از حذف این مطلب اطمینان دارید؟ این عمل قابل بازگشت نیست.')) {
+            if (confirm('آیا از حذف این مطلب اطمینان دارید؟')) {
                 const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
                 const filteredPosts = posts.filter(post => post.id !== id);
                 localStorage.setItem('blogPosts', JSON.stringify(filteredPosts));
@@ -1840,9 +1050,7 @@
             const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
                 { id: 1, title: "خانه", url: "index.html", order: 1, visible: true },
                 { id: 2, title: "درباره ما", url: "about.html", order: 2, visible: true },
-                { id: 3, title: "تماس با ما", url: "contact.html", order: 3, visible: true },
-                { id: 4, title: "کتاب‌ها", url: "books.html", order: 4, visible: true },
-                { id: 5, title: "بلاگ", url: "blog.html", order: 5, visible: true }
+                { id: 3, title: "تماس با ما", url: "contact.html", order: 3, visible: true }
             ];
             
             renderMenuItems(menuItems);
@@ -1944,8 +1152,6 @@
                     title: "درباره ما",
                     slug: "about",
                     content: "محتوا درباره ما...",
-                    image: "https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg",
-                    metaDescription: "درباره نشر اعماق",
                     visible: true
                 },
                 {
@@ -1953,8 +1159,6 @@
                     title: "تماس با ما",
                     slug: "contact",
                     content: "اطلاعات تماس...",
-                    image: "https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg",
-                    metaDescription: "تماس با نشر اعماق",
                     visible: true
                 }
             ];
@@ -1972,13 +1176,8 @@
                 pageItem.innerHTML = `
                     <div class="form-row-responsive">
                         <div class="form-group-responsive">
-                            <img src="${page.image}" alt="${page.title}" class="page-preview">
-                        </div>
-                        <div class="form-group-responsive">
                             <input type="text" class="form-control mb-2" value="${page.title}" placeholder="عنوان صفحه" onchange="updatePage(${page.id}, 'title', this.value)">
                             <input type="text" class="form-control mb-2" value="${page.slug}" placeholder="اسلاگ صفحه" onchange="updatePage(${page.id}, 'slug', this.value)">
-                            <input type="text" class="form-control mb-2" value="${page.image}" placeholder="آدرس تصویر" onchange="updatePage(${page.id}, 'image', this.value)">
-                            <input type="text" class="form-control mb-2" value="${page.metaDescription}" placeholder="توضیحات متa" onchange="updatePage(${page.id}, 'metaDescription', this.value)">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" ${page.visible ? 'checked' : ''} onchange="updatePage(${page.id}, 'visible', this.checked)">
                                 <label class="form-check-label">صفحه فعال</label>
@@ -1986,9 +1185,6 @@
                         </div>
                     </div>
                     <div class="d-flex gap-2 mt-3">
-                        <button class="btn btn-sm btn-outline-primary" onclick="editPageContent(${page.id})">
-                            <i class="fas fa-edit"></i> ویرایش محتوا
-                        </button>
                         <button class="btn btn-sm btn-outline-danger" onclick="removePage(${page.id})">
                             <i class="fas fa-trash"></i> حذف
                         </button>
@@ -2005,8 +1201,6 @@
                 title: 'صفحه جدید',
                 slug: 'new-page',
                 content: '<p>محتوا صفحه...</p>',
-                image: 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg',
-                metaDescription: 'توضیحات صفحه جدید',
                 visible: true
             };
             
@@ -2024,17 +1218,6 @@
             }
         }
 
-        function editPageContent(id) {
-            const pages = JSON.parse(localStorage.getItem('pages')) || [];
-            const page = pages.find(p => p.id === id);
-            if (page) {
-                const content = prompt('محتوا صفحه:', page.content);
-                if (content !== null) {
-                    updatePage(id, 'content', content);
-                }
-            }
-        }
-
         function removePage(id) {
             if (confirm('آیا از حذف این صفحه اطمینان دارید؟')) {
                 const pages = JSON.parse(localStorage.getItem('pages')) || [];
@@ -2044,7 +1227,7 @@
             }
         }
 
-        // مدیریت درخواست‌ها با قابلیت دانلود فایل
+        // مدیریت درخواست‌ها
         function loadSubmissions() {
             const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
             renderSubmissions(submissions);
@@ -2068,13 +1251,6 @@
                 const statusText = submission.status === 'read' ? 'خوانده شده' : 
                                  submission.status === 'replied' ? 'پاسخ داده شده' : 'جدید';
                 
-                // ایجاد دکمه دانلود اگر فایل وجود دارد
-                const fileDownload = submission.fileData ? 
-                    `<a href="${submission.fileData}" download="${submission.fileName}" class="file-download-btn">
-                        <i class="fas fa-download"></i> دانلود فایل (${submission.fileName})
-                    </a>` : 
-                    '<span class="text-muted">بدون فایل</span>';
-                
                 submissionItem.innerHTML = `
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
@@ -2091,18 +1267,11 @@
                             ${submission.phone ? `<p><strong>واتساپ:</strong> ${submission.phone}</p>` : ''}
                         </div>
                         <div class="col-md-6">
-                            <p><strong>فایل:</strong> ${fileDownload}</p>
                             <p><strong>توضیحات:</strong> ${submission.description || 'ندارد'}</p>
                         </div>
                     </div>
                     
                     <div class="d-flex gap-2 mt-3">
-                        <button class="btn btn-sm btn-outline-primary" onclick="changeSubmissionStatus(${submission.id}, 'read')">
-                            <i class="fas fa-eye"></i> علامت به عنوان خوانده شده
-                        </button>
-                        <button class="btn btn-sm btn-outline-success" onclick="changeSubmissionStatus(${submission.id}, 'replied')">
-                            <i class="fas fa-reply"></i> علامت به عنوان پاسخ داده شده
-                        </button>
                         <button class="btn btn-sm btn-outline-danger" onclick="deleteSubmission(${submission.id})">
                             <i class="fas fa-trash"></i> حذف
                         </button>
@@ -2116,16 +1285,6 @@
             document.getElementById('submissionsCount').textContent = `${count} درخواست`;
         }
 
-        function changeSubmissionStatus(id, status) {
-            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
-            const submissionIndex = submissions.findIndex(sub => sub.id === id);
-            if (submissionIndex !== -1) {
-                submissions[submissionIndex].status = status;
-                localStorage.setItem('submissions', JSON.stringify(submissions));
-                renderSubmissions(submissions);
-            }
-        }
-
         function deleteSubmission(id) {
             if (confirm('آیا از حذف این درخواست اطمینان دارید؟')) {
                 const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
@@ -2136,41 +1295,7 @@
             }
         }
 
-        function filterSubmissions() {
-            const dateFilter = document.getElementById('filterDate').value;
-            const statusFilter = document.getElementById('filterStatus').value;
-            const searchFilter = document.getElementById('searchSubmissions').value.toLowerCase();
-            
-            let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
-            
-            if (dateFilter) {
-                submissions = submissions.filter(sub => {
-                    const subDate = new Date(sub.timestamp).toISOString().split('T')[0];
-                    return subDate === dateFilter;
-                });
-            }
-            
-            if (statusFilter !== 'all') {
-                submissions = submissions.filter(sub => sub.status === statusFilter);
-            }
-            
-            if (searchFilter) {
-                submissions = submissions.filter(sub => 
-                    sub.name.toLowerCase().includes(searchFilter) ||
-                    sub.bookName.toLowerCase().includes(searchFilter) ||
-                    sub.email.toLowerCase().includes(searchFilter)
-                );
-            }
-            
-            renderSubmissions(submissions);
-            updateSubmissionsCount(submissions.length);
-        }
-
-        function searchSubmissions() {
-            filterSubmissions();
-        }
-
-        // مدیریت فوتر (به حالت اول برگردانده شده)
+        // مدیریت فوتر - به‌روزرسانی شده
         function loadFooterSettings() {
             const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [
                 { name: 'تلگرام', url: 'https://t.me/amaghpub', icon: 'https://uploadkon.ir/uploads/3db017_25Telegram.png' },
@@ -2190,7 +1315,10 @@
                 const linkItem = document.createElement('div');
                 linkItem.className = 'social-link-item';
                 linkItem.innerHTML = `
-                    <img src="${link.icon}" alt="${link.name}" class="social-icon-preview">
+                    <div class="social-link-header">
+                        <img src="${link.icon}" alt="${link.name}" class="social-icon-preview">
+                        <strong>${link.name}</strong>
+                    </div>
                     <div class="social-link-inputs">
                         <input type="text" class="form-control" value="${link.name}" placeholder="نام شبکه اجتماعی" onchange="updateSocialLink(${index}, 'name', this.value)">
                         <input type="url" class="form-control" value="${link.url}" placeholder="آدرس لینک" onchange="updateSocialLink(${index}, 'url', this.value)">
@@ -2198,15 +1326,26 @@
                     </div>
                     <div class="social-link-actions">
                         <button class="btn btn-sm btn-outline-primary" onclick="updateSocialIconPreview(${index})">
-                            <i class="fas fa-sync"></i>
+                            <i class="fas fa-sync"></i> بروزرسانی
                         </button>
                         <button class="btn btn-sm btn-outline-danger" onclick="removeSocialLink(${index})">
-                            <i class="fas fa-trash"></i>
+                            <i class="fas fa-trash"></i> حذف
                         </button>
                     </div>
                 `;
                 container.appendChild(linkItem);
             });
+        }
+
+        function addSocialLink() {
+            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+            socialLinks.push({
+                name: 'شبکه اجتماعی جدید',
+                url: '#',
+                icon: 'https://uploadkon.ir/uploads/547417_25Untitled-2.png'
+            });
+            localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+            renderSocialLinks(socialLinks);
         }
 
         function updateSocialLink(index, field, value) {
@@ -2223,6 +1362,7 @@
                 const linkItem = document.querySelectorAll('.social-link-item')[index];
                 const iconImg = linkItem.querySelector('.social-icon-preview');
                 iconImg.src = socialLinks[index].icon;
+                alert('آیکون بروزرسانی شد');
             }
         }
 
@@ -2235,22 +1375,28 @@
             }
         }
 
-        function addSocialLink() {
-            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
-            socialLinks.push({
-                name: 'شبکه اجتماعی جدید',
-                url: '#',
-                icon: 'https://uploadkon.ir/uploads/547417_25Untitled-2.png'
-            });
-            localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
-            renderSocialLinks(socialLinks);
+        function updateFooterSettings() {
+            const email = document.getElementById('contactEmail').value;
+            const copyright = document.getElementById('copyrightText').value;
+            
+            localStorage.setItem('footerEmail', email);
+            localStorage.setItem('footerCopyright', copyright);
+            
+            alert('تنظیمات فوتر با موفقیت ذخیره شد');
+        }
+
+        // آمار و گزارشات
+        function loadStats() {
+            document.getElementById('totalVisits').textContent = '0';
+            document.getElementById('uniqueVisitors').textContent = '0';
+            document.getElementById('pageViews').textContent = '0';
+            document.getElementById('submissionCount').textContent = '0';
         }
 
         // بارگذاری اولیه
         document.addEventListener('DOMContentLoaded', function() {
             initializeModules();
             handleResize();
-            loadFooterSettings();
             window.addEventListener('resize', handleResize);
         });
     </script>
