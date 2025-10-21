@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -592,42 +593,57 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // 2) بارگذاری لوگوی سایت از پنل مدیریت با کلید siteLogo
+        // بارگذاری لوگوی سایت
         function loadSiteLogo() {
-            const savedLogo = localStorage.getItem('siteLogo') || 'https://uploadkon.ir/uploads/bf3921_25website-logo-min.png';
+            const savedLogo = localStorage.getItem('currentSiteLogo') || 'https://uploadkon.ir/uploads/bf3921_25website-logo-min.png';
             const logoElement = document.getElementById('mainLogo');
             if (logoElement) {
                 logoElement.src = savedLogo;
             }
         }
 
-        // لود محتوای درباره ما از پنل مدیریت
-        function loadAboutContent() {
-            const aboutText = localStorage.getItem('aboutText') || '';
-            const aboutContainer = document.getElementById('aboutContent');
-            if (aboutContainer) {
-                if (aboutText) {
-                    const paragraphs = aboutText.split('\n').filter(p => p.trim());
-                    let htmlContent = '';
-                    paragraphs.forEach(paragraph => {
-                        htmlContent += `<p class="mb-4" style="text-align: justify; line-height: 2;">${paragraph}</p>`;
-                    });
-                    aboutContainer.innerHTML = htmlContent;
-                } else {
-                    aboutContainer.innerHTML = '<p class="text-muted text-center">محتوا در حال به‌روزرسانی می‌باشد...</p>';
-                }
-            }
+// لود محتوای درباره ما از پنل مدیریت
+function loadAboutContent() {
+    const aboutText = localStorage.getItem('aboutText') || '';
+    
+    const aboutContainer = document.getElementById('aboutContent');
+    if (aboutContainer) {
+        if (aboutText) {
+            // تبدیل خطوط جدید به پاراگراف‌های HTML
+            const paragraphs = aboutText.split('\n').filter(p => p.trim());
+            let htmlContent = '';
+            
+            paragraphs.forEach(paragraph => {
+                htmlContent += `<p class="mb-4" style="text-align: justify; line-height: 2;">${paragraph}</p>`;
+            });
+            
+            aboutContainer.innerHTML = htmlContent;
+        } else {
+            aboutContainer.innerHTML = '<p class="text-muted text-center">محتوا در حال به‌روزرسانی می‌باشد...</p>';
         }
-
-        // 3) لود اسلایدشو فقط از داده‌های پنل مدیریت، بدون هیچ متن/اسلاید پیش‌فرض
+    }
+}
+        // لود اسلایدشو از پنل مدیریت
         function loadSlideshow() {
-            const slides = JSON.parse(localStorage.getItem('slides')) || [];
+            const slides = JSON.parse(localStorage.getItem('slides')) || [
+                {
+                    id: 1,
+                    title: "به نشر اعماق خوش آمدید",
+                    description: "ناشری برای آثار عمیق و ماندگار",
+                    image: "https://uploadkon.ir/uploads/520820_25new-slide.jpg",
+                    link: "about.html",
+                    active: true
+                }
+            ];
+
             const sliderContainer = document.getElementById('heroSlider');
             const activeSlides = slides.filter(slide => slide.active);
 
             if (activeSlides.length === 0) {
-                // اگر اسلاید فعالی وجود ندارد، فقط بنر نمایش داده شود
-                sliderContainer.innerHTML = '<div class="hero-banner"></div>';
+                // اگر اسلاید فعالی وجود ندارد، از بنر اصلی استفاده کن
+                sliderContainer.innerHTML = `
+                    <div class="hero-banner"></div>
+                `;
                 return;
             }
 
@@ -693,23 +709,39 @@
             }, 5000); // تغییر اسلاید هر 5 ثانیه
         }
 
-        // 1) لود پست‌های بلاگ فقط از داده‌های پنل مدیریت و فقط وضعیت "published"
+        // لود پست‌های بلاگ
         function loadBlogPosts() {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-            const publishedPosts = posts.filter(p => p.status === 'published');
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [
+                {
+                    id: 1,
+                    title: "عنوان مطلب اول",
+                    excerpt: "خلاصه‌ای از مطلب اول که کاربر را ترغیب به خواندن ادامه مطلب کند...",
+                    image: "https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg",
+                    date: "۱۴۰۳/۱۰/۱۵",
+                    content: "<h2>این محتوای کامل مطلب اول است</h2><p>این یک پاراگراف نمونه از محتوای کامل مطلب است. این متن می‌تواند شامل اطلاعات مفید و جذاب برای خوانندگان باشد.</p><p>می‌توانید در اینجا مطالب بیشتری بنویسید و از تگ‌های HTML مختلف استفاده کنید.</p>"
+                },
+                {
+                    id: 2,
+                    title: "عنوان مطلب دوم",
+                    excerpt: "خلاصه‌ای از مطلب دوم که کاربر را ترغیب به خواندن ادامه مطلب کند...",
+                    image: "https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg",
+                    date: "۱۴۰۳/۱۰/۱۰",
+                    content: "<h2>این محتوای کامل مطلب دوم است</h2><p>این یک پاراگراف نمونه از محتوای کامل مطلب است. این متن می‌تواند شامل اطلاعات مفید و جذاب برای خوانندگان باشد.</p>"
+                },
+                {
+                    id: 3,
+                    title: "عنوان مطلب سوم",
+                    excerpt: "خلاصه‌ای از مطلب سوم که کاربر را ترغیب به خواندن ادامه مطلب کند...",
+                    image: "https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg",
+                    date: "۱۴۰۳/۱۰/۰5",
+                    content: "<h2>این محتوای کامل مطلب سوم است</h2><p>این یک پاراگراف نمونه از محتوای کامل مطلب است. این متن می‌تواند شامل اطلاعات مفید و جذاب برای خوانندگان باشد.</p>"
+                }
+            ];
+
             const container = document.getElementById('blogPosts');
             container.innerHTML = '';
 
-            if (publishedPosts.length === 0) {
-                container.innerHTML = `
-                    <div class="col-12">
-                        <p class="text-center text-muted">هنوز مطلب منتشرشده‌ای وجود ندارد.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            publishedPosts.forEach(post => {
+            posts.forEach(post => {
                 container.innerHTML += `
                     <div class="col-md-4">
                         <div class="card">
@@ -718,7 +750,7 @@
                                 <h5 class="card-title">${post.title}</h5>
                                 <p class="card-text">${post.excerpt}</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">${post.date || ''}</small>
+                                    <small class="text-muted">${post.date}</small>
                                     <button type="button" class="btn btn-primary" onclick="viewPost(${post.id})">ادامه مطلب</button>
                                 </div>
                             </div>
@@ -919,3 +951,4 @@
     </script>
 </body>
 </html>
+```
