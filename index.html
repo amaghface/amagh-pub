@@ -480,19 +480,20 @@
     <section class="hero-slider" id="heroSlider">
         <!-- اسلایدها به صورت داینامیک لود می‌شوند -->
     </section>
-<!-- درباره نشر -->
-<section class="about-section">
-    <div class="container">
-        <h2 class="section-title text-center">اگر از اعماق بازمی‌گردید</h2>
-        <div class="row">
-            <div class="col-lg-8 mx-auto">
-                <div id="aboutContent">
-                    <!-- محتوای درباره ما به صورت داینامیک لود می‌شود -->
+
+    <!-- درباره نشر -->
+    <section class="about-section">
+        <div class="container">
+            <h2 class="section-title text-center">اگر از اعماق بازمی‌گردید</h2>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div id="aboutContent">
+                        <!-- محتوای درباره ما به صورت داینامیک لود می‌شود -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- مطالب -->
     <section class="blog-section">
@@ -592,57 +593,43 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // بارگذاری لوگوی سایت
+        // بارگذاری لوگوی سایت - اصلاح شده
         function loadSiteLogo() {
-            const savedLogo = localStorage.getItem('currentSiteLogo') || 'https://uploadkon.ir/uploads/bf3921_25website-logo-min.png';
+            const savedLogo = localStorage.getItem('siteLogo') || 'https://uploadkon.ir/uploads/bf3921_25website-logo-min.png';
             const logoElement = document.getElementById('mainLogo');
-            if (logoElement) {
+            if (logoElement && savedLogo) {
                 logoElement.src = savedLogo;
             }
         }
 
-// لود محتوای درباره ما از پنل مدیریت
-function loadAboutContent() {
-    const aboutText = localStorage.getItem('aboutText') || '';
-    
-    const aboutContainer = document.getElementById('aboutContent');
-    if (aboutContainer) {
-        if (aboutText) {
-            // تبدیل خطوط جدید به پاراگراف‌های HTML
-            const paragraphs = aboutText.split('\n').filter(p => p.trim());
-            let htmlContent = '';
+        // لود محتوای درباره ما از پنل مدیریت
+        function loadAboutContent() {
+            const aboutText = localStorage.getItem('aboutText') || 'نشر اعماق بیست و دوم مهرماه یک‌هزار و چهارصد و چهار زاده شد\n\nنشر اعماق امکان زیستن است در عین نبودن\n\nشماره پروانه نشر: 19975\n\n[...در حال به روزرسانی...]';
             
-            paragraphs.forEach(paragraph => {
-                htmlContent += `<p class="mb-4" style="text-align: justify; line-height: 2;">${paragraph}</p>`;
-            });
-            
-            aboutContainer.innerHTML = htmlContent;
-        } else {
-            aboutContainer.innerHTML = '<p class="text-muted text-center">محتوا در حال به‌روزرسانی می‌باشد...</p>';
-        }
-    }
-}
-        // لود اسلایدشو از پنل مدیریت
-        function loadSlideshow() {
-            const slides = JSON.parse(localStorage.getItem('slides')) || [
-                {
-                    id: 1,
-                    title: "به نشر اعماق خوش آمدید",
-                    description: "ناشری برای آثار عمیق و ماندگار",
-                    image: "https://uploadkon.ir/uploads/520820_25new-slide.jpg",
-                    link: "about.html",
-                    active: true
+            const aboutContainer = document.getElementById('aboutContent');
+            if (aboutContainer) {
+                if (aboutText) {
+                    const paragraphs = aboutText.split('\n').filter(p => p.trim());
+                    let htmlContent = '';
+                    
+                    paragraphs.forEach(paragraph => {
+                        htmlContent += `<p class="mb-4" style="text-align: justify; line-height: 2;">${paragraph}</p>`;
+                    });
+                    
+                    aboutContainer.innerHTML = htmlContent;
                 }
-            ];
+            }
+        }
 
+        // لود اسلایدشو از پنل مدیریت - اصلاح شده
+        function loadSlideshow() {
+            const slides = JSON.parse(localStorage.getItem('slides')) || [];
             const sliderContainer = document.getElementById('heroSlider');
             const activeSlides = slides.filter(slide => slide.active);
 
+            // اگر اسلاید فعالی وجود ندارد، از بنر اصلی استفاده کن
             if (activeSlides.length === 0) {
-                // اگر اسلاید فعالی وجود ندارد، از بنر اصلی استفاده کن
-                sliderContainer.innerHTML = `
-                    <div class="hero-banner"></div>
-                `;
+                sliderContainer.innerHTML = `<div class="hero-banner"></div>`;
                 return;
             }
 
@@ -661,17 +648,10 @@ function loadAboutContent() {
                     </div>
                 `;
 
-                dotsHTML += `
-                    <div class="slider-dot ${index === 0 ? 'active' : ''}" 
-                         onclick="showSlide(${index})"></div>
-                `;
+                dotsHTML += `<div class="slider-dot ${index === 0 ? 'active' : ''}" onclick="showSlide(${index})"></div>`;
             });
 
-            sliderContainer.innerHTML = slidesHTML + `
-                <div class="slider-controls">
-                    ${dotsHTML}
-                </div>
-            `;
+            sliderContainer.innerHTML = slidesHTML + `<div class="slider-controls">${dotsHTML}</div>`;
 
             // شروع اتوماتیک اسلایدشو اگر بیش از یک اسلاید وجود دارد
             if (activeSlides.length > 1) {
@@ -687,10 +667,11 @@ function loadAboutContent() {
             slides.forEach(slide => slide.classList.remove('active'));
             dots.forEach(dot => dot.classList.remove('active'));
             
-            slides[index].classList.add('active');
-            dots[index].classList.add('active');
-            
-            currentSlide = index;
+            if (slides[index]) {
+                slides[index].classList.add('active');
+                dots[index].classList.add('active');
+                currentSlide = index;
+            }
         }
 
         // شروع اسلایدشو اتوماتیک
@@ -705,42 +686,29 @@ function loadAboutContent() {
             slideInterval = setInterval(() => {
                 currentSlide = (currentSlide + 1) % totalSlides;
                 showSlide(currentSlide);
-            }, 5000); // تغییر اسلاید هر 5 ثانیه
+            }, 5000);
         }
 
-        // لود پست‌های بلاگ
+        // لود پست‌های بلاگ - اصلاح شده
         function loadBlogPosts() {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [
-                {
-                    id: 1,
-                    title: "عنوان مطلب اول",
-                    excerpt: "خلاصه‌ای از مطلب اول که کاربر را ترغیب به خواندن ادامه مطلب کند...",
-                    image: "https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg",
-                    date: "۱۴۰۳/۱۰/۱۵",
-                    content: "<h2>این محتوای کامل مطلب اول است</h2><p>این یک پاراگراف نمونه از محتوای کامل مطلب است. این متن می‌تواند شامل اطلاعات مفید و جذاب برای خوانندگان باشد.</p><p>می‌توانید در اینجا مطالب بیشتری بنویسید و از تگ‌های HTML مختلف استفاده کنید.</p>"
-                },
-                {
-                    id: 2,
-                    title: "عنوان مطلب دوم",
-                    excerpt: "خلاصه‌ای از مطلب دوم که کاربر را ترغیب به خواندن ادامه مطلب کند...",
-                    image: "https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg",
-                    date: "۱۴۰۳/۱۰/۱۰",
-                    content: "<h2>این محتوای کامل مطلب دوم است</h2><p>این یک پاراگراف نمونه از محتوای کامل مطلب است. این متن می‌تواند شامل اطلاعات مفید و جذاب برای خوانندگان باشد.</p>"
-                },
-                {
-                    id: 3,
-                    title: "عنوان مطلب سوم",
-                    excerpt: "خلاصه‌ای از مطلب سوم که کاربر را ترغیب به خواندن ادامه مطلب کند...",
-                    image: "https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg",
-                    date: "۱۴۰۳/۱۰/۰۵",
-                    content: "<h2>این محتوای کامل مطلب سوم است</h2><p>این یک پاراگراف نمونه از محتوای کامل مطلب است. این متن می‌تواند شامل اطلاعات مفید و جذاب برای خوانندگان باشد.</p>"
-                }
-            ];
-
+            const allPosts = JSON.parse(localStorage.getItem('blogPosts')) || [];
             const container = document.getElementById('blogPosts');
             container.innerHTML = '';
 
-            posts.forEach(post => {
+            // نمایش همه پست‌ها (بدون فیلتر کردن)
+            if (allPosts.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center">
+                        <p class="text-muted">هنوز هیچ مطلبی منتشر نشده است.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // مرتب کردن پست‌ها بر اساس تاریخ (جدیدترین اول)
+            const sortedPosts = allPosts.sort((a, b) => b.timestamp - a.timestamp);
+
+            sortedPosts.forEach(post => {
                 container.innerHTML += `
                     <div class="col-md-4">
                         <div class="card">
@@ -765,9 +733,7 @@ function loadAboutContent() {
             const post = posts.find(p => p.id === postId);
             
             if (post) {
-                // ذخیره پست برای نمایش در صفحه جداگانه
                 localStorage.setItem('currentPost', JSON.stringify(post));
-                // باز کردن صفحه پست
                 window.open('post.html', '_blank');
             } else {
                 alert('پست مورد نظر یافت نشد.');
@@ -781,12 +747,9 @@ function loadAboutContent() {
             const uploadProgress = document.getElementById('uploadProgress');
             
             if (file) {
-                // نمایش اطلاعات فایل
                 const fileSize = (file.size / (1024 * 1024)).toFixed(2);
                 fileInfo.innerHTML = `فایل انتخاب شده: ${file.name} (${fileSize} MB)`;
                 fileInfo.style.display = 'block';
-                
-                // نمایش نوار پیشرفت
                 uploadProgress.style.display = 'block';
             } else {
                 fileInfo.style.display = 'none';
@@ -800,7 +763,6 @@ function loadAboutContent() {
             const uploadStatus = document.getElementById('uploadStatus');
             const submitBtn = document.getElementById('submitBtn');
             
-            // غیرفعال کردن دکمه ارسال
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> در حال آپلود...';
             
@@ -814,7 +776,6 @@ function loadAboutContent() {
                     progressBar.style.width = '100%';
                     uploadStatus.textContent = '100% - آپلود کامل شد';
                     
-                    // فعال کردن دکمه ارسال
                     setTimeout(() => {
                         submitBtn.disabled = false;
                         submitBtn.innerHTML = 'ارسال درخواست';
@@ -825,18 +786,6 @@ function loadAboutContent() {
                     uploadStatus.textContent = Math.round(progress) + '% - در حال آپلود...';
                 }
             }, 200);
-        }
-
-        // ارسال ایمیل
-        function sendEmail(formData) {
-            // در اینجا کد واقعی ارسال ایمیل قرار می‌گیرد
-            // برای نمونه، فقط لاگ می‌کنیم
-            console.log('ایمیل ارسال شد به: amagh.pub@gmail.com', formData);
-            
-            // شبیه‌سازی ارسال ایمیل
-            setTimeout(() => {
-                console.log('ایمیل با موفقیت ارسال شد');
-            }, 1000);
         }
 
         // مدیریت فرم
@@ -858,14 +807,12 @@ function loadAboutContent() {
                 const fileInput = document.getElementById('bookFile');
                 
                 if (fileInput.files.length > 0) {
-                    // اگر فایل انتخاب شده، آپلود شبیه‌سازی می‌شود
                     simulateFileUpload((success) => {
                         if (success) {
                             saveSubmission();
                         }
                     });
                 } else {
-                    // اگر فایلی نیست، مستقیم ذخیره شود
                     saveSubmission();
                 }
             } else {
@@ -883,7 +830,6 @@ function loadAboutContent() {
                 const file = fileInput.files[0];
                 fileName = file.name;
                 
-                // تبدیل فایل به Base64 برای ذخیره‌سازی
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     fileData = e.target.result;
@@ -904,9 +850,6 @@ function loadAboutContent() {
                     
                     submissions.push(formData);
                     localStorage.setItem('submissions', JSON.stringify(submissions));
-                    
-                    // ارسال ایمیل
-                    sendEmail(formData);
                     
                     alert('درخواست شما با موفقیت ثبت شد. به زودی با شما تماس خواهیم گرفت.');
                     document.getElementById('submissionForm').reset();
@@ -932,11 +875,8 @@ function loadAboutContent() {
                 submissions.push(formData);
                 localStorage.setItem('submissions', JSON.stringify(submissions));
                 
-                // ارسال ایمیل
-                sendEmail(formData);
-                
                 alert('درخواست شما با موفقیت ثبت شد. به زودی با شما تماس خواهیم گرفت.');
-                this.reset();
+                document.getElementById('submissionForm').reset();
             }
         }
 
@@ -945,8 +885,14 @@ function loadAboutContent() {
             loadSiteLogo();
             loadSlideshow();
             loadBlogPosts();
-            loadAboutContent(); // این خط اضافه شده
+            loadAboutContent();
         });
+
+        // رفرش خودکار هر 5 ثانیه برای به روزرسانی محتوا
+        setInterval(() => {
+            loadSiteLogo();
+            loadBlogPosts();
+        }, 5000);
     </script>
 </body>
 </html>
