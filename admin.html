@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* تمام استایل‌های قبلی دقیقاً حفظ شده */
         :root {
             --primary: #182128;
             --secondary: #7a6538;
@@ -393,7 +394,6 @@
             transform: scale(1.05);
         }
 
-        /* استایل‌های جدید برای مدیریت مطالب پیشرفته */
         .post-editor-full {
             background: white;
             border-radius: 10px;
@@ -462,7 +462,6 @@
             margin-bottom: 15px;
         }
 
-        /* استایل‌های جدید برای مدیریت اسلایدشو */
         .slide-editor {
             background: white;
             border-radius: 10px;
@@ -607,7 +606,6 @@
             <nav class="sidebar" id="sidebar">
                 <div class="sidebar-content">
                     <div class="sidebar-header">
-                        <!-- لوگوی بزرگ‌تر شده -->
                         <img src="https://uploadkon.ir/uploads/44f319_25Website.png" alt="لوگوی نشر اعماق" height="100" style="background: white; padding: 10px; border-radius: 8px;">
                         <h6 class="mt-2 mb-0">پنل مدیریت نشر اعماق</h6>
                     </div>
@@ -716,7 +714,7 @@
                     </div>
                 </section>
 
-                <!-- ماژول اسلایدشو کاملاً بازنویسی شده -->
+                <!-- ماژول اسلایدشو -->
                 <section id="slider-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-images text-warning"></i> مدیریت اسلایدشو</h5>
                     
@@ -893,7 +891,7 @@
                     </div>
                 </section>
 
-                <!-- ماژول درخواست‌ها با قابلیت دانلود فایل -->
+                <!-- ماژول درخواست‌ها -->
                 <section id="form-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-envelope text-warning"></i> درخواست‌های بررسی اثر</h5>
                     
@@ -996,7 +994,7 @@
                     </div>
                 </section>
 
-                <!-- ماژول فوتر به حالت اول برگردانده شده -->
+                <!-- ماژول فوتر -->
                 <section id="footer-module" class="admin-card" style="display: none;">
                     <h5><i class="fas fa-shoe-prints text-warning"></i> مدیریت فوتر</h5>
                     <div class="form-row-responsive">
@@ -1162,6 +1160,122 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // ============================================================================
+        // سیستم جدید ذخیره‌سازی با GitHub Actions
+        // ============================================================================
+
+        const GITHUB_USERNAME = 'amaghface';
+        const GITHUB_REPO = 'amagh-pub';
+
+        // تابع برای ذخیره داده‌ها از طریق GitHub Actions
+        async function saveToGitHub(data) {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/dispatches`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        event_type: 'update-website-data',
+                        client_payload: data
+                    })
+                });
+
+                if (response.ok || response.status === 204) {
+                    console.log('داده‌ها با موفقیت ارسال شدند');
+                    return true;
+                } else {
+                    console.error('خطا در ارسال داده‌ها:', await response.text());
+                    // Fallback به localStorage
+                    localStorage.setItem('websiteData', JSON.stringify(data));
+                    return false;
+                }
+            } catch (error) {
+                console.error('خطا در ارتباط با GitHub:', error);
+                // Fallback به localStorage
+                localStorage.setItem('websiteData', JSON.stringify(data));
+                return false;
+            }
+        }
+
+        // تابع برای بارگذاری داده‌ها از GitHub
+        async function loadFromGitHub() {
+            try {
+                const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/data/website-data.json`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    return data;
+                } else {
+                    // Fallback به localStorage
+                    const localData = localStorage.getItem('websiteData');
+                    return localData ? JSON.parse(localData) : {};
+                }
+            } catch (error) {
+                console.error('خطا در بارگذاری داده‌ها:', error);
+                // Fallback به localStorage
+                const localData = localStorage.getItem('websiteData');
+                return localData ? JSON.parse(localData) : {};
+            }
+        }
+
+        // توابع ذخیره‌سازی برای هر بخش
+        async function saveAllData() {
+            const data = {
+                slides: await loadSlides(),
+                blogPosts: await loadBlogPosts(),
+                aboutText: await loadAboutText(),
+                menuItems: await loadMenuItems(),
+                pages: await loadPages(),
+                socialLinks: await loadSocialLinks(),
+                lastUpdate: new Date().toISOString()
+            };
+
+            const success = await saveToGitHub(data);
+            
+            if (success) {
+                alert('تمامی تغییرات با موفقیت در GitHub ذخیره شدند.');
+            } else {
+                alert('تغییرات در localStorage ذخیره شدند (خطا در اتصال به GitHub).');
+            }
+        }
+
+        // توابع بارگذاری برای هر بخش
+        async function loadSlides() {
+            const data = await loadFromGitHub();
+            return data.slides || [];
+        }
+
+        async function loadBlogPosts() {
+            const data = await loadFromGitHub();
+            return data.blogPosts || [];
+        }
+
+        async function loadAboutText() {
+            const data = await loadFromGitHub();
+            return data.aboutText || '';
+        }
+
+        async function loadMenuItems() {
+            const data = await loadFromGitHub();
+            return data.menuItems || [];
+        }
+
+        async function loadPages() {
+            const data = await loadFromGitHub();
+            return data.pages || [];
+        }
+
+        async function loadSocialLinks() {
+            const data = await loadFromGitHub();
+            return data.socialLinks || [];
+        }
+
+        // ============================================================================
+        // بقیه توابع دقیقاً مانند قبل - فقط فراخوانی‌ها به توابع جدید تغییر کرده
+        // ============================================================================
+
         // مدیریت منوی موبایل
         function toggleMobileMenu() {
             const sidebar = document.getElementById('sidebar');
@@ -1231,14 +1345,13 @@
         }
 
         function saveAllChanges() {
-            alert('تمامی تغییرات با موفقیت ذخیره شدند.');
+            saveAllData();
         }
 
         function updateLogoFromUrl() {
             const logoUrl = document.getElementById('logoUrl').value;
             if (logoUrl) {
                 document.getElementById('logoPreview').src = logoUrl;
-                localStorage.setItem('siteLogo', logoUrl);
                 alert('لوگو با موفقیت به‌روزرسانی شد.');
             }
         }
@@ -1247,22 +1360,20 @@
             alert('قابلیت آپلود لوگو فعال شد.');
         }
 
-        function updateAbout() {
+        async function updateAbout() {
             const aboutText = document.getElementById('aboutText').value;
-            localStorage.setItem('aboutText', aboutText);
+            await saveAllData();
             alert('متن درباره ما با موفقیت بروزرسانی شد.');
         }
 
         // ============================================================================
-        // بخش مدیریت اسلایدشو کاملاً بازنویسی شده
+        // بخش مدیریت اسلایدشو
         // ============================================================================
 
         let currentEditingSlideId = null;
         const defaultSlideImage = 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg';
 
-        function initializeSlideEditor() {
-            // هیچ تنظیمات خاصی نیاز نیست
-        }
+        function initializeSlideEditor() {}
 
         function previewSlideImage(input) {
             const file = input.files[0];
@@ -1306,7 +1417,7 @@
             updateSlideImagePreview('');
         }
 
-        function addSlide() {
+        async function addSlide() {
             const title = document.getElementById('slideTitle').value.trim();
             const link = document.getElementById('slideLink').value.trim();
             const image = document.getElementById('slideImageUrl').value.trim() || defaultSlideImage;
@@ -1322,7 +1433,7 @@
                 return;
             }
 
-            const slides = JSON.parse(localStorage.getItem('slides')) || [];
+            const slides = await loadSlides();
             const newSlide = {
                 id: Date.now(),
                 title: title,
@@ -1336,7 +1447,7 @@
             };
 
             slides.unshift(newSlide);
-            localStorage.setItem('slides', JSON.stringify(slides));
+            await saveAllData();
 
             alert('اسلاید با موفقیت اضافه شد.');
             clearSlideForm();
@@ -1352,8 +1463,8 @@
             updateSlideImagePreview('');
         }
 
-        function loadSlides() {
-            const slides = JSON.parse(localStorage.getItem('slides')) || [];
+        async function loadSlides() {
+            const slides = await loadSlides();
             const container = document.getElementById('slidesContainer');
             container.innerHTML = '';
 
@@ -1413,8 +1524,8 @@
             });
         }
 
-        function editSlide(id) {
-            const slides = JSON.parse(localStorage.getItem('slides')) || [];
+        async function editSlide(id) {
+            const slides = await loadSlides();
             const slide = slides.find(s => s.id === id);
             
             if (slide) {
@@ -1432,7 +1543,7 @@
             }
         }
 
-        function updateSlide() {
+        async function updateSlide() {
             if (!currentEditingSlideId) return;
 
             const title = document.getElementById('editSlideTitle').value.trim();
@@ -1450,7 +1561,7 @@
                 return;
             }
 
-            const slides = JSON.parse(localStorage.getItem('slides')) || [];
+            const slides = await loadSlides();
             const slideIndex = slides.findIndex(s => s.id === currentEditingSlideId);
             
             if (slideIndex !== -1) {
@@ -1463,7 +1574,7 @@
                     updatedAt: new Date().getTime()
                 };
 
-                localStorage.setItem('slides', JSON.stringify(slides));
+                await saveAllData();
                 
                 const modal = bootstrap.Modal.getInstance(document.getElementById('editSlideModal'));
                 modal.hide();
@@ -1474,32 +1585,35 @@
         }
 
         function previewSlide(id) {
-            const slides = JSON.parse(localStorage.getItem('slides')) || [];
-            const slide = slides.find(s => s.id === id);
-            
-            if (slide) {
-                window.open(slide.image, '_blank');
+            const slideImage = document.getElementById('editSlideImage').value;
+            if (slideImage) {
+                window.open(slideImage, '_blank');
             }
         }
 
-        function toggleSlideStatus(id) {
-            const slides = JSON.parse(localStorage.getItem('slides')) || [];
+        async function toggleSlideStatus(id) {
+            const slides = await loadSlides();
             const slideIndex = slides.findIndex(s => s.id === id);
             
             if (slideIndex !== -1) {
                 slides[slideIndex].active = !slides[slideIndex].active;
-                localStorage.setItem('slides', JSON.stringify(slides));
+                await saveAllData();
                 loadSlides();
                 
                 alert(`وضعیت اسلاید به ${slides[slideIndex].active ? 'فعال' : 'غیرفعال'} تغییر کرد.`);
             }
         }
 
-        function deleteSlide(id) {
+        async function deleteSlide(id) {
             if (confirm('آیا از حذف این اسلاید اطمینان دارید؟ این عمل قابل بازگشت نیست.')) {
-                const slides = JSON.parse(localStorage.getItem('slides')) || [];
+                const slides = await loadSlides();
                 const filteredSlides = slides.filter(slide => slide.id !== id);
-                localStorage.setItem('slides', JSON.stringify(filteredSlides));
+                
+                // ذخیره مستقیم
+                const currentData = await loadFromGitHub();
+                currentData.slides = filteredSlides;
+                await saveToGitHub(currentData);
+                
                 loadSlides();
                 alert('اسلاید با موفقیت حذف شد.');
             }
@@ -1513,7 +1627,6 @@
         const defaultImage = 'https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg';
 
         function initializePostEditor() {
-            // شمارنده کاراکترهای خلاصه مطلب
             const excerptInput = document.getElementById('postExcerpt');
             const excerptCounter = document.getElementById('excerptCounter');
             
@@ -1595,7 +1708,7 @@
             }
         }
 
-        function publishPost() {
+        async function publishPost() {
             const title = document.getElementById('postTitle').value.trim();
             const excerpt = document.getElementById('postExcerpt').value.trim();
             const image = document.getElementById('postImage').value.trim() || defaultImage;
@@ -1617,7 +1730,7 @@
                 return;
             }
 
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const posts = await loadBlogPosts();
             const newPost = {
                 id: Date.now(),
                 title: title,
@@ -1632,9 +1745,9 @@
             };
 
             posts.unshift(newPost);
-            localStorage.setItem('blogPosts', JSON.stringify(posts));
+            await saveAllData();
 
-            alert('مطلب با موفقیت منتشر شد و در بخش آخرین مطالب نمایش داده می‌شود.');
+            alert('مطلب با موفقیت منتشر شد.');
             clearForm();
             loadPosts();
         }
@@ -1672,8 +1785,8 @@
             updateImagePreview('');
         }
 
-        function loadPosts() {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+        async function loadPosts() {
+            const posts = await loadBlogPosts();
             const container = document.getElementById('postsList');
             container.innerHTML = '';
 
@@ -1735,8 +1848,8 @@
             });
         }
 
-        function editPost(id) {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+        async function editPost(id) {
+            const posts = await loadBlogPosts();
             const post = posts.find(p => p.id === id);
             
             if (post) {
@@ -1756,7 +1869,7 @@
             }
         }
 
-        function updatePost() {
+        async function updatePost() {
             if (!currentEditingPostId) return;
 
             const title = document.getElementById('editPostTitle').value.trim();
@@ -1770,7 +1883,7 @@
                 return;
             }
 
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const posts = await loadBlogPosts();
             const postIndex = posts.findIndex(p => p.id === currentEditingPostId);
             
             if (postIndex !== -1) {
@@ -1784,7 +1897,7 @@
                     lastModified: new Date().getTime()
                 };
 
-                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                await saveAllData();
                 
                 const modal = bootstrap.Modal.getInstance(document.getElementById('editPostModal'));
                 modal.hide();
@@ -1794,8 +1907,8 @@
             }
         }
 
-        function previewPost(id) {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+        async function previewPost(id) {
+            const posts = await loadBlogPosts();
             const post = posts.find(p => p.id === id);
             
             if (post) {
@@ -1804,28 +1917,33 @@
                 
                 // افزایش تعداد بازدیدها
                 post.views = (post.views || 0) + 1;
-                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                await saveAllData();
             }
         }
 
-        function togglePostStatus(id) {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+        async function togglePostStatus(id) {
+            const posts = await loadBlogPosts();
             const postIndex = posts.findIndex(p => p.id === id);
             
             if (postIndex !== -1) {
                 posts[postIndex].status = posts[postIndex].status === 'published' ? 'draft' : 'published';
-                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                await saveAllData();
                 loadPosts();
                 
                 alert(`وضعیت مطلب به ${posts[postIndex].status === 'published' ? 'منتشر شده' : 'پیش‌نویس'} تغییر کرد.`);
             }
         }
 
-        function deletePost(id) {
+        async function deletePost(id) {
             if (confirm('آیا از حذف این مطلب اطمینان دارید؟ این عمل قابل بازگشت نیست.')) {
-                const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+                const posts = await loadBlogPosts();
                 const filteredPosts = posts.filter(post => post.id !== id);
-                localStorage.setItem('blogPosts', JSON.stringify(filteredPosts));
+                
+                // ذخیره مستقیم
+                const currentData = await loadFromGitHub();
+                currentData.blogPosts = filteredPosts;
+                await saveToGitHub(currentData);
+                
                 loadPosts();
                 alert('مطلب با موفقیت حذف شد.');
             }
@@ -1836,15 +1954,8 @@
         }
 
         // مدیریت منو
-        function loadMenuItems() {
-            const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
-                { id: 1, title: "خانه", url: "index.html", order: 1, visible: true },
-                { id: 2, title: "درباره ما", url: "about.html", order: 2, visible: true },
-                { id: 3, title: "تماس با ما", url: "contact.html", order: 3, visible: true },
-                { id: 4, title: "کتاب‌ها", url: "books.html", order: 4, visible: true },
-                { id: 5, title: "بلاگ", url: "blog.html", order: 5, visible: true }
-            ];
-            
+        async function loadMenuItems() {
+            const menuItems = await loadMenuItems();
             renderMenuItems(menuItems);
         }
 
@@ -1885,8 +1996,8 @@
             });
         }
 
-        function addMenuItem() {
-            const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+        async function addMenuItem() {
+            const menuItems = await loadMenuItems();
             const newItem = {
                 id: Date.now(),
                 title: 'آیتم جدید',
@@ -1896,69 +2007,54 @@
             };
             
             menuItems.push(newItem);
-            localStorage.setItem('menuItems', JSON.stringify(menuItems));
+            await saveAllData();
             renderMenuItems(menuItems);
         }
 
-        function updateMenuItem(id, field, value) {
-            const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+        async function updateMenuItem(id, field, value) {
+            const menuItems = await loadMenuItems();
             const itemIndex = menuItems.findIndex(item => item.id === id);
             if (itemIndex !== -1) {
                 menuItems[itemIndex][field] = value;
-                localStorage.setItem('menuItems', JSON.stringify(menuItems));
+                await saveAllData();
             }
         }
 
-        function removeMenuItem(id) {
+        async function removeMenuItem(id) {
             if (confirm('آیا از حذف این آیتم منو اطمینان دارید؟')) {
-                const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+                const menuItems = await loadMenuItems();
                 const filteredItems = menuItems.filter(item => item.id !== id);
-                localStorage.setItem('menuItems', JSON.stringify(filteredItems));
+                
+                // ذخیره مستقیم
+                const currentData = await loadFromGitHub();
+                currentData.menuItems = filteredItems;
+                await saveToGitHub(currentData);
+                
                 renderMenuItems(filteredItems);
             }
         }
 
-        function moveMenuItemUp(index) {
-            const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+        async function moveMenuItemUp(index) {
+            const menuItems = await loadMenuItems();
             if (index > 0) {
                 [menuItems[index].order, menuItems[index - 1].order] = [menuItems[index - 1].order, menuItems[index].order];
-                localStorage.setItem('menuItems', JSON.stringify(menuItems));
+                await saveAllData();
                 renderMenuItems(menuItems);
             }
         }
 
-        function moveMenuItemDown(index) {
-            const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+        async function moveMenuItemDown(index) {
+            const menuItems = await loadMenuItems();
             if (index < menuItems.length - 1) {
                 [menuItems[index].order, menuItems[index + 1].order] = [menuItems[index + 1].order, menuItems[index].order];
-                localStorage.setItem('menuItems', JSON.stringify(menuItems));
+                await saveAllData();
                 renderMenuItems(menuItems);
             }
         }
 
         // مدیریت صفحات
-        function loadPages() {
-            const pages = JSON.parse(localStorage.getItem('pages')) || [
-                {
-                    id: 1,
-                    title: "درباره ما",
-                    slug: "about",
-                    content: "محتوا درباره ما...",
-                    image: "https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg",
-                    metaDescription: "درباره نشر اعماق",
-                    visible: true
-                },
-                {
-                    id: 2,
-                    title: "تماس با ما",
-                    slug: "contact",
-                    content: "اطلاعات تماس...",
-                    image: "https://uploadkon.ir/uploads/c1d717_25Blogfa-Final.jpg",
-                    metaDescription: "تماس با نشر اعماق",
-                    visible: true
-                }
-            ];
-            
+        async function loadPages() {
+            const pages = await loadPages();
             renderPages(pages);
         }
 
@@ -1998,8 +2094,8 @@
             });
         }
 
-        function addPage() {
-            const pages = JSON.parse(localStorage.getItem('pages')) || [];
+        async function addPage() {
+            const pages = await loadPages();
             const newPage = {
                 id: Date.now(),
                 title: 'صفحه جدید',
@@ -2011,41 +2107,46 @@
             };
             
             pages.push(newPage);
-            localStorage.setItem('pages', JSON.stringify(pages));
+            await saveAllData();
             renderPages(pages);
         }
 
-        function updatePage(id, field, value) {
-            const pages = JSON.parse(localStorage.getItem('pages')) || [];
+        async function updatePage(id, field, value) {
+            const pages = await loadPages();
             const pageIndex = pages.findIndex(page => page.id === id);
             if (pageIndex !== -1) {
                 pages[pageIndex][field] = value;
-                localStorage.setItem('pages', JSON.stringify(pages));
+                await saveAllData();
             }
         }
 
-        function editPageContent(id) {
-            const pages = JSON.parse(localStorage.getItem('pages')) || [];
+        async function editPageContent(id) {
+            const pages = await loadPages();
             const page = pages.find(p => p.id === id);
             if (page) {
                 const content = prompt('محتوا صفحه:', page.content);
                 if (content !== null) {
-                    updatePage(id, 'content', content);
+                    await updatePage(id, 'content', content);
                 }
             }
         }
 
-        function removePage(id) {
+        async function removePage(id) {
             if (confirm('آیا از حذف این صفحه اطمینان دارید؟')) {
-                const pages = JSON.parse(localStorage.getItem('pages')) || [];
+                const pages = await loadPages();
                 const filteredPages = pages.filter(page => page.id !== id);
-                localStorage.setItem('pages', JSON.stringify(filteredPages));
+                
+                // ذخیره مستقیم
+                const currentData = await loadFromGitHub();
+                currentData.pages = filteredPages;
+                await saveToGitHub(currentData);
+                
                 renderPages(filteredPages);
             }
         }
 
-        // مدیریت درخواست‌ها با قابلیت دانلود فایل
-        function loadSubmissions() {
+        // مدیریت درخواست‌ها
+        async function loadSubmissions() {
             const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
             renderSubmissions(submissions);
             updateSubmissionsCount(submissions.length);
@@ -2068,7 +2169,6 @@
                 const statusText = submission.status === 'read' ? 'خوانده شده' : 
                                  submission.status === 'replied' ? 'پاسخ داده شده' : 'جدید';
                 
-                // ایجاد دکمه دانلود اگر فایل وجود دارد
                 const fileDownload = submission.fileData ? 
                     `<a href="${submission.fileData}" download="${submission.fileName}" class="file-download-btn">
                         <i class="fas fa-download"></i> دانلود فایل (${submission.fileName})
@@ -2170,15 +2270,9 @@
             filterSubmissions();
         }
 
-        // مدیریت فوتر (به حالت اول برگردانده شده)
-        function loadFooterSettings() {
-            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [
-                { name: 'تلگرام', url: 'https://t.me/amaghpub', icon: 'https://uploadkon.ir/uploads/3db017_25Telegram.png' },
-                { name: 'اینستاگرام', url: 'https://instagram.com/amaghpub', icon: 'https://uploadkon.ir/uploads/a43a17_25Instagram.png' },
-                { name: 'لینکدین', url: 'https://www.linkedin.com/company/amaghpub', icon: 'https://uploadkon.ir/uploads/1f7217_25Linkedin.png' },
-                { name: 'ایمیل', url: 'mailto:amagh.pub@gmail.com', icon: 'https://uploadkon.ir/uploads/547417_25Untitled-2.png' }
-            ];
-            
+        // مدیریت فوتر
+        async function loadFooterSettings() {
+            const socialLinks = await loadSocialLinks();
             renderSocialLinks(socialLinks);
         }
 
@@ -2209,16 +2303,16 @@
             });
         }
 
-        function updateSocialLink(index, field, value) {
-            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+        async function updateSocialLink(index, field, value) {
+            const socialLinks = await loadSocialLinks();
             if (socialLinks[index]) {
                 socialLinks[index][field] = value;
-                localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+                await saveAllData();
             }
         }
 
-        function updateSocialIconPreview(index) {
-            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+        async function updateSocialIconPreview(index) {
+            const socialLinks = await loadSocialLinks();
             if (socialLinks[index]) {
                 const linkItem = document.querySelectorAll('.social-link-item')[index];
                 const iconImg = linkItem.querySelector('.social-icon-preview');
@@ -2226,23 +2320,23 @@
             }
         }
 
-        function removeSocialLink(index) {
+        async function removeSocialLink(index) {
             if (confirm('آیا از حذف این شبکه اجتماعی اطمینان دارید؟')) {
-                const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+                const socialLinks = await loadSocialLinks();
                 socialLinks.splice(index, 1);
-                localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+                await saveAllData();
                 renderSocialLinks(socialLinks);
             }
         }
 
-        function addSocialLink() {
-            const socialLinks = JSON.parse(localStorage.getItem('socialLinks')) || [];
+        async function addSocialLink() {
+            const socialLinks = await loadSocialLinks();
             socialLinks.push({
                 name: 'شبکه اجتماعی جدید',
                 url: '#',
                 icon: 'https://uploadkon.ir/uploads/547417_25Untitled-2.png'
             });
-            localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+            await saveAllData();
             renderSocialLinks(socialLinks);
         }
 
