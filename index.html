@@ -592,6 +592,31 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // ============================================================================
+        // توابع جدید برای بارگذاری داده‌ها از GitHub
+        // ============================================================================
+
+        // تابع برای بارگذاری داده‌ها از GitHub
+        async function loadFromGitHub() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/amaghface/amagh-pub/main/data/website-data.json');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    return data;
+                } else {
+                    // Fallback به localStorage
+                    const localData = localStorage.getItem('websiteData');
+                    return localData ? JSON.parse(localData) : {};
+                }
+            } catch (error) {
+                console.error('خطا در بارگذاری داده‌ها:', error);
+                // Fallback به localStorage
+                const localData = localStorage.getItem('websiteData');
+                return localData ? JSON.parse(localData) : {};
+            }
+        }
+
         // بارگذاری لوگوی سایت
         function loadSiteLogo() {
             const savedLogo = localStorage.getItem('currentSiteLogo') || 'https://uploadkon.ir/uploads/bf3921_25website-logo-min.png';
@@ -601,9 +626,10 @@
             }
         }
 
-        // لود محتوای درباره ما از پنل مدیریت
-        function loadAboutContent() {
-            const aboutText = localStorage.getItem('aboutText') || '';
+        // لود محتوای درباره ما از GitHub
+        async function loadAboutContent() {
+            const data = await loadFromGitHub();
+            const aboutText = data.aboutText || '';
             
             const aboutContainer = document.getElementById('aboutContent');
             if (aboutContainer) {
@@ -622,9 +648,10 @@
             }
         }
 
-        // لود اسلایدشو از پنل مدیریت (بدون داده پیش‌فرض)
-        function loadSlideshow() {
-            const slides = JSON.parse(localStorage.getItem('slides')) || [];
+        // لود اسلایدشو از GitHub
+        async function loadSlideshow() {
+            const data = await loadFromGitHub();
+            const slides = data.slides || [];
 
             const sliderContainer = document.getElementById('heroSlider');
             const activeSlides = slides.filter(slide => slide.active);
@@ -697,9 +724,10 @@
             }, 5000);
         }
 
-        // لود پست‌های بلاگ (بدون داده پیش‌فرض)
-        function loadBlogPosts() {
-            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+        // لود پست‌های بلاگ از GitHub
+        async function loadBlogPosts() {
+            const data = await loadFromGitHub();
+            const posts = data.blogPosts || [];
 
             const container = document.getElementById('blogPosts');
             container.innerHTML = '';
