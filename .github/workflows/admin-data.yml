@@ -1,0 +1,25 @@
+name: Update Website Data
+
+on:
+  repository_dispatch:
+    types: [update-website-data]
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update data files
+        run: |
+          mkdir -p data
+          echo '${{ toJson(github.event.client_payload) }}' > data/website-data.json
+          
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/
+          git commit -m "Update website data from admin panel" || exit 0
+          git push
