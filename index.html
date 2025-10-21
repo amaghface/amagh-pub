@@ -593,7 +593,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // بارگذاری لوگوی سایت - اصلاح شده
+        // 2) بارگذاری لوگوی سایت از پنل مدیریت (siteLogo) + fallback
         function loadSiteLogo() {
             const savedLogo = localStorage.getItem('siteLogo') || 'https://uploadkon.ir/uploads/bf3921_25website-logo-min.png';
             const logoElement = document.getElementById('mainLogo');
@@ -604,32 +604,31 @@
 
         // لود محتوای درباره ما از پنل مدیریت
         function loadAboutContent() {
-            const aboutText = localStorage.getItem('aboutText') || 'نشر اعماق بیست و دوم مهرماه یک‌هزار و چهارصد و چهار زاده شد\n\nنشر اعماق امکان زیستن است در عین نبودن\n\nشماره پروانه نشر: 19975\n\n[...در حال به روزرسانی...]';
-            
+            const aboutText = localStorage.getItem('aboutText') || '';
             const aboutContainer = document.getElementById('aboutContent');
             if (aboutContainer) {
                 if (aboutText) {
                     const paragraphs = aboutText.split('\n').filter(p => p.trim());
                     let htmlContent = '';
-                    
                     paragraphs.forEach(paragraph => {
                         htmlContent += `<p class="mb-4" style="text-align: justify; line-height: 2;">${paragraph}</p>`;
                     });
-                    
                     aboutContainer.innerHTML = htmlContent;
+                } else {
+                    aboutContainer.innerHTML = '<p class="text-muted text-center">محتوا در حال به‌روزرسانی می‌باشد...</p>';
                 }
             }
         }
 
-        // لود اسلایدشو از پنل مدیریت - اصلاح شده
+        // 3) لود اسلایدشو فقط از داده‌های پنل مدیریت، بدون هیچ متن/اسلاید پیش‌فرض
         function loadSlideshow() {
             const slides = JSON.parse(localStorage.getItem('slides')) || [];
             const sliderContainer = document.getElementById('heroSlider');
             const activeSlides = slides.filter(slide => slide.active);
 
-            // اگر اسلاید فعالی وجود ندارد، از بنر اصلی استفاده کن
             if (activeSlides.length === 0) {
-                sliderContainer.innerHTML = `<div class="hero-banner"></div>`;
+                // اگر اسلاید فعالی وجود ندارد، فقط بنر نمایش داده شود
+                sliderContainer.innerHTML = '<div class="hero-banner"></div>';
                 return;
             }
 
@@ -647,13 +646,17 @@
                         </div>
                     </div>
                 `;
-
-                dotsHTML += `<div class="slider-dot ${index === 0 ? 'active' : ''}" onclick="showSlide(${index})"></div>`;
+                dotsHTML += `
+                    <div class="slider-dot ${index === 0 ? 'active' : ''}" onclick="showSlide(${index})"></div>
+                `;
             });
 
-            sliderContainer.innerHTML = slidesHTML + `<div class="slider-controls">${dotsHTML}</div>`;
+            sliderContainer.innerHTML = slidesHTML + `
+                <div class="slider-controls">
+                    ${dotsHTML}
+                </div>
+            `;
 
-            // شروع اتوماتیک اسلایدشو اگر بیش از یک اسلاید وجود دارد
             if (activeSlides.length > 1) {
                 startSlideshow(activeSlides.length);
             }
@@ -663,52 +666,41 @@
         function showSlide(index) {
             const slides = document.querySelectorAll('.slide');
             const dots = document.querySelectorAll('.slider-dot');
-            
             slides.forEach(slide => slide.classList.remove('active'));
             dots.forEach(dot => dot.classList.remove('active'));
-            
-            if (slides[index]) {
-                slides[index].classList.add('active');
-                dots[index].classList.add('active');
-                currentSlide = index;
-            }
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentSlide = index;
         }
 
         // شروع اسلایدشو اتوماتیک
         let currentSlide = 0;
         let slideInterval;
-
         function startSlideshow(totalSlides) {
-            if (slideInterval) {
-                clearInterval(slideInterval);
-            }
-            
+            if (slideInterval) clearInterval(slideInterval);
             slideInterval = setInterval(() => {
                 currentSlide = (currentSlide + 1) % totalSlides;
                 showSlide(currentSlide);
             }, 5000);
         }
 
-        // لود پست‌های بلاگ - اصلاح شده
+        // 1) لود پست‌های بلاگ فقط از داده‌های پنل مدیریت و فقط وضعیت "published"
         function loadBlogPosts() {
-            const allPosts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const publishedPosts = posts.filter(p => p.status === 'published');
             const container = document.getElementById('blogPosts');
             container.innerHTML = '';
 
-            // نمایش همه پست‌ها (بدون فیلتر کردن)
-            if (allPosts.length === 0) {
+            if (publishedPosts.length === 0) {
                 container.innerHTML = `
-                    <div class="col-12 text-center">
-                        <p class="text-muted">هنوز هیچ مطلبی منتشر نشده است.</p>
+                    <div class="col-12">
+                        <p class="text-center text-muted">هنوز مطلب منتشرشده‌ای وجود ندارد.</p>
                     </div>
                 `;
                 return;
             }
 
-            // مرتب کردن پست‌ها بر اساس تاریخ (جدیدترین اول)
-            const sortedPosts = allPosts.sort((a, b) => b.timestamp - a.timestamp);
-
-            sortedPosts.forEach(post => {
+            publishedPosts.forEach(post => {
                 container.innerHTML += `
                     <div class="col-md-4">
                         <div class="card">
@@ -717,7 +709,7 @@
                                 <h5 class="card-title">${post.title}</h5>
                                 <p class="card-text">${post.excerpt}</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">${post.date}</small>
+                                    <small class="text-muted">${post.date || ''}</small>
                                     <button type="button" class="btn btn-primary" onclick="viewPost(${post.id})">ادامه مطلب</button>
                                 </div>
                             </div>
@@ -731,7 +723,6 @@
         function viewPost(postId) {
             const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
             const post = posts.find(p => p.id === postId);
-            
             if (post) {
                 localStorage.setItem('currentPost', JSON.stringify(post));
                 window.open('post.html', '_blank');
@@ -745,7 +736,6 @@
             const file = input.files[0];
             const fileInfo = document.getElementById('fileInfo');
             const uploadProgress = document.getElementById('uploadProgress');
-            
             if (file) {
                 const fileSize = (file.size / (1024 * 1024)).toFixed(2);
                 fileInfo.innerHTML = `فایل انتخاب شده: ${file.name} (${fileSize} MB)`;
@@ -762,20 +752,16 @@
             const progressBar = document.getElementById('progressBar');
             const uploadStatus = document.getElementById('uploadStatus');
             const submitBtn = document.getElementById('submitBtn');
-            
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> در حال آپلود...';
-            
             let progress = 0;
             const interval = setInterval(() => {
                 progress += Math.random() * 15;
                 if (progress >= 100) {
                     progress = 100;
                     clearInterval(interval);
-                    
                     progressBar.style.width = '100%';
                     uploadStatus.textContent = '100% - آپلود کامل شد';
-                    
                     setTimeout(() => {
                         submitBtn.disabled = false;
                         submitBtn.innerHTML = 'ارسال درخواست';
@@ -788,12 +774,19 @@
             }, 200);
         }
 
+        // ارسال ایمیل (شبیه‌سازی)
+        function sendEmail(formData) {
+            console.log('ایمیل ارسال شد به: amagh.pub@gmail.com', formData);
+            setTimeout(() => {
+                console.log('ایمیل با موفقیت ارسال شد');
+            }, 1000);
+        }
+
         // مدیریت فرم
         document.getElementById('submissionForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const requiredFields = this.querySelectorAll('[required]');
             let valid = true;
-            
             requiredFields.forEach(field => {
                 if (!field.value.trim()) {
                     valid = false;
@@ -802,10 +795,8 @@
                     field.style.borderColor = '';
                 }
             });
-            
             if (valid) {
                 const fileInput = document.getElementById('bookFile');
-                
                 if (fileInput.files.length > 0) {
                     simulateFileUpload((success) => {
                         if (success) {
@@ -829,11 +820,9 @@
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
                 fileName = file.name;
-                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     fileData = e.target.result;
-                    
                     const formData = {
                         id: Date.now(),
                         name: document.getElementById('fullName').value,
@@ -847,10 +836,9 @@
                         timestamp: new Date().toLocaleString('fa-IR'),
                         status: 'جدید'
                     };
-                    
                     submissions.push(formData);
                     localStorage.setItem('submissions', JSON.stringify(submissions));
-                    
+                    sendEmail(formData);
                     alert('درخواست شما با موفقیت ثبت شد. به زودی با شما تماس خواهیم گرفت.');
                     document.getElementById('submissionForm').reset();
                     document.getElementById('fileInfo').style.display = 'none';
@@ -871,12 +859,11 @@
                     timestamp: new Date().toLocaleString('fa-IR'),
                     status: 'جدید'
                 };
-                
                 submissions.push(formData);
                 localStorage.setItem('submissions', JSON.stringify(submissions));
-                
+                sendEmail(formData);
                 alert('درخواست شما با موفقیت ثبت شد. به زودی با شما تماس خواهیم گرفت.');
-                document.getElementById('submissionForm').reset();
+                this.reset();
             }
         }
 
@@ -887,12 +874,6 @@
             loadBlogPosts();
             loadAboutContent();
         });
-
-        // رفرش خودکار هر 5 ثانیه برای به روزرسانی محتوا
-        setInterval(() => {
-            loadSiteLogo();
-            loadBlogPosts();
-        }, 5000);
     </script>
 </body>
 </html>
