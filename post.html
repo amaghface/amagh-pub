@@ -23,7 +23,8 @@
             background-color: var(--background);
             color: var(--primary);
             line-height: 1.8;
-            padding: 20px;
+            margin: 0;   /* حذف فاصله پیش‌فرض مرورگر */
+            padding: 0;  /* حذف padding اضافی */
         }
         
         .post-container {
@@ -48,10 +49,13 @@
             border-color: var(--secondary);
         }
 
+        /* هدر */
         .navbar {
             background-color: var(--light) !important;
             border-bottom: 3px solid var(--secondary);
             padding: 8px 0;
+            margin: 0;
+            width: 100%;
         }
         
         .logo-container img {
@@ -73,11 +77,13 @@
             color: var(--secondary) !important;
         }
 
+        /* فوتر */
         .footer {
             background-color: var(--primary);
             color: var(--background);
             padding: 35px 0;
-            margin-top: 50px;
+            margin: 0;
+            width: 100%;
         }
         
         .social-icons {
