@@ -602,36 +602,27 @@
             }
         }
 
-        // لود محتوای درباره ما از پنل مدیریت
-        function loadAboutContent() {
-            const aboutText = localStorage.getItem('aboutText') || `نشر اعماق بیست و دوم مهرماه یک‌هزار و چهارصد و چهار زاده شد
-
-نشر اعماق امکان زیستن است در عین نبودن
-
-شماره پروانه نشر: 19975
-
-[...در حال به روزرسانی...]`;
-
-            const aboutContainer = document.getElementById('aboutContent');
-            if (aboutContainer) {
-                // تبدیل خطوط جدید به پاراگراف‌های HTML
-                const paragraphs = aboutText.split('\n').filter(p => p.trim());
-                let htmlContent = '';
-                
-                paragraphs.forEach(paragraph => {
-                    if (paragraph.includes('شماره پروانه نشر:')) {
-                        htmlContent += `<p class="fw-bold">${paragraph}</p>`;
-                    } else if (paragraph.includes('[...در حال به روزرسانی...]')) {
-                        htmlContent += `<p class="text-muted">${paragraph}</p>`;
-                    } else {
-                        htmlContent += `<p class="mb-4">${paragraph}</p>`;
-                    }
-                });
-                
-                aboutContainer.innerHTML = htmlContent;
-            }
+// لود محتوای درباره ما از پنل مدیریت
+function loadAboutContent() {
+    const aboutText = localStorage.getItem('aboutText') || '';
+    
+    const aboutContainer = document.getElementById('aboutContent');
+    if (aboutContainer) {
+        if (aboutText) {
+            // تبدیل خطوط جدید به پاراگراف‌های HTML
+            const paragraphs = aboutText.split('\n').filter(p => p.trim());
+            let htmlContent = '';
+            
+            paragraphs.forEach(paragraph => {
+                htmlContent += `<p class="mb-4" style="text-align: justify; line-height: 2;">${paragraph}</p>`;
+            });
+            
+            aboutContainer.innerHTML = htmlContent;
+        } else {
+            aboutContainer.innerHTML = '<p class="text-muted text-center">محتوا در حال به‌روزرسانی می‌باشد...</p>';
         }
-
+    }
+}
         // لود اسلایدشو از پنل مدیریت
         function loadSlideshow() {
             const slides = JSON.parse(localStorage.getItem('slides')) || [
