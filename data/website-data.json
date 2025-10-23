@@ -1,0 +1,21 @@
+{
+  "aboutText": "نشر اعماق بیست و دوم مهرماه یک‌هزار و چهارصد و چهار زاده شد\n\nنشر اعماق امکان زیستن است در عین نبودن\n\nشماره پروانه نشر: 19975\n\n[...در حال به روزرسانی...]",
+  "slides": [
+    {
+      "title": "اولین اسلاید",
+      "description": "توضیح کوتاه درباره اسلاید اول",
+      "image": "https://uploadkon.ir/uploads/520820_25new-slide.jpg",
+      "link": "https://amaagh.ir/",
+      "active": true
+    }
+  ],
+  "blogPosts": [
+    {
+      "id": 1,
+      "title": "اولین مطلب",
+      "excerpt": "این یک خلاصه کوتاه از مطلب اول است.",
+      "image": "https://uploadkon.ir/uploads/sample-post.jpg",
+      "date": "2025-10-23"
+    }
+  ]
+}
